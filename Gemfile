@@ -41,6 +41,9 @@ gem "thruster", require: false
 # gem "image_processing", "~> 1.2"
 
 group :development, :test do
+  # Provide RuboCop with an ERB-aware parser so it can lint *.erb templates without raising
+  # false positive syntax errors such as "unexpected token tLT".
+  gem "rubocop-erb", require: false
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
 
@@ -55,3 +58,5 @@ group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
 end
+
+gem "devise", "~> 4.9"
