@@ -1,5 +1,5 @@
 class CoursesController < ApplicationController
-    before_action :set_course, only: [:show, :edit, :update, :destroy]
+    before_action :set_course, only: [ :show, :edit, :update, :destroy ]
 
     def index
         @courses = Course.all
@@ -8,14 +8,14 @@ class CoursesController < ApplicationController
     def show
     end
 
-    def new 
+    def new
         @course = Course.new
     end
 
     def create
         @course = Course.new(course_params)
         if @course.save
-            redirect_to @course, notice: 'Course was successfully created.'
+            redirect_to @course, notice: "Course was successfully created."
         else
             render :new
         end
@@ -26,7 +26,7 @@ class CoursesController < ApplicationController
 
     def update
         if @course.update(course_params)
-            redirect_to @course, notice: 'Course was successfully updated.'
+            redirect_to @course, notice: "Course was successfully updated."
         else
             render :edit
         end
@@ -34,7 +34,7 @@ class CoursesController < ApplicationController
 
     def destroy
         @course.destroy
-        redirect_to courses_url, notice: 'Course was successfully destroyed.'
+        redirect_to courses_url, notice: "Course was successfully destroyed."
     end
 
     private
