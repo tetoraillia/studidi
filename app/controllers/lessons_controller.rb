@@ -15,7 +15,7 @@ class LessonsController < ApplicationController
     def create
         @lesson = Lesson.new(lesson_params)
         if @lesson.save
-            redirect_to @lesson, notice: 'Lesson was successfully created.'
+            redirect_to @lesson, notice: "Lesson was successfully created."
         else
             render :new
         end
@@ -26,7 +26,7 @@ class LessonsController < ApplicationController
 
     def update
         if @lesson.update(lesson_params)
-            redirect_to @lesson, notice: 'Lesson was successfully updated.'
+            redirect_to @lesson, notice: "Lesson was successfully updated."
         else
             render :edit
         end
@@ -34,7 +34,7 @@ class LessonsController < ApplicationController
 
     def destroy
         @lesson.destroy
-        redirect_to lessons_url, notice: 'Lesson was successfully destroyed.'
+        redirect_to lessons_url, notice: "Lesson was successfully destroyed."
     end
 
     private
