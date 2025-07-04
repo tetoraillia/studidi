@@ -1,6 +1,6 @@
 <h1>Course Modules</h1>
 
-<%= link_to 'New Course Module', new_course_course_module_path %>
+<%= link_to "New Course Module", new_course_course_module_path %>
 
 <% @course_modules.each do |course_module| %>
   <p>
@@ -8,8 +8,8 @@
     <strong>Course:</strong> <%= course_module.course.title %><br>
     <strong>Position:</strong> <%= course_module.position %><br>
 
-    <%= link_to 'Edit', edit_course_course_module_path(course_module.course_id, course_module.id) %>
-    <%= button_to 'Destroy', course_course_module_path(course_module.course_id, course_module.id), method: :delete, data: { confirm: 'Are you sure?' } %>
+    <%= link_to "Edit", edit_course_course_module_path(course_module.course_id, course_module.id) %>
+    <%= button_to "Destroy", course_course_module_path(course_module.course_id, course_module.id), method: :delete, data: { confirm: "Are you sure?" } %>
   </p>
 <% end %>
 

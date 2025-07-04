@@ -1,6 +1,6 @@
 <h1>Editing Lesson: <%= @lesson.title %></h1>
 
-<%= form_with(model: [@course, @course_module, @lesson]) do |form| %>
+<%= form_with(model: [ @course, @course_module, @lesson ]) do |form| %>
   <div class="field">
     <%= form.label :title %>
     <%= form.text_field :title %>
