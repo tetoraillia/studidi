@@ -8,6 +8,7 @@ class CoursesController < ApplicationController
     end
 
     def show
+        @course_modules = CourseModule.where(course_id: params[:id])
     end
 
     def new
@@ -51,7 +52,7 @@ class CoursesController < ApplicationController
 
     def check_instructor
         unless current_user == @course.instructor
-            redirect_to courses_url, notice: "You are not authorized to perform this action."
+            redirect_to course_url(@course), notice: "You are not authorized to perform this action."
         end
     end
 end
