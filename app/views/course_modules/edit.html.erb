@@ -1,0 +1,15 @@
+<h1>Edit Course Module <%= @course_module.title %></h1>
+
+<%= form_with(model: [@course, @course_module]) do |form| %>
+    <div class="field">
+        <%= form.label :title %>
+        <%= form.text_field :title %>
+    </div>
+    <div class="field">
+        <%= form.label :position %>
+        <%= form.number_field :position %>
+    </div>
+    <div class="actions">
+        <%= form.submit %>
+    </div>
+<% end %>
