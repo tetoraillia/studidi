@@ -1,0 +1,10 @@
+<h1>Lessons</h1>
+
+<%= link_to "New Lesson", new_course_course_module_lesson_path %>
+
+
+<% @lessons.each do |lesson| %>
+    <p><%= lesson.title %> <%= link_to "Show", course_course_module_lesson_path(lesson.course_module.course_id, lesson.course_module_id, lesson.id) %></p>
+<% end %>
+
+<%= link_to "Back", courses_path %>
