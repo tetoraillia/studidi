@@ -1,0 +1,19 @@
+<h1>Lesson</h1>
+
+<%= form_with(model: [@course, @course_module, @lesson]) do |form| %>
+  <div class="field">
+    <%= form.label :title %>
+    <%= form.text_field :title %>
+  </div>
+
+  <%= form.text_field :course_module_id, value: @course_module.id %>
+
+  <div class="field">
+    <%= form.label :position %>
+    <%= form.number_field :position %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

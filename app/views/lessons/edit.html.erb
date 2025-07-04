@@ -1,0 +1,22 @@
+<h1>Editing Lesson: <%= @lesson.title %></h1>
+
+<%= form_with(model: [@course, @course_module, @lesson]) do |form| %>
+  <div class="field">
+    <%= form.label :title %>
+    <%= form.text_field :title %>
+  </div>
+
+  <div class="field">
+    <%= form.label :position %>
+    <%= form.number_field :position %>
+  </div>
+
+  <div class="field">
+    <%= form.label :content %>
+    <%= form.text_area :content, rows: 5 %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit "Update Lesson" %>
+  </div>
+<% end %>
