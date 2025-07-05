@@ -1,0 +1,16 @@
+<h1>Courses</h1>
+
+<h3> Create new course </h3>
+<%= link_to "New Course", new_course_path %>
+
+
+<% @courses.each do |course| %>
+    <p><%= course.title %></p>
+    <p><%= course.description %></p>
+    <p><%= course.instructor.first_name %></p>
+    <%= link_to "Show", course_path(course) %>
+    <%= link_to "Edit", edit_course_path(course) %>
+    <%= button_to "Destroy", course_path(course), method: :delete, data: { confirm: "Are you sure?" } %>
+    <br/>
+    <hr/>
+<% end %>

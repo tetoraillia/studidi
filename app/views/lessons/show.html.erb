@@ -1,0 +1,6 @@
+<h1>Lesson: <%= @lesson.title %></h1>
+
+<p><%= @lesson.content %></p>
+
+<%= link_to "Edit", edit_course_course_module_lesson_path(@lesson.course_module.course_id, @lesson.course_module_id, @lesson.id) %>
+<%= button_to "Destroy", course_course_module_lesson_path(@lesson.course_module.course_id, @lesson.course_module_id, @lesson.id), method: :delete, data: { confirm: "Are you sure?" } %>

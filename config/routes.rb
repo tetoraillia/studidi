@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  root "courses#index"
+
   devise_for :users, controllers: {
     sessions: "users/sessions",
     registrations: "users/registrations",
@@ -8,7 +10,9 @@ Rails.application.routes.draw do
 
   get "up" => "rails/health#show", as: :rails_health_check
 
-  resources :courses
-  resources :course_modules
-  resources :lessons
+  resources :courses do
+    resources :course_modules do
+     resources :lessons
+    end
+  end
 end
