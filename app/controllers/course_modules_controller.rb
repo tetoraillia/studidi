@@ -10,6 +10,7 @@ class CourseModulesController < ApplicationController
 
     def show
         @course_module = CourseModule.find(params[:id])
+        @lessons = @course_module.lessons.order(:position).page(params[:page]).per(10)
     end
 
     def new
