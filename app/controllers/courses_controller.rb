@@ -18,7 +18,7 @@ class CoursesController < ApplicationController
     def create
         @course = Course.new(course_params)
         if @course.save
-            redirect_to courses_url, notice: "Course was successfully created."
+            redirect_to course_url(@course), notice: "Course was successfully created."
         else
             render :new
         end
@@ -52,7 +52,7 @@ class CoursesController < ApplicationController
 
     def check_instructor
         unless current_user == @course.instructor
-            redirect_to course_url(@course), notice: "You are not authorized to perform this action."
+            redirect_to courses_url, notice: "You are not an owner of this course."
         end
     end
 end
