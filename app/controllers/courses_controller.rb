@@ -4,7 +4,7 @@ class CoursesController < ApplicationController
     before_action :check_instructor, only: [ :edit, :update, :destroy ]
 
     def index
-        @courses = Course.all
+        @courses = Course.order(created_at: :asc).page(params[:page]).per(10)
     end
 
     def show
@@ -18,7 +18,7 @@ class CoursesController < ApplicationController
     def create
         @course = Course.new(course_params)
         if @course.save
-            redirect_to @course, notice: "Course was successfully created."
+            redirect_to courses_url, notice: "Course was successfully created."
         else
             render :new
         end
