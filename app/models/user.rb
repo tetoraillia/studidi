@@ -18,4 +18,8 @@ class User < ApplicationRecord
   def student?
     role == "student"
   end
+
+  def enrolled_in?(course)
+    enrolled_courses.include?(course)
+  end
 end
