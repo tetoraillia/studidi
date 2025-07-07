@@ -3,6 +3,9 @@
 <%= link_to "New Course Module", new_course_course_module_path %>
 
 <% @course_modules.each do |course_module| %>
+  <br>
+  <hr>
+  <%= link_to course_module.title, course_course_module_path(course_module.course_id, course_module.id) %>
   <p>
     <strong>Module:</strong> <%= course_module.title %><br>
     <strong>Course:</strong> <%= course_module.course.title %><br>
