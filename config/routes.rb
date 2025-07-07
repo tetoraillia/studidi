@@ -11,8 +11,9 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
 
   resources :courses do
+    resources :enrollments, only: [:create, :destroy]
     resources :course_modules do
-     resources :lessons
+      resources :lessons
     end
   end
 end
