@@ -1,16 +1,100 @@
 <h1>Courses</h1>
 
-<h3> Create new course </h3>
-<%= link_to "New Course", new_course_path %>
-
+<%= link_to "New Course", new_course_path, class: "btn btn-primary" %>
 
 <% @courses.each do |course| %>
-    <p><%= course.title %></p>
+  <div class="course">
+    <h2><%= course.title %></h2>
     <p><%= course.description %></p>
-    <p><%= course.instructor.first_name %></p>
-    <%= link_to "Show", course_path(course) %>
-    <%= link_to "Edit", edit_course_path(course) %>
-    <%= button_to "Destroy", course_path(course), method: :delete, data: { confirm: "Are you sure?" } %>
-    <br/>
-    <hr/>
+    <p class="instructor">Instructor: <%= course.instructor.first_name %></p>
+    
+    <div class="actions">
+      <div class="primary-actions">
+        <%= link_to "Show", course_path(course), class: "btn btn-info" %>
+        <%= link_to "Edit", edit_course_path(course), class: "btn btn-warning" %>
+      </div>
+      <div class="danger-action">
+        <%= button_to "Delete", course_path(course), method: :delete,
+                     data: { confirm: "Are you sure?" },
+                     class: "btn btn-danger" %>
+      </div>
+    </div>
+  </div>
 <% end %>
+
+<div class="pagination">
+  <%= paginate @courses %>
+</div>
+
+<style>
+  .course {
+    margin: 20px 0;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+
+  .instructor {
+    color: #666;
+    font-style: italic;
+  }
+
+  .actions {
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .primary-actions {
+    display: flex;
+    gap: 10px;
+  }
+
+  .btn {
+    padding: 8px 12px;
+    border-radius: 4px;
+    text-decoration: none;
+    margin-right: 10px;
+  }
+
+  .btn-primary { background-color: #007bff; color: white; }
+  .btn-info { background-color: #007bff; color: white; }
+  .btn-warning { background-color:rgb(192, 192, 192); color: #333; }
+  .btn-danger { background-color: #dc3545; color: white; }
+
+  .pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    gap: 8px;
+    margin-bottom: 20px
+  }
+
+  .pagination a {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    color: #333;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+
+  .pagination a:hover {
+    background-color: #f8f9fa;
+    border-color: #007bff;
+    color: #007bff;
+  }
+
+  .pagination .current {
+    border-color: #007bff;
+    font-weight: 500;
+  }
+
+  .pagination .disabled {
+    color: #666;
+    pointer-events: none;
+    opacity: 0.6;
+  }
+</style>
+
