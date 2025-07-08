@@ -29,6 +29,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_07_180000) do
     t.bigint "instructor_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "public", default: true, null: false
     t.index ["instructor_id"], name: "index_courses_on_instructor_id"
   end
 
