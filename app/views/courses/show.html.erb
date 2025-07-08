@@ -8,7 +8,7 @@
 <p>Description: <%= @course.description %></p>
 <p>Instructor: <%= @course.instructor.first_name %></p>
 <p>
-  <span class="badge <%= @course.public ? 'badge-public' : 'badge-private' %>">
+  <span class="badge <%= @course.public ? "badge-public" : "badge-private" %>">
     <%= @course.public ? "Public" : "Private" %>
   </span>
 </p>
