@@ -7,7 +7,11 @@
 
 <p>Description: <%= @course.description %></p>
 <p>Instructor: <%= @course.instructor.first_name %></p>
-
+<p>
+  <span class="badge <%= @course.public ? 'badge-public' : 'badge-private' %>">
+    <%= @course.public ? "Public" : "Private" %>
+  </span>
+</p>
 <% @course_modules.each do |course_module| %>
     <%= course_module.title %>
     <%= link_to "Edit", edit_course_course_module_path(course_module.course_id, course_module.id) %>

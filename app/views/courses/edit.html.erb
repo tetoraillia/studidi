@@ -12,6 +12,10 @@
     <div class="field">
         <%= form.hidden_field :instructor_id %>
     </div>
+    <div class="field">
+        <%= form.label :public, "Public course?" %>
+        <%= form.check_box :public %>
+    </div>
     <div class="actions">
         <%= form.submit %>
     </div>
