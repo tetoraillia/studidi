@@ -14,9 +14,16 @@
   </div>
 
   <div class="field">
-    <%= form.label :content_type %>
-    <%= form.select :content_type, [ "text", "video", "test" ] %>
+    <%= form.hidden_field :content_type %>
   </div>
+
+
+  <% if @lesson.content_type == "video" %>
+    <div class="field">
+      <%= form.label :video_url%>
+      <%= form.text_field :video_url %>
+    </div>
+  <% end %>
 
   <div class="field">
     <%= form.label :position %>
