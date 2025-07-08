@@ -1,0 +1,5 @@
+<% lesson ||= local_assigns[:lesson] || local_assigns.dig(:locals, :lesson) %>
+
+It's test
+
+<p><%= lesson.content %></p>

@@ -10,26 +10,13 @@ lessons:
 <hr>
 
 <% @lessons.each do |lesson| %>
-    <p><%= lesson.title %></p>
-    <%= lesson.content %>
-    <%= lesson.content_type %>
-    <%= lesson.position %>
-    <%= button_to "Destroy",
-              course_course_module_lesson_path(@course_module.course_id,
-                                               @course_module.id,
-                                               lesson),
-              method: :delete,
-              data: { confirm: "Are you sure?" } %>
-
-<%= link_to "Edit",
-            edit_course_course_module_lesson_path(@course_module.course_id,
-                                                  @course_module.id,
-                                                  lesson) %>
+    <%= render partial: "lessons/types/#{lesson.content_type}", locals: { lesson: lesson } %>
+    <%= button_to "Destroy", course_course_module_lesson_path(@course_module.course_id, @course_module.id, lesson), method: :delete, data: { confirm: "Are you sure?" } %>
     <hr>
 <% end %>
 
 
-<%= link_to "New Lesson", new_course_course_module_lesson_path(@course_module.course_id, @course_module.id) %>
+<%= link_to "New Lesson", select_lesson_type_course_course_module_lessons_path(@course_module.course_id, @course_module.id) %>
 <%= link_to "Back", course_course_modules_path %>
 
 <%= paginate @lessons %>

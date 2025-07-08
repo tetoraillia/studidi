@@ -1,0 +1,83 @@
+<% lesson ||= local_assigns[:lesson] || local_assigns.dig(:locals, :lesson) %>
+
+<div class="video-lesson">
+  <div class="container py-4">
+    <div class="card shadow-sm">
+      <div class="card-header bg-light">
+        <h2 class="h5 mb-0"><%= lesson&.title || "Video Lesson" %></h2>
+      </div>
+      <div class="card-body p-4">
+        <% if lesson&.video_url.present? %>
+          <div class="ratio ratio-16x9 mb-4">
+            <% if lesson.video_url.include?("youtube.com") || lesson.video_url.include?("youtu.be") %>
+              <% youtube_id = lesson.video_url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i) %>
+              <% if youtube_id.present? %>
+                <iframe 
+                  src="https://www.youtube.com/embed/<%= youtube_id[1] %>" 
+                  title="<%= lesson&.title || "YouTube Video" %>" 
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                  allowfullscreen>
+                </iframe>
+              <% end %>
+            <% elsif lesson.video_url.include?("vimeo.com") %>
+              <% vimeo_id = lesson.video_url.match(/vimeo\.com\/(\d+)/i) %>
+              <% if vimeo_id.present? %>
+                <iframe 
+                  src="https://player.vimeo.com/video/<%= vimeo_id[1] %>" 
+                  title="<%= lesson&.title || "Vimeo Video" %>" 
+                  frameborder="0" 
+                  allow="autoplay; fullscreen; picture-in-picture" 
+                  allowfullscreen>
+                </iframe>
+              <% end %>
+            <% else %>
+              <video controls class="w-100">
+                <source src="<%= lesson.video_url %>" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+            <% end %>
+          </div>
+          
+          <% if lesson&.video_url.present? %>
+            <div class="video-description mt-4">
+              <h5 class="h6 mb-3">About this video:</h5>
+              <div class="lesson-text-video_url">
+                <%= raw lesson.content %>
+              </div>
+            </div>
+          <% end %>
+        <% else %>
+          <div class="text-center text-muted py-4">
+            <div class="mb-3">
+              <i class="bi bi-camera-video-off" style="font-size: 3rem;"></i>
+            </div>
+            <p>No video available for this lesson.</p>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.video-lesson .video-description {
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  padding: 1.25rem;
+}
+
+.video-lesson .lesson-text-video_url {
+  line-height: 1.6;
+}
+
+.video-lesson .lesson-text-video_url p:last-child {
+  margin-bottom: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .video-lesson .ratio-16x9 {
+    --bs-aspect-ratio: 56.25%; /* 16:9 Aspect Ratio */
+  }
+}
+</style>
