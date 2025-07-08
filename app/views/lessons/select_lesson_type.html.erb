@@ -1,6 +1,6 @@
 <h1>Select lesson type</h1>
 
 <%= form_with url: new_course_course_module_lesson_path(@course, @course_module), method: :get, local: true do |f| %>
-  <%= f.select :content_type, [['Text', 'text'], ['Video', 'video'], ['Test', 'test']], { prompt: "Select lesson type" }, class: 'form-select' %>
+  <%= f.select :content_type, [['Text', 'text'], ['Video', 'video'], ['Test', 'test']], { selected: 'text' }, class: 'form-select' %>
   <%= f.submit "Continue" %>
 <% end %>
