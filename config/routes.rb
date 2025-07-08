@@ -12,7 +12,11 @@ Rails.application.routes.draw do
 
   resources :courses do
     resources :course_modules do
-     resources :lessons
+     resources :lessons do
+      collection do
+        get "select_lesson_type"
+      end
+     end
     end
   end
 end
