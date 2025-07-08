@@ -15,7 +15,7 @@
   </div>
 <% end %>
 
-<%= form_with(model: [@course, @invitation]) do |form| %>
+<%= form_with(model: [ @course, @invitation ]) do |form| %>
   <div class="field">
     <%= form.label :email, "Invite Email" %>
     <%= form.email_field :email, required: true %>
