@@ -1,5 +1,7 @@
 <% lesson ||= local_assigns[:lesson] || local_assigns.dig(:locals, :lesson) %>
 
+<h2><%= lesson.title %></h2>
+
 <div class="lesson-content">
   <div class="container py-4">
     <div class="card shadow-sm">
