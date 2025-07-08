@@ -1,41 +1,35 @@
 class LessonsController < ApplicationController
-    before_action :set_course, only: [ :new, :create, :edit, :update, :destroy ]
     before_action :authenticate_user!
     before_action :check_instructor
     before_action :set_lesson, only: [ :edit, :update, :destroy ]
+    before_action :set_course_data, only: [ :new, :create, :edit, :update, :destroy ]
+
+    def select_lesson_type
+      @course = Course.find(params[:course_id])
+      @course_module = @course.course_modules.find(params[:course_module_id])
+    end
 
     def new
         @lesson = Lesson.new
-        @course_module = CourseModule.find(params[:course_module_id])
-        @course = @course_module.course
+        @lesson.content_type = params[:content_type]
     end
 
     def create
         @lesson = Lesson.new(lesson_params)
         if @lesson.save
-            @course_module = CourseModule.find(params[:course_module_id])
-            @course = @course_module.course
             redirect_to course_course_module_path(@course, @course_module), notice: "Lesson was successfully created."
         else
-            @course_module = CourseModule.find(params[:course_module_id])
-            @course = @course_module.course
             render :new
         end
     end
 
     def edit
-        @course = @lesson.course_module.course
-        @course_module = @lesson.course_module
     end
 
     def update
         if @lesson.update(lesson_params)
-            @course_module = @lesson.course_module
-            @course = @course_module.course
             redirect_to course_course_module_path(@course, @course_module), notice: "Lesson was successfully updated."
         else
-            @course_module = @lesson.course_module
-            @course = @course_module.course
             render :edit
         end
     end
@@ -47,7 +41,8 @@ class LessonsController < ApplicationController
 
     private
 
-    def set_course
+    def set_course_data
+        @course_module = CourseModule.find(params[:course_module_id])
         @course = Course.find(params[:course_id])
     end
 
@@ -56,7 +51,7 @@ class LessonsController < ApplicationController
     end
 
     def lesson_params
-        params.require(:lesson).permit(:title, :content, :content_type, :course_module_id, :position)
+        params.require(:lesson).permit(:title, :content, :content_type, :course_module_id, :position, :video_url)
     end
 
     def check_instructor
