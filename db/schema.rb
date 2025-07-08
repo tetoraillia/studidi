@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_03_123752) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_07_180000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -43,6 +43,19 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_03_123752) do
     t.index ["user_id"], name: "index_enrollments_on_user_id"
   end
 
+  create_table "invitations", force: :cascade do |t|
+    t.string "email", null: false
+    t.bigint "course_id", null: false
+    t.bigint "invited_by_id", null: false
+    t.string "token", null: false
+    t.string "status", default: "pending"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["course_id"], name: "index_invitations_on_course_id"
+    t.index ["invited_by_id"], name: "index_invitations_on_invited_by_id"
+    t.index ["token"], name: "index_invitations_on_token", unique: true
+  end
+
   create_table "lessons", force: :cascade do |t|
     t.string "title"
     t.text "content"
@@ -73,5 +86,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_03_123752) do
   add_foreign_key "courses", "users", column: "instructor_id"
   add_foreign_key "enrollments", "courses"
   add_foreign_key "enrollments", "users"
+  add_foreign_key "invitations", "courses"
+  add_foreign_key "invitations", "users", column: "invited_by_id"
   add_foreign_key "lessons", "course_modules"
 end
