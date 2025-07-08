@@ -4,6 +4,10 @@ class EnrollmentsController < ApplicationController
 
   def create
     if current_user.student?
+      if !@course.public
+        redirect_to @course, alert: "You can only enroll in public courses. Please ask the instructor for an invitation."
+        return
+      end
       enrollment = Enrollment.find_or_initialize_by(user: current_user, course: @course)
       if enrollment.persisted?
         redirect_to @course, notice: "You are already enrolled in this course."
