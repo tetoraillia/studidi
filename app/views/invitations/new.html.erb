@@ -1,0 +1,28 @@
+<h1>Invite to <%= @course.title %></h1>
+
+<% if notice %>
+  <p class="notice"><%= notice %></p>
+<% end %>
+
+<% if @invitation.errors.any? %>
+  <div id="error_explanation">
+    <h2><%= pluralize(@invitation.errors.count, "error") %> prohibited this invitation from being sent:</h2>
+    <ul>
+      <% @invitation.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<%= form_with(model: [@course, @invitation]) do |form| %>
+  <div class="field">
+    <%= form.label :email, "Invite Email" %>
+    <%= form.email_field :email, required: true %>
+  </div>
+  <div class="actions">
+    <%= form.submit "Send Invitation" %>
+  </div>
+<% end %>
+
+<%= link_to "Back to Course", course_path(@course) %>
