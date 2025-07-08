@@ -40,6 +40,11 @@ class CoursesController < ApplicationController
         redirect_to courses_url, notice: "Course was successfully destroyed."
     end
 
+    def invite
+        @course = Course.find(params[:id])
+        redirect_to new_course_invitation_path(@course)
+    end
+
     private
 
     def set_course
@@ -47,7 +52,7 @@ class CoursesController < ApplicationController
     end
 
     def course_params
-        params.require(:course).permit(:title, :description, :instructor_id)
+        params.require(:course).permit(:title, :description, :instructor_id, :public)
     end
 
     def check_instructor

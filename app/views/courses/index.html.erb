@@ -1,24 +1,50 @@
 <h1>Courses</h1>
 
-<%= link_to "New Course", new_course_path, class: "btn btn-primary" %>
+<%= link_to "Sign In", new_user_session_path, class: "btn btn-primary" %>
+<%= button_to "Log Out", destroy_user_session_path, method: :delete, data: { confirm: "Are you sure you want to log out?" }, class: "btn btn-outline-secondary" %>
+
+<% if current_user&.teacher? %>
+  <%= link_to "New Course", new_course_path, class: "btn btn-primary" %>
+<% end %>
 
 <% @courses.each do |course| %>
   <div class="course">
     <h2><%= course.title %></h2>
     <p><%= course.description %></p>
     <p class="instructor">Instructor: <%= course.instructor.first_name %></p>
+    <p>
+      <span class="badge <%= course.public ? "badge-public" : "badge-private" %>">
+        <%= course.public ? "Public" : "Private" %>
+      </span>
+    </p>
+    <% if current_user&.student? && current_user.enrolled_in?(course) %>
+      <span class="badge">Enrolled</span>
+    <% end %>
     
     <div class="actions">
       <div class="primary-actions">
-        <%= link_to "Show", course_course_modules_path(course), class: "btn btn-info" %>
-        <%= link_to "Edit", edit_course_path(course), class: "btn btn-warning" %>
-      </div>
-      <div class="danger-action">
-        <%= button_to "Delete", course_path(course), method: :delete,
-                     data: { confirm: "Are you sure?" },
-                     class: "btn btn-danger" %>
+        <%= link_to "View", course_path(course), class: "btn btn-info" %>
+        <% if current_user&.student? && !current_user.enrolled_in?(course) && course.public %>
+          <%= button_to "Enroll", course_enrollments_path(course), method: :post, class: "btn btn-primary" %>
+        <% end %>
+        <% if current_user&.student? && current_user.enrolled_in?(course) %>
+          <%= button_to "Leave", course_enrollment_path(course, current_user.enrollments.find_by(course: course)), method: :delete, data: { confirm: "Are you sure you want to leave this course?" }, class: "btn btn-danger" %>
+        <% end %>
       </div>
     </div>
+
+    <% if current_user&.teacher? %>
+      <div class="actions">
+        <div class="primary-actions">          
+          <%= link_to "Edit", edit_course_path(course), class: "btn btn-warning" %>
+        </div>
+        <div class="danger-action">
+          <%= button_to "Delete", course_path(course), method: :delete,
+                      data: { confirm: "Are you sure?" },
+                      class: "btn btn-danger" %>
+        </div>
+      </div>
+    <% end %>
   </div>
 <% end %>
 
@@ -96,5 +122,32 @@
     pointer-events: none;
     opacity: 0.6;
   }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 10px;
+    height: 22px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #198754;
+    background-color: #e6f4ea;
+    border: 1px solid #c3e6cb;
+    border-radius: 999px;
+    line-height: 1;
+  }
+
+  .badge-public {
+    color: #198754;
+    background-color: #e6f4ea;
+    border: 1px solid #c3e6cb;
+  }
+  .badge-private {
+    color: #b02a37;
+    background-color: #f8d7da;
+    border: 1px solid #f5c2c7;
+  }
+
 </style>
 

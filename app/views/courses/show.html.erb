@@ -1,9 +1,17 @@
 <h1>Course: <%= @course.title %></h1>
-<%= link_to "New Module", new_course_course_module_path(@course) %>
+<% if current_user&.teacher? && @course.instructor == current_user %>
+    <%= link_to "New Module", new_course_course_module_path(@course) %>
+    <%= link_to "Edit", edit_course_path(@course) %>
+    <%= link_to "Invite", invite_course_path(@course), class: "btn btn-success" %>
+<% end %>
 
 <p>Description: <%= @course.description %></p>
 <p>Instructor: <%= @course.instructor.first_name %></p>
-
+<p>
+  <span class="badge <%= @course.public ? "badge-public" : "badge-private" %>">
+    <%= @course.public ? "Public" : "Private" %>
+  </span>
+</p>
 <% @course_modules.each do |course_module| %>
     <%= course_module.title %>
     <%= link_to "Edit", edit_course_course_module_path(course_module.course_id, course_module.id) %>
@@ -11,5 +19,4 @@
 <% end %>
 <br>
 
-<%= link_to "Edit", edit_course_path(@course) %>
 <%= link_to "Back to Courses", courses_path %>

@@ -1,0 +1,10 @@
+<p>Hello,</p>
+<p>
+  You have been invited to join the course "<%= @course.title %>".
+</p>
+<p>
+  Click the link below to accept the invitation:
+</p>
+<p>
+  <%= link_to "Accept Invitation", @accept_url, href: @accept_url %>
+</p>
