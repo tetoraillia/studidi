@@ -10,7 +10,15 @@ lessons:
 <hr>
 
 <% @lessons.each do |lesson| %>
-    <%= render partial: "lessons/types/#{lesson.content_type}", locals: { lesson: lesson } %>
+    <% begin %>
+      <%= render partial: "lessons/types/#{lesson.content_type}", locals: { lesson: lesson } %>
+    <% rescue ActionView::MissingTemplate => e %>
+      <div class="alert alert-warning">
+        <p>Could not find template for lesson type: <%= lesson.content_type %></p>
+        <p>Lesson ID: <%= lesson.id %></p>
+        <p>Title: <%= lesson.title %></p>
+      </div>
+    <% end %>
     <%= button_to "Destroy", course_course_module_lesson_path(@course_module.course_id, @course_module.id, lesson), method: :delete, data: { confirm: "Are you sure?" } %>
     <hr>
 <% end %>
