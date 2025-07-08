@@ -27,7 +27,6 @@ Rails.application.routes.draw do
       end
     end
     resources :course_modules do
-      resources :lessons
       resources :lessons do
         collection do
           get "select_lesson_type"
