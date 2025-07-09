@@ -11,6 +11,7 @@ lessons:
 
 <% @lessons.each do |lesson| %>
     <%= render partial: "lessons/types/#{lesson.content_type}", locals: { lesson: lesson } %>
+    <%= link_to "Edit", edit_course_course_module_lesson_path(@course_module.course_id, @course_module.id, lesson) %>
     <%= button_to "Destroy", course_course_module_lesson_path(@course_module.course_id, @course_module.id, lesson), method: :delete, data: { confirm: "Are you sure?" } %>
     <hr>
 <% end %>

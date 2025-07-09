@@ -18,10 +18,11 @@ class CourseModulesController < ApplicationController
     end
 
     def create
-        @course_module = CourseModule.new(course_module_params)
-        if @course_module.save
-            redirect_to course_course_module_path(@course, @course_module), notice: "Course module was successfully created."
+        result = CourseModules::CourseModuleCreator.new(course_module_params).call
+        if result.success?
+            redirect_to course_course_modules_path(@course), notice: "Course module was successfully created."
         else
+            @course_module = CourseModule.new(course_module_params)
             render :new
         end
     end
@@ -30,9 +31,11 @@ class CourseModulesController < ApplicationController
     end
 
     def update
-        if @course_module.update(course_module_params)
-            redirect_to course_course_module_path(@course, @course_module), notice: "Course module was successfully updated."
+        result = CourseModules::CourseModuleUpdater.new(@course_module.id, course_module_params).call
+        if result.success?
+            redirect_to course_course_module_path(@course), notice: "Course module was successfully updated."
         else
+            @course_module = CourseModule.new(course_module_params)
             render :edit
         end
     end
@@ -53,16 +56,11 @@ class CourseModulesController < ApplicationController
     end
 
     def check_instructor
-        @course ||= if params[:id]
-                      CourseModule.find(params[:id]).course
-        else
-                      Course.find(params[:course_id])
+        result = AccessChecker::CourseAccessChecker.new(course: @course, user: current_user).call
+        unless result.success?
+            redirect_to course_course_modules_url notice: "You are not an owner of this course."
         end
-
-        unless @course.instructor == current_user
-          redirect_to course_course_modules_url notice: "You are not an owner of this course."
-        end
-      end
+    end
 
 
     def course_module_params
