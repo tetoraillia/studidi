@@ -2,7 +2,7 @@
   <div>
     <h1>Course: <%= @course.title %></h1>
     <% if current_user&.teacher? && @course.instructor == current_user %>
-        <%= link_to "New Module", new_course_course_module_path(@course) %>
+        <%= link_to "New Topic", new_course_topic_path(@course) %>
         <%= link_to "Edit", edit_course_path(@course) %>
         <%= link_to "Invite", invite_course_path(@course), class: "btn btn-success" %>
     <% end %>
@@ -27,10 +27,10 @@
     <% end %>
   </div>
 </div>
-<% @course_modules.each do |course_module| %>
-    <%= course_module.title %>
-    <%= link_to "Edit", edit_course_course_module_path(course_module.course_id, course_module.id) %>
-    <%= button_to "Destroy", course_course_module_path(course_module.course_id, course_module.id), method: :delete, data: { confirm: "Are you sure?" } %>
+<% @topics.each do |topic| %>
+    <%= topic.title %>
+    <%= link_to "Edit", edit_course_topic_path(topic.course_id, topic.id) %>
+    <%= button_to "Destroy", course_topic_path(topic.course_id, topic.id), method: :delete, data: { confirm: "Are you sure?" } %>
 <% end %>
 <br>
 

@@ -8,7 +8,7 @@ class CoursesController < ApplicationController
     end
 
     def show
-        @course_modules = CourseModule.where(course_id: params[:id])
+        @topics = Topic.where(course_id: params[:id])
     end
 
     def new
@@ -16,10 +16,11 @@ class CoursesController < ApplicationController
     end
 
     def create
-        @course = Course.new(course_params)
-        if @course.save
-            redirect_to course_url(@course), notice: "Course was successfully created."
+        result = Courses::CourseCreator.new(course_params).call
+        if result.success?
+            redirect_to course_url(result.data), notice: "Course was successfully created."
         else
+            @course = Course.new(course_params)
             render :new
         end
     end
@@ -28,7 +29,8 @@ class CoursesController < ApplicationController
     end
 
     def update
-        if @course.update(course_params)
+        result = Courses::CourseUpdater.new(@course.id, course_params).call
+        if result.success?
             redirect_to @course, notice: "Course was successfully updated."
         else
             render :edit
@@ -56,7 +58,8 @@ class CoursesController < ApplicationController
     end
 
     def check_instructor
-        unless current_user == @course.instructor
+        result = AccessChecker::CourseAccessChecker.new(course: @course, user: current_user).call
+        unless result.success?
             redirect_to courses_url, notice: "You are not an owner of this course."
         end
     end

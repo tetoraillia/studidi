@@ -1,0 +1,22 @@
+<h1>Topics</h1>
+
+<%= link_to "New Topic", new_course_topic_path %>
+
+<% @topics.each do |topic| %>
+  <br>
+  <hr>
+  <%= link_to topic.title, course_topic_path(topic.course_id, topic.id) %>
+  <p>
+    <strong>Topic:</strong> <%= topic.title %><br>
+    <strong>Course:</strong> <%= topic.course.title %><br>
+    <strong>Position:</strong> <%= topic.position %><br>
+
+    <%= link_to "Edit", edit_course_topic_path(topic.course_id, topic.id) %>
+    <%= button_to "Destroy", course_topic_path(topic.course_id, topic.id), method: :delete, data: { confirm: "Are you sure?" } %>
+  </p>
+<% end %>
+
+<%= link_to "Back to Courses", courses_path %>
+
+<%= paginate @topics %>
+

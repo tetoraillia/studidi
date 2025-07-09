@@ -10,18 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_08_091213) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_09_103820) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
-
-  create_table "course_modules", force: :cascade do |t|
-    t.string "title"
-    t.bigint "course_id", null: false
-    t.integer "position"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["course_id"], name: "index_course_modules_on_course_id"
-  end
 
   create_table "courses", force: :cascade do |t|
     t.string "title"
@@ -61,12 +52,21 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_08_091213) do
     t.string "title"
     t.text "content"
     t.string "content_type", default: "text"
-    t.bigint "course_module_id", null: false
+    t.bigint "topic_id", null: false
     t.integer "position"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "video_url"
-    t.index ["course_module_id"], name: "index_lessons_on_course_module_id"
+    t.index ["topic_id"], name: "index_lessons_on_topic_id"
+  end
+
+  create_table "topics", force: :cascade do |t|
+    t.string "title"
+    t.bigint "course_id", null: false
+    t.integer "position"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["course_id"], name: "index_topics_on_course_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -84,11 +84,11 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_08_091213) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
-  add_foreign_key "course_modules", "courses"
   add_foreign_key "courses", "users", column: "instructor_id"
   add_foreign_key "enrollments", "courses"
   add_foreign_key "enrollments", "users"
   add_foreign_key "invitations", "courses"
   add_foreign_key "invitations", "users", column: "invited_by_id"
-  add_foreign_key "lessons", "course_modules"
+  add_foreign_key "lessons", "topics"
+  add_foreign_key "topics", "courses"
 end
