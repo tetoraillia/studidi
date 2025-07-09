@@ -8,7 +8,7 @@ class CoursesController < ApplicationController
     end
 
     def show
-        @course_modules = CourseModule.where(course_id: params[:id])
+        @topics = Topic.where(course_id: params[:id])
     end
 
     def new

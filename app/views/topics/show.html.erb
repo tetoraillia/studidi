@@ -1,0 +1,24 @@
+<h1>Topic: <%= @topic.title %></h1>
+
+<p>Position: <%= @topic.position %></p>
+
+<p>Course: <%= @topic.course.title %></p>
+
+<p>Instructor: <%= @topic.course.instructor.first_name %></p>
+
+lessons:
+<hr>
+
+<% @lessons.each do |lesson| %>
+    <%= render partial: "lessons/types/#{lesson.content_type}", locals: { lesson: lesson } %>
+    <%= link_to "Edit", edit_course_topic_lesson_path(@topic.course_id, @topic.id, lesson) %>
+    <%= button_to "Destroy", course_topic_lesson_path(@topic.course_id, @topic.id, lesson), method: :delete, data: { confirm: "Are you sure?" } %>
+    <hr>
+<% end %>
+
+
+<%= link_to "New Lesson", select_lesson_type_course_topic_lessons_path(@topic.course_id, @topic.id) %>
+<%= link_to "Back", course_topics_path %>
+
+<%= paginate @lessons %>
+

@@ -1,12 +1,12 @@
 <h1>Lesson</h1>
 
-<%= form_with(model: [ @course, @course_module, @lesson ]) do |form| %>  
+<%= form_with(model: [ @course, @topic, @lesson ]) do |form| %>  
   <div class="field">
     <%= form.label :title %>
     <%= form.text_field :title %>
   </div>
 
-  <%= form.hidden_field :course_module_id, value: @course_module.id %>
+  <%= form.hidden_field :topic_id, value: @topic.id %>
 
   <div class="field">
     <%= form.label :content %>

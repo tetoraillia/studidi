@@ -26,7 +26,7 @@ Rails.application.routes.draw do
         get :accept, to: "invitations#accept"
       end
     end
-    resources :course_modules do
+    resources :topics do
       resources :lessons
       resources :lessons do
         collection do

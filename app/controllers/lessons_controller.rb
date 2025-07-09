@@ -15,7 +15,7 @@ class LessonsController < ApplicationController
     def create
         result = Lessons::LessonCreator.new(lesson_params).call
         if result.success?
-            redirect_to course_course_module_path(@course, @course_module), notice: "Lesson was successfully created."
+            redirect_to course_topic_path(@course, @topic), notice: "Lesson was successfully created."
         else
             @lesson = Lesson.new(lesson_params)
             render :new
@@ -28,7 +28,7 @@ class LessonsController < ApplicationController
     def update
         result = Lessons::LessonUpdater.new(@lesson.id, lesson_params).call
         if result.success?
-            redirect_to course_course_module_path(@course, @course_module), notice: "Lesson was successfully updated."
+            redirect_to course_topic_path(@course, @topic), notice: "Lesson was successfully updated."
         else
             @lesson = Lesson.new(lesson_params)
             render :edit
@@ -37,13 +37,13 @@ class LessonsController < ApplicationController
 
     def destroy
         @lesson.destroy
-        redirect_to course_course_module_path, notice: "Lesson was successfully destroyed."
+        redirect_to course_topic_path, notice: "Lesson was successfully destroyed."
     end
 
     private
 
     def set_course_data
-        @course_module = CourseModule.find(params[:course_module_id])
+        @topic = Topic.find(params[:topic_id])
         @course = Course.find(params[:course_id])
     end
 
@@ -52,13 +52,13 @@ class LessonsController < ApplicationController
     end
 
     def lesson_params
-        params.require(:lesson).permit(:title, :content, :content_type, :course_module_id, :position, :video_url)
+        params.require(:lesson).permit(:title, :content, :content_type, :topic_id, :position, :video_url)
     end
 
     def authorize_instructor
         result = AccessChecker::CourseAccessChecker.new(course: @course, user: current_user).call
         unless result.success?
-            redirect_to course_course_modules_url, notice: "You are not an owner of this course."
+            redirect_to course_topics_url, notice: "You are not an owner of this course."
         end
     end
 end
