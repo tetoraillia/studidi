@@ -20,7 +20,7 @@ class Invitations::InvitationCreator
         send_invitation_email(invitation)
     end
 
-    private 
+    private
 
     def send_invitation_email(invitation)
         if invitation.save
@@ -41,7 +41,7 @@ class Invitations::InvitationCreator
     end
 
     def user_not_found_result
-        return Result.new(success: false, error_code: CODE_USER_NOT_FOUND, message: "User with email #{@invited_email} not found.")
+        Result.new(success: false, error_code: CODE_USER_NOT_FOUND, message: "User with email #{@invited_email} not found.")
     end
 
     def invitation_already_exists_result

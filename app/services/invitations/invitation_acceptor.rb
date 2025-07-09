@@ -2,7 +2,7 @@ class Invitations::InvitationAcceptor
     CODE_NOT_SIGNED_IN = :not_signed_in
     CODE_INVITATION_INVALID = :invalid_invitation
     CODE_ALREADY_ENROLLED = :already_enrolled
-    
+
     def initialize(invitation:, current_user:, course:)
         @invitation = invitation
         @user = current_user
