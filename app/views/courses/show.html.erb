@@ -1,17 +1,32 @@
-<h1>Course: <%= @course.title %></h1>
-<% if current_user&.teacher? && @course.instructor == current_user %>
-    <%= link_to "New Topic", new_course_topic_path(@course) %>
-    <%= link_to "Edit", edit_course_path(@course) %>
-    <%= link_to "Invite", invite_course_path(@course), class: "btn btn-success" %>
-<% end %>
+<div style="display: flex; justify-content: space-between; align-items: flex-start;">
+  <div>
+    <h1>Course: <%= @course.title %></h1>
+    <% if current_user&.teacher? && @course.instructor == current_user %>
+        <%= link_to "New Topic", new_course_topic_path(@course) %>
+        <%= link_to "Edit", edit_course_path(@course) %>
+        <%= link_to "Invite", invite_course_path(@course), class: "btn btn-success" %>
+    <% end %>
 
-<p>Description: <%= @course.description %></p>
-<p>Instructor: <%= @course.instructor.first_name %></p>
-<p>
-  <span class="badge <%= @course.public ? "badge-public" : "badge-private" %>">
-    <%= @course.public ? "Public" : "Private" %>
-  </span>
-</p>
+    <p>Description: <%= @course.description %></p>
+    <p>Instructor: <%= @course.instructor.first_name %></p>
+    <p>
+      <span class="badge <%= @course.public ? "badge-public" : "badge-private" %>">
+        <%= @course.public ? "Public" : "Private" %>
+      </span>
+    </p>
+  </div>
+  
+  <div style="background: #f8f9fa; padding: 15px; border-radius: 5px; min-width: 200px;">
+    <p style="margin-top: 0; font-weight: bold;">People in this course:</p>
+    <p>teacher: <%= @course.instructor.first_name %></p>
+    <% @course.enrollments.each do |enrollment| %>
+        <div style="padding: 5px 0; border-bottom: 1px solid #eee;">
+        
+            <%= enrollment.user.first_name %>
+        </div>
+    <% end %>
+  </div>
+</div>
 <% @topics.each do |topic| %>
     <%= topic.title %>
     <%= link_to "Edit", edit_course_topic_path(topic.course_id, topic.id) %>
