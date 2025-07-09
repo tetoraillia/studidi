@@ -1,38 +1,44 @@
 class InvitationsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_course
-  before_action :authorize_teacher!
+  before_action :authorize_teacher!, only: [:new, :create]
 
   def new
     @invitation = Invitation.new
   end
 
   def create
-    @invitation = @course.invitations.build(invitation_params)
-    @invitation.invited_by = current_user
-    if @invitation.save
-      InvitationMailer.invite_email(@invitation).deliver_later
+    result = Invitations::InvitationCreator.new(
+      current_user: current_user,
+      email: invitation_params[:email],
+      course: @course
+    ).call
+
+    if result.success?
       redirect_to course_path(@course), notice: "Invitation sent."
     else
+      @invitation = Invitation.new(email: invitation_params[:email])
+      flash.now[:alert] = result.message || "Failed to send invitation."
       render :new
     end
   end
 
   def accept
-    @invitation = Invitation.find_by(token: params[:id])
-    @course = @invitation&.course
-    if @invitation && @invitation.status == "pending"
-      if user_signed_in?
-        unless current_user.enrolled_in?(@course)
-          Enrollment.create(user: current_user, course: @course, enrolled_at: Time.current)
-        end
-        @invitation.update(status: "accepted")
-        redirect_to course_path(@course), notice: "You have joined the course."
-      else
-        redirect_to new_user_session_path, alert: "Please sign in to accept the invitation."
-      end
+    invitation = Invitation.find_by(token: params[:id])
+    course = invitation&.course
+
+    result = Invitations::InvitationAcceptor.new(
+      invitation:,
+      current_user:,
+      course:
+    ).call
+
+    if result.success?
+      redirect_to course_path(course), notice: "You have joined the course."
+    elsif result.error_code == :not_signed_in
+      redirect_to new_user_session_path, alert: result.message
     else
-      redirect_to root_path, alert: "Invalid or expired invitation."
+      redirect_to root_path, alert: result.message
     end
   end
 
