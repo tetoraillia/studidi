@@ -8,11 +8,11 @@ class InvitationsController < ApplicationController
   end
 
   def create
-    result = Invitations::InvitationCreator.new(
-      current_user: current_user,
-      email: invitation_params[:email],
-      course: @course
-    ).call
+    result = Invitations::CreateInvitation.call(
+      params: invitation_params,
+      course: @course,
+      current_user: current_user
+    )
 
     if result.success?
       redirect_to course_path(@course), notice: "Invitation sent."
@@ -24,14 +24,13 @@ class InvitationsController < ApplicationController
   end
 
   def accept
-    invitation = Invitation.find_by(token: params[:id])
-    course = invitation&.course
+    @invitation = Invitation.find_by(token: params[:id])
 
-    result = Invitations::InvitationAcceptor.new(
-      invitation:,
-      current_user:,
-      course:
-    ).call
+    result = Invitations::AcceptInvitation.call(
+      invitation: @invitation,
+      current_user: current_user,
+      course: @invitation&.course
+    )
 
     if result.success?
       redirect_to course_path(course), notice: "You have joined the course."
@@ -49,9 +48,15 @@ class InvitationsController < ApplicationController
   end
 
   def authorize_teacher!
-    unless current_user.teacher? && @course.instructor == current_user
-      redirect_to course_path(@course), alert: "You are not authorized to invite to this course."
+    result = AccessChecker::TeacherAccessChecker.call(
+      course: @course,
+      current_user: current_user
+    )
+    unless result.success?
+      redirect_to root_path, alert: "You are not authorized to invite to this course."
+      return false
     end
+    true
   end
 
   def invitation_params
