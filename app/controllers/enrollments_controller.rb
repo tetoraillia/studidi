@@ -3,24 +3,12 @@ class EnrollmentsController < ApplicationController
   before_action :set_course
 
   def create
-    if current_user.student?
-      if !@course.public
-        redirect_to @course, alert: "You can only enroll in public courses. Please ask the instructor for an invitation."
-        return
-      end
-      enrollment = Enrollment.find_or_initialize_by(user: current_user, course: @course)
-      if enrollment.persisted?
-        redirect_to @course, notice: "You are already enrolled in this course."
-      else
-        enrollment.enrolled_at = Time.current
-        if enrollment.save
-          redirect_to @course, notice: "Successfully enrolled in the course."
-        else
-          redirect_to @course, alert: "Could not enroll in the course."
-        end
-      end
+    result = Enrollments::EnrollStudent.call(user: current_user, course: @course)
+
+    if result.success?
+      redirect_to @course, notice: result.message
     else
-      redirect_to @course, alert: "Only students can enroll in courses."
+      redirect_to @course, alert: result.error
     end
   end
 

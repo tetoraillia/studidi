@@ -123,7 +123,7 @@ GEM
       actionpack (>= 6.0.0)
       activesupport (>= 6.0.0)
       railties (>= 6.0.0)
-    interactor (3.1.2)
+    interactor
     io-console (0.8.0)
     irb (1.15.2)
       pp (>= 0.6.0)
@@ -383,7 +383,6 @@ DEPENDENCIES
   debug
   devise (~> 4.9)
   importmap-rails
-  interactor (~> 3.1)
   jbuilder
   kamal
   kaminari
