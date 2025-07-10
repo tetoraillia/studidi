@@ -62,16 +62,16 @@ group :development do
 end
 
 group :development, :test do
-  gem 'rspec-rails'
-  gem 'factory_bot_rails'
-  gem 'faker'
-  gem 'database_cleaner-active_record'
+  gem "rspec-rails"
+  gem "factory_bot_rails"
+  gem "faker"
+  gem "database_cleaner-active_record"
 end
 
 group :test do
-  gem 'capybara'
-  gem 'shoulda-matchers'
-  gem 'simplecov', require: false
+  gem "capybara"
+  gem "shoulda-matchers"
+  gem "simplecov", require: false
 end
 
 gem "devise", "~> 4.9"
