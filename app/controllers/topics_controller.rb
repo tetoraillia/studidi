@@ -58,12 +58,11 @@ class TopicsController < ApplicationController
     end
 
     def check_instructor
-        result = AccessChecker::CourseAccessChecker.new(course: @course, user: current_user).call
+        result = Topics::CheckInstructor.call(course: @course, user: current_user)
         unless result.success?
-            redirect_to course_topics_url(@course), notice: "You are not an owner of this course."
+            redirect_to course_topics_url(@course), alert: result.error
         end
     end
-
 
     def topic_params
         params.require(:topic).permit(:title, :course_id, :position)
