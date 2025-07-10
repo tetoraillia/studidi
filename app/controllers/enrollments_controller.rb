@@ -13,7 +13,7 @@ class EnrollmentsController < ApplicationController
   end
 
   def destroy
-    enrollment = Enrollment.find_by(user: current_user, course: @course)
+    enrollment = Enrollment.for_user_and_course(current_user, @course).first
     if enrollment
       enrollment.destroy
       redirect_to @course, notice: "You have left the course."
