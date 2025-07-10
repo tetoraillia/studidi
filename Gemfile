@@ -64,5 +64,3 @@ end
 gem "devise", "~> 4.9"
 
 gem "kaminari"
-
-gem "interactor", "~> 3.1"
