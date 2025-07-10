@@ -18,11 +18,12 @@ class TopicsController < ApplicationController
     end
 
     def create
-        result = Topics::TopicCreator.new(topic_params).call
+        result = Topics::CreateTopic.call(params: topic_params)
         if result.success?
             redirect_to course_topics_path(@course), notice: "Topic was successfully created."
         else
             @topic = Topic.new(topic_params)
+            flash[:alert] = result.error
             render :new
         end
     end
@@ -31,11 +32,12 @@ class TopicsController < ApplicationController
     end
 
     def update
-        result = Topics::TopicUpdater.new(@topic.id, topic_params).call
+        result = Topics::UpdateTopic.call(id: @topic.id, params: topic_params)
         if result.success?
             redirect_to course_topics_path(@course), notice: "Topic was successfully updated."
         else
             @topic = Topic.new(topic_params)
+            flash[:alert] = result.error
             render :edit
         end
     end
