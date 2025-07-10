@@ -13,7 +13,11 @@ class LessonsController < ApplicationController
     end
 
     def create
-        result = Lessons::LessonCreator.new(lesson_params).call
+        result = Lessons::CreateLesson.call(
+            params: lesson_params,
+            course: @course,
+            topic: @topic
+        )
         if result.success?
             redirect_to course_topic_path(@course, @topic), notice: "Lesson was successfully created."
         else
@@ -26,7 +30,12 @@ class LessonsController < ApplicationController
     end
 
     def update
-        result = Lessons::LessonUpdater.new(@lesson.id, lesson_params).call
+        result = Lessons::UpdateLesson.call(
+            id: @lesson.id,
+            params: lesson_params,
+            course: @course,
+            topic: @topic
+        )
         if result.success?
             redirect_to course_topic_path(@course, @topic), notice: "Lesson was successfully updated."
         else
@@ -56,7 +65,10 @@ class LessonsController < ApplicationController
     end
 
     def authorize_instructor
-        result = AccessChecker::CourseAccessChecker.new(course: @course, user: current_user).call
+        result = AccessChecker::CourseAccessChecker.call(
+            course: @course,
+            current_user: current_user
+        )
         unless result.success?
             redirect_to course_topics_url, notice: "You are not an owner of this course."
         end

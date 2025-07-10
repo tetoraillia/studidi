@@ -16,9 +16,13 @@ class CoursesController < ApplicationController
     end
 
     def create
-        result = Courses::CourseCreator.new(course_params).call
+        result = Courses::CreateCourse.call(
+            params: course_params,
+            current_user: current_user
+        )
+
         if result.success?
-            redirect_to course_url(result.data), notice: "Course was successfully created."
+            redirect_to course_url(result.course), notice: "Course was successfully created."
         else
             @course = Course.new(course_params)
             render :new
@@ -29,7 +33,11 @@ class CoursesController < ApplicationController
     end
 
     def update
-        result = Courses::CourseUpdater.new(@course.id, course_params).call
+        result = Courses::UpdateCourse.call(
+            id: @course.id,
+            params: course_params,
+            current_user: current_user
+        )
         if result.success?
             redirect_to @course, notice: "Course was successfully updated."
         else
@@ -58,7 +66,10 @@ class CoursesController < ApplicationController
     end
 
     def check_instructor
-        result = AccessChecker::CourseAccessChecker.new(course: @course, user: current_user).call
+        result = AccessChecker::CourseAccessChecker.call(
+            course: @course,
+            current_user: current_user
+        )
         unless result.success?
             redirect_to courses_url, notice: "You are not an owner of this course."
         end
