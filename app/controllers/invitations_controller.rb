@@ -33,7 +33,7 @@ class InvitationsController < ApplicationController
     )
 
     if result.success?
-      redirect_to course_path(course), notice: "You have joined the course."
+      redirect_to course_path(@course), notice: "You have joined the course."
     elsif result.error_code == :not_signed_in
       redirect_to new_user_session_path, alert: result.message
     else
@@ -44,7 +44,12 @@ class InvitationsController < ApplicationController
   private
 
   def set_course
-    @course = Course.find(params[:course_id])
+    if params[:course_id]
+      @course = Course.find(params[:course_id])
+    elsif params[:id]
+      @invitation = Invitation.find_by(token: params[:id])
+      @course = @invitation&.course
+    end
   end
 
   def authorize_teacher!
