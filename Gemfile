@@ -43,6 +43,8 @@ gem "thruster", require: false
 # gem "image_processing", "~> 1.2"
 
 group :development, :test do
+  # Add controller testing helpers
+  gem "rails-controller-testing"
   # Provide RuboCop with an ERB-aware parser so it can lint *.erb templates without raising
   # false positive syntax errors such as "unexpected token tLT".
   gem "rubocop-erb", require: false
