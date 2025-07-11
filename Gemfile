@@ -72,6 +72,7 @@ group :test do
   gem "capybara"
   gem "shoulda-matchers"
   gem "simplecov", require: false
+  gem "rails-controller-testing"
 end
 
 gem "devise", "~> 4.9"
