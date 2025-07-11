@@ -8,8 +8,8 @@ RSpec.describe Course, type: :model do
     it { should validate_presence_of(:title) }
     it { should validate_presence_of(:description) }
     it { should validate_presence_of(:instructor) }
-    it { should validate_inclusion_of(:public).in_array([true, false]) }
-    
+    it { should validate_inclusion_of(:public).in_array([ true, false ]) }
+
     it 'validates title length' do
       course = build(:course, title: 'a' * 4)
       expect(course).not_to be_valid
