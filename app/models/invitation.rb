@@ -2,6 +2,8 @@ class Invitation < ApplicationRecord
   belongs_to :course
   belongs_to :invited_by, class_name: "User"
 
+  scope :by_token, ->(token) { find_by(token: token) }
+
   validates :email, presence: true
   validates :token, presence: true, uniqueness: true
 

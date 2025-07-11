@@ -4,7 +4,7 @@ class CoursesController < ApplicationController
     before_action :check_instructor, only: [ :edit, :update, :destroy ]
 
     def index
-        @courses = Course.order(created_at: :asc).page(params[:page]).per(10)
+        @courses = Course.ordered.page(params[:page]).per(10)
     end
 
     def show

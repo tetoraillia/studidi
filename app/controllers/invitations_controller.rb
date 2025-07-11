@@ -24,7 +24,7 @@ class InvitationsController < ApplicationController
   end
 
   def accept
-    @invitation = Invitation.find_by(token: params[:id])
+    @invitation = Invitation.by_token(params[:id])
 
     result = Invitations::AcceptInvitation.call(
       invitation: @invitation,

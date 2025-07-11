@@ -5,12 +5,11 @@ class TopicsController < ApplicationController
     before_action :check_instructor, only: [ :new, :create, :edit, :update, :destroy ]
 
     def index
-        @topics = Topic.where(course_id: @course.id).order(created_at: :asc).page(params[:page]).per(10)
+        @topics = Topic.for_course(@course.id).ordered.page(params[:page]).per(10)
     end
 
     def show
-        @topic = Topic.find(params[:id])
-        @lessons = @topic.lessons.order(:position).page(params[:page]).per(10)
+        @lessons = @topic.lessons.ordered.page(params[:page]).per(10)
     end
 
     def new
