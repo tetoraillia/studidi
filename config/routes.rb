@@ -14,16 +14,7 @@ Rails.application.routes.draw do
     resources :enrollments, only: [ :create, :destroy ]
     resources :invitations, only: [ :new, :create ] do
       member do
-        get :accept, to: "invitations#accept"
-      end
-    end
-    member do
-      get :invite
-    end
-    resources :enrollments, only: [ :create, :destroy ]
-    resources :invitations, only: [ :new, :create ] do
-      member do
-        get :accept, to: "invitations#accept"
+        get :accept
       end
     end
     resources :topics do
@@ -34,4 +25,5 @@ Rails.application.routes.draw do
       end
     end
   end
+  
 end
