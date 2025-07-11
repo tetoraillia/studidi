@@ -36,6 +36,11 @@ module Studidi
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
 
+    # Add this to reload routes
+    config.after_initialize do
+      Rails.application.reload_routes!
+    end
+
     # Don't generate system test files.
     config.generators.system_tests = nil
   end

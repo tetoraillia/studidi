@@ -6,6 +6,9 @@ SimpleCov.start 'rails' do
 end
 
 require 'capybara/rspec'
+require 'factory_bot_rails'
+require 'shoulda/matchers'
+require 'database_cleaner/active_record'
 
 RSpec.configure do |config|
   # FactoryBot
