@@ -46,7 +46,7 @@ class LessonsController < ApplicationController
 
     def destroy
         @lesson.destroy
-        redirect_to course_topic_path, notice: "Lesson was successfully destroyed."
+        redirect_to course_topic_path(@course, @topic), notice: "Lesson was successfully destroyed."
     end
 
     private
