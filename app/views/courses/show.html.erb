@@ -5,6 +5,7 @@
         <%= link_to "New Topic", new_course_topic_path(@course) %>
         <%= link_to "Edit", edit_course_path(@course) %>
         <%= link_to "Invite", invite_course_path(@course), class: "btn btn-success" %>
+        <%= button_to "Bookmark", bookmarks_path(course_id: @course.id), method: :post, class: "btn btn-primary" %>
     <% end %>
 
     <p>Description: <%= @course.description %></p>
