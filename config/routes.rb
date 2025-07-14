@@ -7,6 +7,8 @@ Rails.application.routes.draw do
     confirmations: "users/confirmations"
   }
   get "up" => "rails/health#show", as: :rails_health_check
+
+  resources :bookmarks, only: [ :index, :create, :destroy ]
   resources :courses do
     member do
       get :invite
