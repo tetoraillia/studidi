@@ -22,6 +22,18 @@ class EnrollmentsController < ApplicationController
     end
   end
 
+  def kick
+    enrollment = Enrollment.find_by(id: params[:id], course_id: params[:course_id])
+
+    if enrollment
+      authorize enrollment, :destroy?
+      enrollment.destroy
+      redirect_to @course, notice: "Student has been removed from the course."
+    else
+      redirect_to @course, alert: "Enrollment not found."
+    end
+  end
+
   private
 
   def set_course
