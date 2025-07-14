@@ -1,13 +1,13 @@
 class CoursesController < ApplicationController
     before_action :set_course, only: [ :show, :edit, :update, :destroy ]
     before_action :authenticate_user!, except: [ :index, :show ]
-    before_action :check_instructor, only: [ :edit, :update, :destroy ]
 
     def index
-        @courses = Course.ordered.page(params[:page]).per(10)
+        @courses = policy_scope(Course).order(created_at: :asc).page(params[:page]).per(10)
     end
 
     def show
+        authorize @course
         @topics = Topic.where(course_id: params[:id])
     end
 
@@ -20,6 +20,7 @@ class CoursesController < ApplicationController
             params: course_params,
             current_user: current_user
         )
+        authorize result.course
 
         if result.success?
             redirect_to course_url(result.course), notice: "Course was successfully created."
@@ -30,6 +31,7 @@ class CoursesController < ApplicationController
     end
 
     def edit
+        authorize @course
     end
 
     def update
@@ -38,6 +40,8 @@ class CoursesController < ApplicationController
             params: course_params,
             current_user: current_user
         )
+        authorize result.course
+
         if result.success?
             redirect_to @course, notice: "Course was successfully updated."
         else
@@ -46,6 +50,7 @@ class CoursesController < ApplicationController
     end
 
     def destroy
+        authorize @course
         @course.destroy
         redirect_to courses_url, notice: "Course was successfully destroyed."
     end
@@ -63,15 +68,5 @@ class CoursesController < ApplicationController
 
     def course_params
         params.require(:course).permit(:title, :description, :instructor_id, :public)
-    end
-
-    def check_instructor
-        result = AccessChecker::CourseAccessChecker.call(
-            course: @course,
-            current_user: current_user
-        )
-        unless result.success?
-            redirect_to courses_url, notice: "You are not an owner of this course."
-        end
     end
 end

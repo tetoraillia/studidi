@@ -1,10 +1,10 @@
 class InvitationsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_course
-  before_action :authorize_teacher!, only: [ :new, :create ]
 
   def new
-    @invitation = Invitation.new
+    @invitation = Invitation.new(course: @course)
+    authorize @invitation
   end
 
   def create
@@ -13,6 +13,7 @@ class InvitationsController < ApplicationController
       course: @course,
       current_user: current_user
     )
+    authorize result.invitation
 
     if result.success?
       redirect_to course_path(@course), notice: "Invitation sent."
@@ -24,7 +25,8 @@ class InvitationsController < ApplicationController
   end
 
   def accept
-    @invitation = Invitation.by_token(params[:id])
+    @invitation = Invitation.find_by(token: params[:id])
+    authorize @invitation
 
     result = Invitations::AcceptInvitation.call(
       invitation: @invitation,
@@ -50,18 +52,6 @@ class InvitationsController < ApplicationController
       @invitation = Invitation.find_by(token: params[:id])
       @course = @invitation&.course
     end
-  end
-
-  def authorize_teacher!
-    result = AccessChecker::TeacherAccessChecker.call(
-      course: @course,
-      current_user: current_user
-    )
-    unless result.success?
-      redirect_to root_path, alert: "You are not authorized to invite to this course."
-      return false
-    end
-    true
   end
 
   def invitation_params

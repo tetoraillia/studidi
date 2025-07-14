@@ -2,13 +2,13 @@ class LessonsController < ApplicationController
     before_action :authenticate_user!
     before_action :set_lesson, only: [ :edit, :update, :destroy ]
     before_action :set_course_data, only: [ :new, :create, :edit, :update, :destroy, :select_lesson_type ]
-    before_action :authorize_instructor, only: [ :new, :create, :edit, :update, :destroy ]
 
     def select_lesson_type
     end
 
     def new
-        @lesson = Lesson.new
+        @lesson = Lesson.new(topic: @topic)
+        authorize @lesson
         @lesson.content_type = params[:content_type]
     end
 
@@ -18,6 +18,8 @@ class LessonsController < ApplicationController
             course: @course,
             topic: @topic
         )
+        authorize result.lesson
+
         if result.success?
             redirect_to course_topic_path(@course, @topic), notice: "Lesson was successfully created."
         else
@@ -27,6 +29,7 @@ class LessonsController < ApplicationController
     end
 
     def edit
+        authorize @lesson
     end
 
     def update
@@ -36,6 +39,8 @@ class LessonsController < ApplicationController
             course: @course,
             topic: @topic
         )
+        authorize result.lesson
+
         if result.success?
             redirect_to course_topic_path(@course, @topic), notice: "Lesson was successfully updated."
         else
@@ -45,6 +50,7 @@ class LessonsController < ApplicationController
     end
 
     def destroy
+        authorize @lesson
         @lesson.destroy
         redirect_to course_topic_path(@course, @topic), notice: "Lesson was successfully destroyed."
     end
@@ -62,15 +68,5 @@ class LessonsController < ApplicationController
 
     def lesson_params
         params.require(:lesson).permit(:title, :content, :content_type, :topic_id, :position, :video_url)
-    end
-
-    def authorize_instructor
-        result = AccessChecker::CourseAccessChecker.call(
-            course: @course,
-            current_user: current_user
-        )
-        unless result.success?
-            redirect_to course_topics_url, notice: "You are not an owner of this course."
-        end
     end
 end
