@@ -32,6 +32,8 @@ gem "interactor"
 
 gem "pundit"
 
+gem "dotenv-rails"
+
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
 
@@ -76,7 +78,6 @@ group :test do
   gem "capybara"
   gem "shoulda-matchers"
   gem "simplecov", require: false
-  gem "rails-controller-testing"
 end
 
 gem "devise", "~> 4.9"
