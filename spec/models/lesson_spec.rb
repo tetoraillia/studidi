@@ -33,8 +33,6 @@ RSpec.describe Lesson, type: :model do
       expect(lesson).not_to be_valid
       expect(lesson.errors[:position]).to include("must be greater than or equal to 1")
     end
-
-    
   end
 
   describe "video_url validation" do
