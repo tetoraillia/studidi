@@ -13,7 +13,11 @@ Rails.application.routes.draw do
     member do
       get :invite
     end
-    resources :enrollments, only: [ :create, :destroy ]
+    resources :enrollments, only: [ :create, :destroy ] do
+      member do
+        delete :kick
+      end
+    end
     resources :invitations, only: [ :new, :create ] do
       member do
         get :accept
