@@ -8,6 +8,6 @@ class InvitationPolicy < ApplicationPolicy
     end
 
     def accept?
-        user.present? && record.email == user.email && record.status == 'pending'
+        user.present? && record.email == user.email && record.status == "pending"
     end
 end
