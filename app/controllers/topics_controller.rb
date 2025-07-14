@@ -2,7 +2,6 @@ class TopicsController < ApplicationController
     before_action :authenticate_user!, except: [ :index, :show ]
     before_action :set_course, only: [ :new, :create, :edit, :update, :destroy, :index ]
     before_action :set_topic, only: [ :show, :edit, :update, :destroy ]
-    before_action :check_instructor, only: [ :new, :create, :edit, :update, :destroy ]
 
     def index
         @topics = Topic.where(course_id: @course.id).order(created_at: :asc).page(params[:page]).per(10)
@@ -10,15 +9,19 @@ class TopicsController < ApplicationController
 
     def show
         @topic = Topic.find(params[:id])
+        authorize @topic
         @lessons = @topic.lessons.order(:position).page(params[:page]).per(10)
     end
 
     def new
-        @topic = Topic.new
+        @topic = Topic.new(course: @course)
+        authorize @topic
     end
 
     def create
         result = Topics::CreateTopic.call(params: topic_params)
+        authorize result.topic
+
         if result.success?
             redirect_to course_topics_path(@course), notice: "Topic was successfully created."
         else
@@ -29,10 +32,13 @@ class TopicsController < ApplicationController
     end
 
     def edit
+        authorize @topic
     end
 
     def update
         result = Topics::UpdateTopic.call(id: @topic.id, params: topic_params)
+        authorize result.topic
+
         if result.success?
             redirect_to course_topics_path(@course), notice: "Topic was successfully updated."
         else
@@ -43,6 +49,7 @@ class TopicsController < ApplicationController
     end
 
     def destroy
+        authorize @topic
         @topic.destroy
         redirect_to course_topics_path(@course), notice: "Topic was successfully destroyed."
     end
@@ -55,13 +62,6 @@ class TopicsController < ApplicationController
 
     def set_course
         @course = Course.find(params[:course_id])
-    end
-
-    def check_instructor
-        result = Topics::CheckInstructor.call(course: @course, user: current_user)
-        unless result.success?
-            redirect_to course_topics_url(@course), alert: result.error
-        end
     end
 
     def topic_params
