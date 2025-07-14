@@ -22,7 +22,7 @@ RSpec.describe BookmarksController, type: :controller do
 
     it 'assigns @bookmarks' do
       subject
-      expect(assigns(:bookmarks)).to eq([@bookmark])
+      expect(assigns(:bookmarks)).to eq([ @bookmark ])
     end
   end
 
