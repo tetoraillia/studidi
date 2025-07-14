@@ -26,7 +26,12 @@
     <p>teacher: <%= @course.instructor.first_name %></p>
     <% @course.enrollments.each do |enrollment| %>
       <div style="padding: 5px 0; border-bottom: 1px solid #eee;">
-        <%= enrollment.user.first_name %>
+        <p>
+          <%= enrollment.user.first_name %>
+          <% if policy(enrollment).destroy? %>
+            <%= button_to "Kick", kick_course_enrollment_path(@course, enrollment), method: :delete, data: { confirm: "Are you sure you want to remove this student?" } %>
+          <% end %>
+        </p>
       </div>
     <% end %>
   </div>
