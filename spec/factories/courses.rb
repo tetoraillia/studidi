@@ -1,8 +1,15 @@
 FactoryBot.define do
   factory :course do
-    title { "Valid Course Title" }
+    title { Faker::Book.title }
     description { Faker::Lorem.sentence }
-    public { true }
-    association :instructor, factory: :user, strategy: :create, role: :teacher
+    instructor { association(:user, :teacher) }
+
+    trait :private do
+      public { false }
+    end
+
+    trait :public do
+      public { true }
+    end
   end
 end

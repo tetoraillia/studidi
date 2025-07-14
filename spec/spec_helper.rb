@@ -1,4 +1,6 @@
+require 'factory_bot_rails'
 require 'simplecov'
+require 'shoulda/matchers'
 SimpleCov.start 'rails' do
   add_filter '/spec/'
   add_filter '/config/'
