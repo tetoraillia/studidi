@@ -1,0 +1,17 @@
+<h1>Responses</h1>
+
+<% @responses.each do |response| %>
+   You have answered:
+   <%= response.lesson.topic.course.title %>
+   lesson: <%= response.lesson.title %>
+
+   <p>Answer: <%= response.content %></p>
+   <% if response.mark %>
+      <p>Mark: <%= response.mark.value %></p>
+      <p>Comment: <%= response.mark.comment %></p>
+      <p>Marked by: <%= response.mark.user.first_name %> <%= response.mark.user.last_name %></p>
+   <% else %>
+      <p>No mark yet</p>
+   <% end %>
+   <hr>
+<% end %>  
