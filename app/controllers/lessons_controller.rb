@@ -18,9 +18,9 @@ class LessonsController < ApplicationController
             course: @course,
             topic: @topic
         )
-        authorize result.lesson
 
         if result.success?
+            authorize result.lesson
             redirect_to course_topic_path(@course, @topic), notice: "Lesson was successfully created."
         else
             @lesson = Lesson.new(lesson_params)
@@ -33,13 +33,13 @@ class LessonsController < ApplicationController
     end
 
     def update
+        authorize @lesson
         result = Lessons::UpdateLesson.call(
             id: @lesson.id,
             params: lesson_params,
             course: @course,
             topic: @topic
         )
-        authorize result.lesson
 
         if result.success?
             redirect_to course_topic_path(@course, @topic), notice: "Lesson was successfully updated."
