@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_15_083147) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_15_091424) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -66,6 +66,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_15_083147) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "video_url"
+    t.bigint "student_response_id"
+    t.index ["student_response_id"], name: "index_lessons_on_student_response_id"
     t.index ["topic_id"], name: "index_lessons_on_topic_id"
   end
 
@@ -89,6 +91,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_15_083147) do
     t.text "content"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "student_response_type"
     t.index ["lesson_id"], name: "index_responses_on_lesson_id"
     t.index ["mark_id"], name: "index_responses_on_mark_id"
     t.index ["user_id"], name: "index_responses_on_user_id"
@@ -125,6 +128,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_15_083147) do
   add_foreign_key "enrollments", "users"
   add_foreign_key "invitations", "courses"
   add_foreign_key "invitations", "users", column: "invited_by_id"
+  add_foreign_key "lessons", "responses", column: "student_response_id"
   add_foreign_key "lessons", "topics"
   add_foreign_key "marks", "lessons"
   add_foreign_key "marks", "responses"

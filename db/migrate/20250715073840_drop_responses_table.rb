@@ -11,11 +11,11 @@ class DropResponsesTable < ActiveRecord::Migration[8.0]
       t.text :content
       t.timestamps
     end
-    
+
     add_index :responces, :lesson_id
     add_index :responces, :mark_id
     add_index :responces, :user_id
-    
+
     add_foreign_key :responces, :lessons
     add_foreign_key :responces, :marks
     add_foreign_key :responces, :users
