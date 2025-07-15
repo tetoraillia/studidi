@@ -14,6 +14,8 @@ class User < ApplicationRecord
   has_many :marks, dependent: :destroy
   has_many :responses, dependent: :destroy
 
+  has_many :courses, foreign_key: :instructor_id, dependent: :destroy
+
   def teacher?
     role == "teacher"
   end

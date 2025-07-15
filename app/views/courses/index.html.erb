@@ -5,10 +5,24 @@
 <h1>Courses</h1>
 
 <%= link_to "Sign In", new_user_session_path, class: "btn btn-primary" %>
-<%= button_to "Log Out", destroy_user_session_path, method: :delete, data: { confirm: "Are you sure you want to log out?" }, class: "btn btn-outline-secondary" %>
 
 <% if policy(Course).create? %>
   <%= link_to "New Course", new_course_path, class: "btn btn-primary" %>
+<% end %>
+
+<% if current_user.present? %>
+  <div class="account-info">
+    <p style="margin-top: 0; font-weight: bold;">Account info:</p>
+    <p>username: <%= current_user.first_name %></p>
+    <p>email: <%= current_user.email %></p>
+    <p>role: <%= current_user.role %></p>
+    <% if current_user.teacher? %>
+      <p>created courses: <%= current_user.courses.count %></p>
+    <% else %>
+      <p>enrolled courses: <%= current_user.enrollments.count %></p>
+    <% end %>
+    <%= button_to "Log Out", destroy_user_session_path, method: :delete, data: { confirm: "Are you sure you want to log out?" }, class: "btn btn-outline-secondary" %>
+  </div>
 <% end %>
 
 <% @courses.each do |course| %>
@@ -152,5 +166,17 @@
     color: #b02a37;
     background-color: #f8d7da;
     border: 1px solid #f5c2c7;
+  }
+
+  .account-info {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 5px;
+    min-width: 200px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    z-index: 1000;
   }
 </style>
