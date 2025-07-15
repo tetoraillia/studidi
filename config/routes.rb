@@ -20,11 +20,7 @@ Rails.application.routes.draw do
       end
     end
     resources :lessons do
-      resources :responses, only: [ :create ] do
-        member do
-          post :respond
-        end
-      end
+      resources :responses, only: [ :create ]
     end
     resources :invitations, only: [ :new, :create ] do
       member do
@@ -33,7 +29,7 @@ Rails.application.routes.draw do
     end
     resources :topics do
       resources :lessons do
-        resources :marks, only: [ :index, :new, :create, :destroy ]
+        resources :marks, only: [ :index, :create, :edit, :update ]
         collection do
           get "select_lesson_type"
         end
