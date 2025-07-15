@@ -13,6 +13,7 @@ lessons:
     <%= render partial: "lessons/types/#{lesson.content_type}", locals: { lesson: lesson } %>
     <%= link_to "Edit", edit_course_topic_lesson_path(@topic.course_id, @topic.id, lesson) %>
     <%= button_to "Destroy", course_topic_lesson_path(@topic.course_id, @topic.id, lesson), method: :delete, data: { confirm: "Are you sure?" } %>
+    <%= link_to "Lesson", course_topic_lesson_path(@topic.course_id, @topic.id, lesson) %>
     <hr>
 <% end %>
 
