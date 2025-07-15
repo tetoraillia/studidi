@@ -11,6 +11,8 @@ class User < ApplicationRecord
 
   has_many :enrollments, dependent: :destroy
   has_many :enrolled_courses, through: :enrollments, source: :course
+  has_many :marks, dependent: :destroy
+  has_many :responses, dependent: :destroy
 
   def teacher?
     role == "teacher"
