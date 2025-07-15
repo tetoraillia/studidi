@@ -1,5 +1,10 @@
+require "sidekiq/web"
+
 Rails.application.routes.draw do
+  mount Sidekiq::Web => "/sidekiq"
+
   root "courses#index"
+
   devise_for :users, controllers: {
     sessions: "users/sessions",
     registrations: "users/registrations",
