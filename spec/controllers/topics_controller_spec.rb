@@ -183,7 +183,7 @@ RSpec.describe "Topics", type: :request do
       other_user = create(:user, :teacher)
       sign_in other_user
       get edit_course_topic_path(course, topic)
-      expect(response).to redirect_to(course_topics_path(course))
+      expect(response).to redirect_to(root_path)
     end
   end
 end
