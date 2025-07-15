@@ -7,7 +7,7 @@ Rails.application.routes.draw do
     confirmations: "users/confirmations"
   }
   get "up" => "rails/health#show", as: :rails_health_check
-  get "marks/:user_id", to: "marks#index", as: :total_marks
+  get "responses/:user_id", to: "responses#index", as: :total_responses
 
   resources :bookmarks, only: [ :index, :create, :destroy ]
   resources :courses do
