@@ -7,6 +7,7 @@ Rails.application.routes.draw do
     confirmations: "users/confirmations"
   }
   get "up" => "rails/health#show", as: :rails_health_check
+  get "marks/:user_id", to: "marks#index", as: :total_marks
 
   resources :bookmarks, only: [ :index, :create, :destroy ]
   resources :courses do
@@ -18,6 +19,13 @@ Rails.application.routes.draw do
         delete :kick
       end
     end
+    resources :lessons do
+      resources :responses, only: [ :create ] do
+        member do
+          post :respond
+        end
+      end
+    end
     resources :invitations, only: [ :new, :create ] do
       member do
         get :accept
@@ -25,6 +33,7 @@ Rails.application.routes.draw do
     end
     resources :topics do
       resources :lessons do
+        resources :marks, only: [ :index, :new, :create, :destroy ]
         collection do
           get "select_lesson_type"
         end
