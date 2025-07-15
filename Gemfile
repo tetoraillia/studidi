@@ -83,3 +83,5 @@ end
 gem "devise", "~> 4.9"
 
 gem "kaminari"
+
+gem "sidekiq", "~> 8.0"
