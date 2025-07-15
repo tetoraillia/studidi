@@ -2,22 +2,21 @@ class MarksController < ApplicationController
     before_action :authenticate_user!
     before_action :set_parent_objects, only: [ :create ]
 
-    def index
-        @user = User.find(params[:user_id])
-        if current_user&.teacher? && current_user == @user.enrolled_courses.find_by(lessons: @lesson).instructor
-            @marks = @user.marks.where(lesson: @lesson)
-        else
-            @marks = @user.marks.where(lesson: @lesson)
-        end
-    end
-
     def create
         @user = current_user
-        @responses = Response.where(lesson: @lesson)
+
+        if params[:mark][:response_id].blank?
+            flash.now[:alert] = "Response not found"
+            redirect_to course_topic_lesson_path(@course, @topic, @lesson)
+            return
+        end
+
+        @response = Response.find(params[:mark][:response_id])
+
         result = Marks::CreateMark.call(
             lesson: @lesson,
             user: @user,
-            response: response,
+            response: @response,
             params: mark_params
         )
 
@@ -56,7 +55,7 @@ class MarksController < ApplicationController
     end
 
     def mark_params
-        params.require(:mark).permit(:value, :comment)
+        params.require(:mark).permit(:value, :comment, :response_id)
     end
 
     def response_params
