@@ -1,4 +1,6 @@
 class Lesson < ApplicationRecord
+  has_many :marks, dependent: :destroy
+  has_many :responses, dependent: :destroy
   belongs_to :topic
 
   validates :title, valid_characters: true, presence: true, length: { minimum: 5, maximum: 50 }

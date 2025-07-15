@@ -1,9 +1,18 @@
 class LessonsController < ApplicationController
     before_action :authenticate_user!
-    before_action :set_lesson, only: [ :edit, :update, :destroy ]
+    before_action :set_lesson, only: [ :show, :edit, :update, :destroy ]
     before_action :set_course_data, only: [ :new, :create, :edit, :update, :destroy, :select_lesson_type ]
 
     def select_lesson_type
+    end
+
+    def show
+        authorize @lesson
+        @user = current_user
+        @response = Response.new(lesson: @lesson, user: current_user)
+        @responses = Response.where(lesson: @lesson)
+        @user_response = Response.find_by(lesson: @lesson, user: current_user)
+        @mark = Mark.new(lesson: @lesson)
     end
 
     def new
@@ -67,6 +76,6 @@ class LessonsController < ApplicationController
     end
 
     def lesson_params
-        params.require(:lesson).permit(:title, :content, :content_type, :topic_id, :position, :video_url)
+        params.require(:lesson).permit(:title, :content, :content_type, :topic_id, :position, :video_url, :student_response_id)
     end
 end
