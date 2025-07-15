@@ -8,7 +8,14 @@ module Marks
             mark = Mark.new(context.params)
             mark.lesson = context.lesson
             mark.user = context.user
-            mark.response = context.response
+
+            response = Response.find_by(id: context.params[:response_id])
+            if response.nil?
+                context.fail!(error: "Response not found")
+                return
+            end
+
+            mark.response = response
 
             if mark.save
                 context.mark = mark
