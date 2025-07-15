@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_15_074001) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_15_083147) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -76,14 +76,16 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_15_074001) do
     t.string "comment"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "response_id"
     t.index ["lesson_id"], name: "index_marks_on_lesson_id"
+    t.index ["response_id"], name: "index_marks_on_response_id"
     t.index ["user_id"], name: "index_marks_on_user_id"
   end
 
   create_table "responses", force: :cascade do |t|
     t.bigint "lesson_id", null: false
     t.bigint "user_id", null: false
-    t.bigint "mark_id", null: false
+    t.bigint "mark_id"
     t.text "content"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -125,6 +127,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_15_074001) do
   add_foreign_key "invitations", "users", column: "invited_by_id"
   add_foreign_key "lessons", "topics"
   add_foreign_key "marks", "lessons"
+  add_foreign_key "marks", "responses"
   add_foreign_key "marks", "users"
   add_foreign_key "responses", "lessons"
   add_foreign_key "responses", "marks"
