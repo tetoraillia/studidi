@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_14_081449) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_15_074001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -69,6 +69,29 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_14_081449) do
     t.index ["topic_id"], name: "index_lessons_on_topic_id"
   end
 
+  create_table "marks", force: :cascade do |t|
+    t.bigint "lesson_id", null: false
+    t.bigint "user_id", null: false
+    t.integer "value"
+    t.string "comment"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["lesson_id"], name: "index_marks_on_lesson_id"
+    t.index ["user_id"], name: "index_marks_on_user_id"
+  end
+
+  create_table "responses", force: :cascade do |t|
+    t.bigint "lesson_id", null: false
+    t.bigint "user_id", null: false
+    t.bigint "mark_id", null: false
+    t.text "content"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["lesson_id"], name: "index_responses_on_lesson_id"
+    t.index ["mark_id"], name: "index_responses_on_mark_id"
+    t.index ["user_id"], name: "index_responses_on_user_id"
+  end
+
   create_table "topics", force: :cascade do |t|
     t.string "title"
     t.bigint "course_id", null: false
@@ -101,5 +124,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_14_081449) do
   add_foreign_key "invitations", "courses"
   add_foreign_key "invitations", "users", column: "invited_by_id"
   add_foreign_key "lessons", "topics"
+  add_foreign_key "marks", "lessons"
+  add_foreign_key "marks", "users"
+  add_foreign_key "responses", "lessons"
+  add_foreign_key "responses", "marks"
+  add_foreign_key "responses", "users"
   add_foreign_key "topics", "courses"
 end
