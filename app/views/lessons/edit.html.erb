@@ -16,6 +16,11 @@
     <%= form.text_area :content, rows: 5 %>
   </div>
 
+  <div class="field">
+    <%= form.label :ends_at %>
+    <%= form.datetime_field :ends_at %>
+  </div>
+
   <div class="actions">
     <%= form.submit "Update Lesson" %>
   </div>

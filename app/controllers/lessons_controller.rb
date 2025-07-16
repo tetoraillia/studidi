@@ -76,6 +76,6 @@ class LessonsController < ApplicationController
     end
 
     def lesson_params
-        params.require(:lesson).permit(:title, :content, :content_type, :topic_id, :position, :video_url, :student_response_id)
+        params.require(:lesson).permit(:title, :content, :content_type, :topic_id, :position, :video_url, :student_response_id, :ends_at)
     end
 end
