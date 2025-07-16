@@ -35,7 +35,7 @@ class ResponsesController < ApplicationController
             @responses = Response.where(lesson: @lesson)
             @user_response = Response.find_by(lesson: @lesson, user: current_user)
             @mark = Mark.new(lesson: @lesson)
-            
+
             flash.now[:alert] = result.error
             render "lessons/show", status: :unprocessable_entity
         end
