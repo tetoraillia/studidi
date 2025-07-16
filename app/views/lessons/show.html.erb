@@ -1,4 +1,5 @@
 <%= render partial: "lessons/types/#{@lesson.content_type}", locals: { lesson: @lesson } %>
+Lesson is accepting answers untill: <%= @lesson.end_date %>
 
 <% if @user.student? %>
     <% if @user_response %>
@@ -10,9 +11,13 @@
         <% end %>
     <% else %>
         <h2>Give the answer</h2>
-        <%= form_with(model: @response, url: course_lesson_responses_path(@lesson.topic.course, @lesson), local: true) do |form| %>
-            <%= form.text_area :content %>
-            <%= form.submit %>
+        <% if @lesson.is_open? %>
+            <%= form_with(model: @response, url: course_lesson_responses_path(@lesson.topic.course, @lesson), local: true) do |form| %>
+                <%= form.text_area :content %>
+                <%= form.submit %>
+            <% end %>
+        <% else %>
+            Lesson time is expired
         <% end %>
     <% end %>
 <% else %>
