@@ -25,8 +25,19 @@ class ResponsesController < ApplicationController
     private
 
     def no_edit_after_lesson_ends
-        if @lesson.ends_at < Time.current
-            redirect_to course_topic_lesson_path(@lesson.topic.course, @lesson.topic, @lesson), alert: "Lesson has already ended."
+        result = Lessons::NoEditAfterLessonEnds.call(lesson: @lesson)
+
+        if result.success?
+            true
+        else
+            @user = current_user
+            @response = Response.new(lesson: @lesson, user: current_user)
+            @responses = Response.where(lesson: @lesson)
+            @user_response = Response.find_by(lesson: @lesson, user: current_user)
+            @mark = Mark.new(lesson: @lesson)
+            
+            flash.now[:alert] = result.error
+            render "lessons/show", status: :unprocessable_entity
         end
     end
 
