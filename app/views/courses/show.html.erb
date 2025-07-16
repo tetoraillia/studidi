@@ -44,8 +44,10 @@
 <% @topics.each do |topic| %>
   <div>
     <%= topic.title %>
-    <%= link_to "Edit", edit_course_topic_path(topic.course_id, topic.id) %>
-    <%= button_to "Destroy", course_topic_path(topic.course_id, topic.id), method: :delete, data: { confirm: "Are you sure?" } %>
+    <% if policy(topic).edit? %>
+      <%= link_to "Edit", edit_course_topic_path(topic.course_id, topic.id) %>
+      <%= button_to "Destroy", course_topic_path(topic.course_id, topic.id), method: :delete, data: { confirm: "Are you sure?" } %>
+    <% end %>
   </div>
 <% end %>
 

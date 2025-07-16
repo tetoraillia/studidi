@@ -4,6 +4,8 @@ class Lesson < ApplicationRecord
   has_many :responses, through: :marks, dependent: :destroy
   belongs_to :topic
 
+  scope :ordered, -> { order(Arel.sql("COALESCE(position, 9999) ASC"), :created_at) }
+
   validates :title, valid_characters: true, presence: true, length: { minimum: 5, maximum: 50 }
   validates :content, valid_characters: true, presence: true, length: { minimum: 10 }, unless: -> { content_type == "video" }
   validates :video_url, presence: true, if: -> { content_type == "video" }
