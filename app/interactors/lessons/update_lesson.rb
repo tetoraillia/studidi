@@ -6,10 +6,9 @@ module Lessons
 
         def call
             update_lesson(context.id, context.params)
-            check_lesson_open_status
 
             if @lesson.save
-
+                check_lesson_open_status
                 context.lesson = @lesson
             else
                 context.fail!(error: @lesson.errors.full_messages.to_sentence)
