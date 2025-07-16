@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_16_084417) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_16_092230) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -31,7 +31,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_16_084417) do
     t.datetime "updated_at", null: false
     t.boolean "public", default: true, null: false
     t.datetime "ends_at"
+    t.boolean "is_archived", default: false, null: false
     t.index ["instructor_id"], name: "index_courses_on_instructor_id"
+    t.index ["is_archived"], name: "index_courses_on_is_archived"
   end
 
   create_table "enrollments", force: :cascade do |t|
