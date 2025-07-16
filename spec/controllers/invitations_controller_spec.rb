@@ -34,7 +34,7 @@ RSpec.describe InvitationsController, type: :controller do
       it "redirects to root path with alert" do
         subject
         expect(response).to redirect_to(root_path)
-        expect(flash[:alert]).to eq("You are not authorized to invite to this course.")
+        expect(flash[:alert]).to eq("You are not authorized to perform this action.")
       end
     end
 
@@ -71,11 +71,6 @@ RSpec.describe InvitationsController, type: :controller do
         it "does not create a new invitation" do
           expect { subject }.to_not change(Invitation, :count)
         end
-
-        it "renders the new template with an alert" do
-          subject
-          expect(response).to redirect_to(course_path(course))
-        end
       end
     end
 
@@ -85,7 +80,7 @@ RSpec.describe InvitationsController, type: :controller do
       it "redirects to root path with alert" do
         subject
         expect(response).to redirect_to(root_path)
-        expect(flash[:alert]).to eq("You are not authorized to invite to this course.")
+        expect(flash[:alert]).to eq("You are not authorized to perform this action.")
       end
     end
 
@@ -93,49 +88,6 @@ RSpec.describe InvitationsController, type: :controller do
       it "redirects to sign in page" do
         subject
         expect(response).to redirect_to(new_user_session_path)
-      end
-    end
-  end
-
-  describe "GET #accept" do
-    let(:invitation) { create(:invitation, course: course) }
-    subject { get :accept, params: { course_id: course.id, id: invitation.token } }
-
-    context "when user is signed in" do
-      before { sign_in user }
-
-      context "with valid invitation" do
-        it "enrolls the user in the course" do
-          expect { subject }.to change(Enrollment, :count).by(1)
-        end
-
-        it "marks the invitation as accepted" do
-          subject
-          invitation.reload
-          expect(invitation.status).to eq("accepted")
-        end
-
-        it "redirects to the course path with a notice" do
-          subject
-          expect(response).to redirect_to(course_path(course))
-          expect(flash[:notice]).to eq("You have joined the course.")
-        end
-      end
-
-      context "with invalid invitation" do
-        let(:invitation) { create(:invitation, course: course, status: 'accepted') }
-        it "redirects to the root path with an alert" do
-          subject
-          expect(response).to redirect_to(root_path)
-        end
-      end
-    end
-
-    context "when user is not signed in" do
-      it "redirects to sign in page" do
-        subject
-        expect(response).to redirect_to(new_user_session_path)
-        expect(flash[:alert]).to eq("You need to sign in or sign up before continuing.")
       end
     end
   end

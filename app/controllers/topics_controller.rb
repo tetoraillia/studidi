@@ -20,9 +20,9 @@ class TopicsController < ApplicationController
 
     def create
         result = Topics::CreateTopic.call(params: topic_params)
-        authorize result.topic
 
         if result.success?
+            authorize result.topic
             redirect_to course_topics_path(@course), notice: "Topic was successfully created."
         else
             @topic = Topic.new(topic_params)
@@ -36,8 +36,8 @@ class TopicsController < ApplicationController
     end
 
     def update
+        authorize @topic
         result = Topics::UpdateTopic.call(id: @topic.id, params: topic_params)
-        authorize result.topic
 
         if result.success?
             redirect_to course_topics_path(@course), notice: "Topic was successfully updated."

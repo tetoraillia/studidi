@@ -7,7 +7,8 @@ module Invitations
         def call
             create_invitation
 
-            if context.success?
+            if context.invitation.persisted?
+                InvitationMailer.invite_email(context.invitation).deliver_now
                 context.success
             else
                 context.fail!(error: "Failed to create invitation.")
