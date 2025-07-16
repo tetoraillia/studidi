@@ -23,8 +23,7 @@ class MarksController < ApplicationController
         if result.success?
             redirect_to course_topic_lesson_path(@course, @topic, @lesson), notice: "Your mark was set successfully."
         else
-            flash.now[:alert] = "Failed to submit mark: #{result.error}"
-            render "lessons/show", status: :unprocessable_entity
+            redirect_to course_topic_lesson_path(@course, @topic, @lesson), alert: "Failed to submit mark: #{result.error}"
         end
     end
 

@@ -25,8 +25,8 @@ class CoursesController < ApplicationController
             authorize result.course
             redirect_to course_url(result.course), notice: "Course was successfully created."
         else
-            @course = Course.new(course_params)
-            render :new
+            @course = result.course
+            redirect_to new_course_path, alert: "Error creating course: #{result.error}"
         end
     end
 

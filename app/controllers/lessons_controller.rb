@@ -33,7 +33,7 @@ class LessonsController < ApplicationController
             redirect_to course_topic_path(@course, @topic), notice: "Lesson was successfully created."
         else
             @lesson = Lesson.new(lesson_params)
-            render :new
+            redirect_to new_course_topic_lesson_path(@course, @topic), alert: "Error creating lesson: #{result.error}"
         end
     end
 
