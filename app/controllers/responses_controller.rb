@@ -1,6 +1,7 @@
 class ResponsesController < ApplicationController
     before_action :authenticate_user!
     before_action :set_lesson, only: [ :create ]
+    before_action :no_edit_after_lesson_ends, only: [ :create ]
 
     def index
         @user = User.find(current_user.id)
@@ -22,6 +23,12 @@ class ResponsesController < ApplicationController
     end
 
     private
+
+    def no_edit_after_lesson_ends
+        if @lesson.ends_at < Time.current
+            redirect_to course_topic_lesson_path(@lesson.topic.course, @lesson.topic, @lesson), alert: "Lesson has already ended."
+        end
+    end
 
     def set_lesson
         @lesson = Lesson.find(params[:lesson_id])
