@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_16_063544) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_16_084417) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -133,9 +133,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_16_063544) do
   add_foreign_key "lessons", "responses", column: "student_response_id"
   add_foreign_key "lessons", "topics"
   add_foreign_key "marks", "lessons"
-  add_foreign_key "marks", "responses"
+  add_foreign_key "marks", "responses", on_delete: :cascade
   add_foreign_key "marks", "users"
-  add_foreign_key "responses", "lessons"
+  add_foreign_key "responses", "lessons", on_delete: :cascade
   add_foreign_key "responses", "marks"
   add_foreign_key "responses", "users"
   add_foreign_key "topics", "courses"
