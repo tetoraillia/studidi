@@ -154,7 +154,7 @@ RSpec.describe "Lessons", type: :request do
 
     it 'redirects if user is not course instructor' do
       get edit_course_topic_lesson_path(course, topic, lesson)
-      expect(response).to redirect_to(course_topics_path(course))
+      expect(response).to redirect_to(root_path)
     end
   end
 end

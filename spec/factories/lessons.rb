@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :lesson do
-    title { Faker::Book.title }
+    title { Faker::Lorem.sentence }
     content { Faker::Lorem.sentence }
     topic { association(:topic) }
     position { 1 }

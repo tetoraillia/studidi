@@ -8,7 +8,7 @@ class Lesson < ApplicationRecord
   validates :content, valid_characters: true, presence: true, length: { minimum: 10 }, unless: -> { content_type == "video" }
   validates :video_url, presence: true, if: -> { content_type == "video" }
   validates :topic, presence: true
-  validates :position, numericality: { greater_than_or_equal_to: 1 }
+  validates :position, numericality: { greater_than_or_equal_to: 1 }, allow_nil: true
 
   before_validation :ensure_lesson_ends_before_course
   after_save :schedule_expiration, if: :saved_change_to_ends_at?

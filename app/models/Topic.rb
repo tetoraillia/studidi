@@ -7,5 +7,5 @@ class Topic < ApplicationRecord
 
   validates :title, valid_characters: true, presence: true, length: { minimum: 5, maximum: 50 }
   validates :course, presence: true
-  validates :position, numericality: { greater_than_or_equal_to: 1 }
+  validates :position, numericality: { greater_than_or_equal_to: 1 }, allow_nil: true
 end

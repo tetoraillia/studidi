@@ -20,13 +20,13 @@ class CoursesController < ApplicationController
             params: course_params,
             current_user: current_user
         )
-        authorize result.course
 
         if result.success?
+            authorize result.course
             redirect_to course_url(result.course), notice: "Course was successfully created."
         else
-            @course = Course.new(course_params)
-            render :new
+            @course = result.course
+            redirect_to new_course_path, alert: "Error creating course: #{result.error}"
         end
     end
 
@@ -35,12 +35,12 @@ class CoursesController < ApplicationController
     end
 
     def update
+        authorize @course
         result = Courses::UpdateCourse.call(
             id: @course.id,
             params: course_params,
             current_user: current_user
         )
-        authorize result.course
 
         if result.success?
             redirect_to @course, notice: "Course was successfully updated."
