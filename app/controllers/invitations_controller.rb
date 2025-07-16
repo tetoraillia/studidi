@@ -19,8 +19,7 @@ class InvitationsController < ApplicationController
       redirect_to course_path(@course), notice: "Invitation sent."
     else
       @invitation = Invitation.new(email: invitation_params[:email])
-      flash.now[:alert] = result.message || "Failed to send invitation."
-      render :new
+      redirect_to new_course_invitation_path(@course), alert: "Error sending invitation: #{result.error}"
     end
   end
 
