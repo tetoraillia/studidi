@@ -1,5 +1,5 @@
 <% if current_user %>
-<h2><%= link_to "Marks", total_responses_path(current_user) %></h2>
+<h2><%= link_to "Responses", total_responses_path(current_user) %></h2>
 <% end %>
 
 <h1>Courses</h1>
@@ -30,6 +30,7 @@
     <h2><%= course.title %></h2>
     <p><%= course.description %></p>
     <p class="instructor">Instructor: <%= course.instructor.first_name %></p>
+    <p class="archived">Archived: <%= course.is_archived ? "Yes" : "No" %></p>
     <p>
       <span class="badge <%= course.public ? "badge-public" : "badge-private" %>">
         <%= course.public ? "Public" : "Private" %>

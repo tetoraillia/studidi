@@ -8,6 +8,7 @@ module Courses
             update_course(context.id, context.params)
 
             if @course.save
+                check_archived_status
                 context.course = @course
             else
                 context.fail!(error: @course.errors.full_messages.to_sentence)
@@ -20,6 +21,10 @@ module Courses
             if context.id.nil? || context.params.nil? || context.current_user.nil?
                 context.fail!(error: "Invalid context")
             end
+        end
+
+        def check_archived_status
+            @course.update!(is_archived: false) if @course.ends_at > Time.current
         end
 
         def update_course(id, params)

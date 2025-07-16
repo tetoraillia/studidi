@@ -34,6 +34,10 @@
         </p>
       </div>
     <% end %>
+
+    <% if @course.ends_at.present? %>
+      <p> Course ends at: <%= @course.end_date %></p>
+    <% end %>
   </div>
 </div>
 

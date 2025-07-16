@@ -17,7 +17,6 @@
     <%= form.hidden_field :content_type %>
   </div>
 
-
   <% if @lesson.content_type == "video" %>
     <div class="field">
       <%= form.label :video_url%>
@@ -28,6 +27,11 @@
   <div class="field">
     <%= form.label :position %>
     <%= form.number_field :position %>
+  </div>
+
+  <div class="field">
+    <%= form.label :ends_at, "Lesson end date" %>
+    <%= form.datetime_select :ends_at %>
   </div>
 
   <div class="actions">

@@ -1,6 +1,7 @@
 class ResponsesController < ApplicationController
     before_action :authenticate_user!
     before_action :set_lesson, only: [ :create ]
+    before_action :no_edit_after_lesson_ends, only: [ :create ]
 
     def index
         @user = User.find(current_user.id)
@@ -22,6 +23,23 @@ class ResponsesController < ApplicationController
     end
 
     private
+
+    def no_edit_after_lesson_ends
+        result = Lessons::NoEditAfterLessonEnds.call(lesson: @lesson)
+
+        if result.success?
+            true
+        else
+            @user = current_user
+            @response = Response.new(lesson: @lesson, user: current_user)
+            @responses = Response.where(lesson: @lesson)
+            @user_response = Response.find_by(lesson: @lesson, user: current_user)
+            @mark = Mark.new(lesson: @lesson)
+
+            flash.now[:alert] = result.error
+            render "lessons/show", status: :unprocessable_entity
+        end
+    end
 
     def set_lesson
         @lesson = Lesson.find(params[:lesson_id])

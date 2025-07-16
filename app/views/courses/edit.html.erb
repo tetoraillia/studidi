@@ -5,17 +5,26 @@
         <%= form.label :title %>
         <%= form.text_field :title %>
     </div>
+
     <div class="field">
         <%= form.label :description %>
         <%= form.text_area :description %>
     </div>
+
     <div class="field">
         <%= form.hidden_field :instructor_id %>
     </div>
+
     <div class="field">
         <%= form.label :public, "Public course?" %>
         <%= form.check_box :public %>
     </div>
+
+    <div class="field">
+        <%= form.label :ends_at, "Course end date" %>
+        <%= form.datetime_select :ends_at %>
+    </div>
+
     <div class="actions">
         <%= form.submit %>
     </div>
