@@ -15,12 +15,20 @@ class Course < ApplicationRecord
   validates :public, inclusion: { in: [ true, false ] }
 
   after_save :schedule_expiration, if: :saved_change_to_ends_at?
+  after_save :schedule_reminder, if: :saved_change_to_ends_at?
+
 
   def end_date
     ends_at&.strftime("%Y-%m-%d")
   end
 
   private
+
+  def schedule_reminder
+    return unless public? && ends_at.present?
+
+    CourseReminderJob.set(wait_until: (ends_at - 3.days) == Time.current).perform_later(id)
+  end
 
   def schedule_expiration
     return unless public? && ends_at.present?
