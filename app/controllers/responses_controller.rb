@@ -46,6 +46,6 @@ class ResponsesController < ApplicationController
     end
 
     def response_params
-        params.require(:response).permit(:content, :mark_id, :lesson_id, :user_id)
+        params.require(:response).permit(:content, :mark_id, :lesson_id, :user_id, :attachment)
     end
 end
