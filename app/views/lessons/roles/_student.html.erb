@@ -1,6 +1,7 @@
 <% if @user_response %>
     <h2>Your answer</h2>
     <p><%= @user_response.content %></p>
+    <%= render_attachment(@user_response.attachment) if @user_response.attachment.present? %>
     <% if @user_response.mark %>
         <p>Mark: <%= @user_response.mark.value %></p>
         <p>Comment: <%= @user_response.mark.comment %></p>
