@@ -18,6 +18,7 @@ module Enrollments
                 return
             end
 
+            EnrollmentNotifier.with(record: context.enrollment, message: "Student #{context.user.first_name} enrolled on your course: #{context.course.title}").deliver(context.course.instructor)
             context.message = "Successfully enrolled in the course."
         end
     end
