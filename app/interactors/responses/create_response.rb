@@ -10,6 +10,7 @@ module Responses
             @response.user = context.user
 
             if @response.save
+                ResponseNotifier.with(record: @response, message: "Student #{@response.user.first_name} sent you a response to #{@response.lesson.title}").deliver(context.lesson.topic.course.instructor)
                 context.response = @response
                 context.lesson.update!(student_response_id: @response.id)
             else
