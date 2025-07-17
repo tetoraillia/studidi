@@ -9,6 +9,7 @@ module Invitations
 
             if context.invitation.persisted?
                 InvitationMailer.invite_email(context.invitation).deliver_now
+                InvitationNotifier.with(record: context.invitation, message: "You have been invited to join course #{context.course.title}, check your email").deliver(User.find_by(email: context.invitation.email))
                 context.success
             else
                 context.fail!(error: "Failed to create invitation.")
