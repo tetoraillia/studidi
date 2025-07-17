@@ -1,0 +1,22 @@
+<% if @user_response %>
+    <h2>Your answer</h2>
+    <p><%= @user_response.content %></p>
+    <% if @user_response.mark %>
+        <p>Mark: <%= @user_response.mark.value %></p>
+        <p>Comment: <%= @user_response.mark.comment %></p>
+    <% end %>
+<% else %>
+    <h2>Give the answer</h2>
+    <% if @lesson.is_open? %>
+        <%= form_with(model: @response, url: course_lesson_responses_path(@lesson.topic.course, @lesson), local: true) do |form| %>
+            <%= form.text_area :content %>
+            <div class="field">
+                <%= form.label :attachment %>
+                <%= form.file_field :attachment %>
+            </div>
+            <%= form.submit %>
+        <% end %>
+    <% else %>
+        Lesson time is expired
+    <% end %>
+<% end %>
