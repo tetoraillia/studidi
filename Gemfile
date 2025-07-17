@@ -87,3 +87,4 @@ gem "kaminari"
 gem "sidekiq", "~> 8.0"
 
 gem "carrierwave", "~> 3.0"
+gem "mini_magick"
