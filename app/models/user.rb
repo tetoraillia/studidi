@@ -16,6 +16,8 @@ class User < ApplicationRecord
 
   has_many :courses, foreign_key: :instructor_id, dependent: :destroy
 
+  mount_uploader :avatar, UserAvatarUploader
+
   def teacher?
     role == "teacher"
   end

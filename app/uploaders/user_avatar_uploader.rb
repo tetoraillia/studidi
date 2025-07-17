@@ -1,0 +1,42 @@
+class UserAvatarUploader < CarrierWave::Uploader::Base
+    include CarrierWave::MiniMagick
+
+    storage :file
+
+    def store_dir
+      "uploads/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}"
+    end
+
+    def filename
+      @name ||= "#{secure_token}.#{file.extension}" if original_filename.present?
+    end
+
+    version :avatar do
+      process resize_to_fit: [ 200, 200 ]
+    end
+
+    def size_range
+      0..5.megabytes
+    end
+
+    def validate_file_size
+      if file.size > size_range.max
+        errors.add(:file, "File size exceeds the limit of #{size_range.max}")
+      end
+    end
+
+    protected
+
+    def secure_token
+      var = :"@#{mounted_as}_secure_token"
+      model.instance_variable_get(var) || model.instance_variable_set(var, SecureRandom.uuid)
+    end
+
+    def default_url(*args)
+      ActionController::Base.helpers.asset_path("default_avatar.png")
+    end
+
+    def extension_allowlist
+      %w[jpg jpeg png]
+    end
+end
