@@ -5,7 +5,9 @@ module Marks
         before :validate_params!
 
         def call
-            mark = Mark.new(context.params)
+            mark_params = context.params.slice(:value, :comment)
+
+            mark = Mark.new(mark_params)
             mark.lesson = context.lesson
             mark.user = context.user
 
