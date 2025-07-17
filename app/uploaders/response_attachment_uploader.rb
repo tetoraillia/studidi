@@ -19,6 +19,16 @@ class ResponseAttachmentUploader < CarrierWave::Uploader::Base
     new_file.content_type.start_with?("image/")
   end
 
+  def size_range
+    0..5.megabytes
+  end
+
+  def validate_file_size
+    if file.size > size_range.max
+      errors.add(:file, "File size exceeds the limit of #{size_range.max}")
+    end
+  end
+
   protected
 
   def secure_token
