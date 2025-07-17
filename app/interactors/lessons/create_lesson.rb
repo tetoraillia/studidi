@@ -8,6 +8,7 @@ module Lessons
             create_lesson(context.params)
 
             if @lesson.save
+                LessonNotifier.with(record: @lesson, message: "Teacher #{@lesson.topic.course.instructor.first_name} posted new lesson").deliver(@lesson.topic.course.students)
                 context.lesson = @lesson
             else
                 context.fail!(error: @lesson.errors.full_messages.to_sentence)
