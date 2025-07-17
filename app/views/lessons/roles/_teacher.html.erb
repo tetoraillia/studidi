@@ -1,0 +1,16 @@
+<h2>Students' answers</h2>
+<% if @responses && @responses.any? %>
+    <% @responses.each do |response| %>
+        <p><%= response.content %> from <%= response.user.first_name %> <%= response.user.last_name %></p>
+        <%= render_attachment(response.attachment) if response.attachment.present? %>
+        <% if response.mark %>
+            <p>Mark: <%= response.mark.value %></p>
+            <p>Comment: <%= response.mark.comment %></p>
+            <hr>
+        <% else %>
+            <%= render partial: "marks/new", locals: { response: response } %>
+        <% end %>
+    <% end %>
+<% else %>
+    No answers yet
+<% end %>

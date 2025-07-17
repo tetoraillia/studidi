@@ -1,43 +1,8 @@
 <%= render partial: "lessons/types/#{@lesson.content_type}", locals: { lesson: @lesson } %>
 Lesson is accepting answers untill: <%= @lesson.end_date %>
 
-<% if @user.student? %>
-    <% if @user_response %>
-        <h2>Your answer</h2>
-        <p><%= @user_response.content %></p>
-        <% if @user_response.mark %>
-            <p>Mark: <%= @user_response.mark.value %></p>
-            <p>Comment: <%= @user_response.mark.comment %></p>
-        <% end %>
-    <% else %>
-        <h2>Give the answer</h2>
-        <% if @lesson.is_open? %>
-            <%= form_with(model: @response, url: course_lesson_responses_path(@lesson.topic.course, @lesson), local: true) do |form| %>
-                <%= form.text_area :content %>
-                <%= form.submit %>
-            <% end %>
-        <% else %>
-            Lesson time is expired
-        <% end %>
-    <% end %>
+<% if @user.role == "student" || @user.role == "teacher" %>
+    <%= render partial: "lessons/roles/#{@user.role}", locals: { lesson: @lesson } %>
 <% else %>
-    <% if @user.teacher? %>
-        <h2>Students' answers</h2>
-        <% if @responses && @responses.any? %>
-            <% @responses.each do |response| %>
-                <p><%= response.content %> from <%= response.user.first_name %> <%= response.user.last_name %></p>
-                <% if @user.teacher? %>
-                    <% if response.mark %>
-                        <p>Mark: <%= response.mark.value %></p>
-                        <p>Comment: <%= response.mark.comment %></p>
-                        <hr>
-                    <% else %>
-                        <%= render partial: "marks/new", locals: { response: response } %>
-                    <% end %>
-                <% end %>
-            <% end %>
-        <% else %>
-            No answers yet
-        <% end %>
-    <% end %>
+    <p>You don't have access to this lesson</p>
 <% end %>

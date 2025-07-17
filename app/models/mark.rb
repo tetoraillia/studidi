@@ -2,7 +2,6 @@ class Mark < ApplicationRecord
   belongs_to :lesson
   belongs_to :user
   belongs_to :response, optional: true
-  belongs_to :response_user, class_name: "User", optional: true
 
   validates :value, presence: true, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 100 }
   validates :comment, presence: true, if: :student?
@@ -13,6 +12,6 @@ class Mark < ApplicationRecord
   end
 
   def teacher?
-    response_user&.role == "teacher"
+    response&.user&.role == "teacher"
   end
 end
