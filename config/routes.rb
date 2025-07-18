@@ -9,7 +9,8 @@ Rails.application.routes.draw do
     sessions: "users/sessions",
     registrations: "users/registrations",
     passwords: "users/passwords",
-    confirmations: "users/confirmations"
+    confirmations: "users/confirmations",
+    omniauth_callbacks: "users/omniauth_callbacks"
   }
   get "up" => "rails/health#show", as: :rails_health_check
   get "responses/:user_id", to: "responses#index", as: :total_responses

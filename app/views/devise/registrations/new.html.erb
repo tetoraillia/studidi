@@ -50,9 +50,14 @@
       <%= f.file_field :avatar, class: "form-control" %>
     </div>
 
-  <div class="actions">
-    <%= f.submit "Sign up", class: "btn btn-primary" %>
-  </div>
-<% end %>
+    <div class="actions">
+      <%= f.submit "Sign up", class: "btn btn-primary" %>
+    </div>
+  <% end %>
 
-<%= render "devise/shared/links" %>
+  <div class="links mt-3">
+    <%= render "devise/shared/links" %>
+  </div>
+</div>
+
+
