@@ -5,7 +5,6 @@ class Mark < ApplicationRecord
   belongs_to :response_user, class_name: "User", optional: true
 
   has_many :notifications, dependent: :destroy, as: :recipient, class_name: "Noticed::Notification"
-  has_many :notification_mentions, dependent: :destroy, class_name: "Noticed::Event"
 
   validates :value, presence: true, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 100 }
   validates :comment, presence: true, if: :student?

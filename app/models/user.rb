@@ -14,7 +14,6 @@ class User < ApplicationRecord
   has_many :marks, dependent: :destroy
   has_many :responses, dependent: :destroy
   has_many :notifications, dependent: :destroy, as: :recipient, class_name: "Noticed::Notification"
-  has_many :notification_mentions, dependent: :destroy, class_name: "Noticed::Event"
 
   has_many :courses, foreign_key: :instructor_id, dependent: :destroy
 

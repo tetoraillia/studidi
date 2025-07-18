@@ -3,7 +3,6 @@ class Enrollment < ApplicationRecord
   belongs_to :course
 
   has_many :notifications, dependent: :destroy, as: :recipient, class_name: "Noticed::Notification"
-  has_many :notification_mentions, dependent: :destroy, class_name: "Noticed::Event"
 
   scope :for_user_and_course, ->(user, course) { where(user: user, course: course) }
 
