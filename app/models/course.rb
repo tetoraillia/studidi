@@ -22,6 +22,11 @@ class Course < ApplicationRecord
     ends_at&.strftime("%Y-%m-%d")
   end
 
+  def enrolled?(user)
+    return false unless user
+    enrollments.exists?(user_id: user.id)
+  end
+
   private
 
   def schedule_reminder

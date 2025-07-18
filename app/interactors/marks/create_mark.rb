@@ -12,10 +12,6 @@ module Marks
             mark.user = context.user
 
             response = Response.find_by(id: context.params[:response_id])
-            if response.nil?
-                context.fail!(error: "Response not found")
-                return
-            end
 
             mark.response = response
 

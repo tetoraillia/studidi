@@ -1,187 +1,105 @@
-<% if current_user %>
-<h2><%= link_to "Responses", total_responses_path(current_user) %></h2>
-<% end %>
-
-<h1>Courses</h1>
-
-<%= link_to "Sign In", new_user_session_path, class: "btn btn-primary" %>
-
-<% if policy(Course).create? %>
-  <%= link_to "New Course", new_course_path, class: "btn btn-primary" %>
-<% end %>
-
-<% if current_user.present? %>
-  <div class="account-info">
-    <p style="margin-top: 0; font-weight: bold;">Account info:</p>
-    <%= image_tag current_user.avatar.present? ? current_user.avatar.url : "default_avatar.jpg", class: "user-avatar" %>
-    <p>username: <%= current_user.first_name %></p>
-    <p>email: <%= current_user.email %></p>
-    <p>role: <%= current_user.role %></p>
-    <% if current_user.teacher? %>
-      <p>created courses: <%= current_user.courses.count %></p>
-    <% else %>
-      <p>enrolled courses: <%= current_user.enrollments.count %></p>
-    <% end %>
-    <div class="actions">
-      <%= button_to "Log Out", destroy_user_session_path, method: :delete, data: { confirm: "Are you sure you want to log out?" }, class: "btn btn-outline-secondary" %>
-      <%= link_to "Edit profile", edit_user_registration_path, class: "btn btn-outline-secondary" %>
-    </div>
-  </div>
-<% end %>
-
-<% @courses.each do |course| %>
-  <div class="course">
-    <h2><%= course.title %></h2>
-    <p><%= course.description %></p>
-    <p class="instructor">Instructor: <%= course.instructor.first_name %></p>
-    <p class="archived">Archived: <%= course.is_archived ? "Yes" : "No" %></p>
-    <p>
-      <span class="badge <%= course.public ? "badge-public" : "badge-private" %>">
-        <%= course.public ? "Public" : "Private" %>
-      </span>
-    </p>
-
-    <% if current_user&.student? && current_user.enrolled_in?(course) %>
-      <span class="badge">Enrolled</span>
-    <% end %>
-
-    <div class="actions">
-      <div class="primary-actions">
-        <%= link_to "View", course_path(course), class: "btn btn-info" %>
-
-        <% if current_user&.student? && !current_user.enrolled_in?(course) && course.public %>
-          <%= button_to "Enroll", course_enrollments_path(course), method: :post, class: "btn btn-primary" %>
-        <% end %>
-
-        <% if current_user&.student? && current_user.enrolled_in?(course) %>
-          <%= button_to "Leave", course_enrollment_path(course, current_user.enrollments.find_by(course: course)), method: :delete, data: { confirm: "Are you sure you want to leave this course?" }, class: "btn btn-danger" %>
-        <% end %>
-      </div>
-
-      <% if policy(course).update? %>
-        <div class="primary-actions">
-          <%= link_to "Edit", edit_course_path(course), class: "btn btn-warning" %>
+<div class="container">
+  <div class="left-side">
+    <% if current_user.present? %>
+      <div class="user-profile">
+        <%= image_tag current_user.avatar.present? ? current_user.avatar.url : "default_avatar.jpg", class: "user-avatar" %>
+        <div class="user-info">
+          <p class="user-name"><%= current_user.first_name %></p>
+          <p class="user-email"><%= current_user.email %></p>
+          <p class="user-role"><%= current_user.role %></p>
+          <% if current_user.teacher? %>
+            <p class="user-stats">Created courses: <%= current_user.courses.count %></p>
+          <% else %>
+            <p class="user-stats">Enrolled courses: <%= current_user.enrollments.count %></p>
+          <% end %>
         </div>
-        <div class="danger-action">
-          <%= button_to "Delete", course_path(course), method: :delete,
-                      data: { confirm: "Are you sure?" },
-                      class: "btn btn-danger" %>
+        <div class="user-actions">
+          <%= button_to "Log Out", destroy_user_session_path, method: :delete, 
+                       data: { confirm: "Are you sure you want to log out?" }, 
+                       class: "btn btn-outline-secondary" %>
+          <%= link_to "Edit profile", edit_user_registration_path, class: "btn btn-outline-secondary" %>
+        </div>
+      </div>
+    <% else %>
+      <div class="auth-buttons">
+        <%= link_to "Sign In", new_user_session_path, class: "btn btn-outline-primary" %>
+        <%= link_to "Sign Up", new_user_registration_path, class: "btn btn-outline-primary" %>
+      </div>
+    <% end %>
+  </div>
+<br>
+  <div class="center">
+    <% if current_user %>
+      <nav>
+        <ul>
+          <li>
+            <%= link_to "Responses", total_responses_path(current_user), 
+                         class: "btn btn-primary" %>
+          </li>
+          <li>
+            <%= link_to "Courses", courses_path, 
+                         class: "btn btn-primary" %>
+          </li>
+          <li>
+            <%= link_to "Bookmarks", bookmarks_path(current_user), 
+                         class: "btn btn-primary" %>
+          </li>
+        </ul>
+      </nav>
+    <% end %>
+<br>
+    <% if policy(Course).create? %>
+      <div class="new-course-button">
+        <%= link_to "New Course", new_course_path, class: "btn btn-outline-primary" %>
+      </div>
+    <% end %>
+
+    <div class="courses-list">
+      <% @courses.each do |course| %>
+        <div class="course">
+          <div class="course-header">
+            <h3 class="course-title"><%= course.title %></h3>
+            <div class="course-meta">
+              <p class="instructor">Instructor: <%= course.instructor.first_name %></p>
+              <% if course.is_archived %>
+                <span class="badge badge-public">Archived</span>
+              <% end %>
+                
+              </span>
+              <span class="badge <%= course.public ? "badge-public" : "badge-private" %>">
+                <%= course.public ? "Public" : "Private" %>
+              </span>
+              <% if current_user&.student? && current_user.enrolled_in?(course) %>
+                <span class="badge badge-enrolled">Enrolled</span>
+              <% end %>
+            </div>
+          </div>
+          <p class="course-description"><%= course.description %></p>
+          <div class="course-actions">
+            <%= link_to "View", course_path(course), class: "course-link course-link-primary" %>
+            <% if current_user&.student? && !current_user.enrolled_in?(course) && course.public %>
+              <%= button_to "Enroll in Course", 
+                        course_enrollments_path(course), 
+                        method: :post, 
+                        class: "course-link course-link-primary" %>
+            <% end %>
+            <% if current_user&.student? && current_user.enrolled_in?(course) %>
+              <%= button_to "Leave", course_enrollment_path(course, current_user.enrollments.find_by(course: course)), 
+                           method: :delete, 
+                           data: { confirm: "Are you sure you want to leave this course?" }, 
+                           class: "course-link course-link-danger" %>
+            <% end %>
+            <% if policy(course).update? %>
+              <%= link_to "Edit", edit_course_path(course), class: "course-link course-link-warning" %> 
+              <%= button_to "Delete", course_path(course), 
+                         method: :delete,
+                         data: { confirm: "Are you sure?" },
+                         class: "course-link course-link-danger" %>
+            <% end %>
+          </div>
         </div>
       <% end %>
     </div>
+    <%= paginate @courses %>
   </div>
-<% end %>
-
-<div class="pagination">
-  <%= paginate @courses %>
 </div>
-
-<style>
-  .course {
-    margin: 20px 0;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-  }
-
-  .instructor {
-    color: #666;
-    font-style: italic;
-  }
-
-  .actions {
-    margin-top: 15px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .primary-actions {
-    display: flex;
-    gap: 10px;
-  }
-
-  .btn {
-    padding: 8px 12px;
-    border-radius: 4px;
-    text-decoration: none;
-    margin-right: 10px;
-  }
-
-  .btn-primary { background-color: #007bff; color: white; }
-  .btn-info { background-color: #007bff; color: white; }
-  .btn-warning { background-color:rgb(192, 192, 192); color: #333; }
-  .btn-danger { background-color: #dc3545; color: white; }
-
-  .pagination {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-    gap: 8px;
-    margin-bottom: 20px
-  }
-
-  .pagination a {
-    padding: 8px 12px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    color: #333;
-    text-decoration: none;
-    transition: all 0.2s;
-  }
-
-  .pagination a:hover {
-    background-color: #f8f9fa;
-    border-color: #007bff;
-    color: #007bff;
-  }
-
-  .pagination .current {
-    border-color: #007bff;
-    font-weight: 500;
-  }
-
-  .pagination .disabled {
-    color: #666;
-    pointer-events: none;
-    opacity: 0.6;
-  }
-
-  .badge {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0 10px;
-    height: 22px;
-    font-size: 0.75rem;
-    font-weight: 500;
-    color: #198754;
-    background-color: #e6f4ea;
-    border: 1px solid #c3e6cb;
-    border-radius: 999px;
-    line-height: 1;
-  }
-
-  .badge-public {
-    color: #198754;
-    background-color: #e6f4ea;
-    border: 1px solid #c3e6cb;
-  }
-  .badge-private {
-    color: #b02a37;
-    background-color: #f8d7da;
-    border: 1px solid #f5c2c7;
-  }
-
-  .account-info {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    background: #f8f9fa;
-    padding: 15px;
-    border-radius: 5px;
-    min-width: 200px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    z-index: 1000;
-  }
-</style>
