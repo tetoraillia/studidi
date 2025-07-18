@@ -3,6 +3,14 @@
 # ResponseNotifier.with(record: @post, message: "New post").deliver(User.all)
 
 class ResponseNotifier < ApplicationNotifier
+  deliver_by :action_cable, format: :to_action_cable, message: -> { params[:message] }
+
+  def to_action_cable
+    {
+      message: params[:message],
+      url: params[:url]
+    }
+  end
   # Add your delivery methods
   #
   # deliver_by :email do |config|
