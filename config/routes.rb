@@ -25,7 +25,7 @@ Rails.application.routes.draw do
       end
     end
     resources :lessons do
-      resources :responses, only: [ :create ]
+      resources :responses, only: [ :create, :update, :show ]
     end
     resources :invitations, only: [ :new, :create ] do
       member do
