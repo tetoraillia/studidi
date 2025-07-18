@@ -6,8 +6,8 @@
         <div>
           <h1 class="display-5 mb-2"><%= @course.title %></h1>
           <div class="d-flex align-items-center gap-2 mb-3">
-            <span class="badge <%= @course.public ? 'bg-success' : 'bg-secondary' %>">
-              <%= @course.public ? 'Public' : 'Private' %>
+            <span class="badge <%= @course.public ? "bg-success" : "bg-secondary" %>">
+              <%= @course.public ? "Public" : "Private" %>
             </span>
             <% if @course.is_archived %>
               <span class="badge bg-warning text-dark">Archived</span>
@@ -31,8 +31,8 @@
           <%= button_to bookmarks_path(course_id: @course.id), 
                       method: @bookmarked ? :delete : :post, 
                       class: "btn #{@bookmarked ? 'btn-warning' : 'btn-outline-primary'}" do %>
-            <i class="<%= @bookmarked ? 'fas' : 'far' %> fa-bookmark me-1"></i>
-            <%= @bookmarked ? 'Unbookmark' : 'Bookmark' %>
+            <i class="<%= @bookmarked ? "fas" : "far" %> fa-bookmark me-1"></i>
+            <%= @bookmarked ? "Unbookmark" : "Bookmark" %>
           <% end %>
         </div>
       </div>
@@ -83,11 +83,11 @@
               <% @topics.each_with_index do |topic, index| %>
                 <div class="accordion-item border-0 mb-2">
                   <h3 class="accordion-header" id="heading<%= topic.id %>">
-                    <button class="accordion-button <%= index.zero? ? '' : 'collapsed' %> shadow-none" 
+                    <button class="accordion-button <%= index.zero? ? "" : "collapsed" %> shadow-none" 
                             type="button" 
                             data-bs-toggle="collapse" 
                             data-bs-target="#collapse<%= topic.id %>" 
-                            aria-expanded="<%= index.zero? ? 'true' : 'false' %>" 
+                            aria-expanded="<%= index.zero? ? "true" : "false" %>" 
                             aria-controls="collapse<%= topic.id %>">
                       <div class="d-flex justify-content-between align-items-center w-100">
                         <span class="fw-bold"><%= topic.title %></span>
@@ -97,7 +97,7 @@
                   </h3>
                   
                   <div id="collapse<%= topic.id %>" 
-                       class="accordion-collapse collapse <%= index.zero? ? 'show' : '' %>" 
+                       class="accordion-collapse collapse <%= index.zero? ? "show" : "" %>" 
                        aria-labelledby="heading<%= topic.id %>" 
                        data-bs-parent="#topicsAccordion">
                     <div class="accordion-body pt-3">

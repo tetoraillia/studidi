@@ -35,7 +35,7 @@
           <div class="lesson-meta mt-3 pt-3 border-top">
             <p class="text-muted mb-0">
               <i class="far fa-clock me-1"></i> Accepting answers until: 
-              <strong><%= @lesson.end_date.present? ? DateTime.parse(@lesson.end_date.to_s).strftime("%B %d, %Y at %I:%M %p") : 'No end date set' %></strong>
+              <strong><%= @lesson.end_date.present? ? DateTime.parse(@lesson.end_date.to_s).strftime("%B %d, %Y at %I:%M %p") : "No end date set" %></strong>
             </p>
           </div>
         </div>
