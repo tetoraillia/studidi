@@ -6,7 +6,6 @@ class MarksController < ApplicationController
         @user = current_user
 
         if params[:mark][:response_id].blank?
-            flash.now[:alert] = "Response not found"
             redirect_to course_topic_lesson_path(@course, @topic, @lesson)
             return
         end
