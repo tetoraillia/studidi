@@ -25,7 +25,7 @@ module Marks
                     url: url,
                     recipient: response.user
                 ).deliver_later(response.user)
-              
+
                 context.mark = mark
             else
                 context.fail!(error: mark.errors.full_messages.to_sentence)
