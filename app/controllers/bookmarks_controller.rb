@@ -2,7 +2,7 @@ class BookmarksController < ApplicationController
     before_action :authenticate_user!
 
     def index
-        @bookmarks = Bookmark.by_user(current_user)
+        @bookmarks = Bookmark.by_user(current_user).page(params[:page]).per(10)
     end
 
     def create

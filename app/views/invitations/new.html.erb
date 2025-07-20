@@ -17,12 +17,13 @@
 
 <%= form_with(model: [ @course, @invitation ], data: { turbo: false }) do |form| %>
   <div class="field">
-    <%= form.label :email, "Invite Email" %>
-    <%= form.email_field :email, required: true %>
+    <%= form.label :email, "Invite Email", class: "form-label" %>
+    <%= form.email_field :email, required: true, class: "form-control" %>
   </div>
+  <br>
   <div class="actions">
-    <%= form.submit "Send Invitation" %>
+    <%= form.submit "Send Invitation", class: "btn btn-primary" %>
   </div>
 <% end %>
 
-<%= link_to "Back to Course", course_path(@course) %>
+<%= link_to "Back to Course", course_path(@course), class: "btn btn-secondary" %>
