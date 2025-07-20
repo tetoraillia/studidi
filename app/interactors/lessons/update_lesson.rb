@@ -8,10 +8,16 @@ module Lessons
             update_lesson(context.id, context.params)
 
             if @lesson.save
+                message = "Teacher #{@lesson.topic.course.instructor.first_name} posted a new lesson: #{@lesson.title}"
+                url = Rails.application.routes.url_helpers.lesson_path(@lesson)
                 @lesson.topic.course.students.each do |student|
-                    NotificationsChannel.broadcast_to(student, { message: "Teacher #{@lesson.topic.course.instructor.first_name} edited lesson #{@lesson.title}" })
+                    LessonNotifier.with(
+                        message: message,
+                        url: url,
+                        recipient: student,
+                    ).deliver_later(student)
                 end
-                #LessonNotifier.with(record: @lesson, message: "Teacher #{@lesson.topic.course.instructor.first_name} edited lesson #{@lesson.title}").deliver(@lesson.topic.course.students)
+
                 check_lesson_open_status
                 context.lesson = @lesson
             else

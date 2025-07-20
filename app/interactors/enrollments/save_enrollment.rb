@@ -18,8 +18,13 @@ module Enrollments
                 return
             end
 
-            #EnrollmentNotifier.with(record: context.enrollment, message: "Student #{context.user.first_name} enrolled on your course: #{context.course.title}").deliver(context.course.instructor)
-            NotificationsChannel.broadcast_to(context.course.instructor, { message: "Student #{context.user.first_name} enrolled on your course: #{context.course.title}" })
+            message = "Student #{context.user.first_name} enrolled on your course: #{context.course.title}"
+            url = Rails.application.routes.url_helpers.course_path(context.course)
+            EnrollmentNotifier.with(
+                recipient: context.course.instructor,
+                message: message,
+                url: url
+            ).deliver_later(context.course.instructor)
 
             context.message = "Successfully enrolled in the course."
         end
