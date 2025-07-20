@@ -1,0 +1,23 @@
+<div class="container mt-4">
+  <h2 class="mb-4">Your Notifications</h2>
+
+  <div class="mb-3">
+    <%= link_to "All", notifications_path, class: "btn btn-outline-primary #{'active' if params[:filter].blank?}" %>
+    <%= link_to "Unread", notifications_path(filter: "unread"), class: "btn btn-outline-primary #{'active' if params[:filter] == 'unread'}" %>
+    <%= link_to "Read", notifications_path(filter: "read"), class: "btn btn-outline-primary #{'active' if params[:filter] == 'read'}" %>
+  </div>
+
+  <% if @notifications.any? %>
+    <div class="list-group">
+      <% @notifications.each do |notification| %>
+        <%= render partial: "notification", locals: { notification: notification } %>
+      <% end %>
+    </div>
+  <% else %>
+    <p class="text-muted">No notifications found.</p>
+  <% end %>
+
+  <div class="mt-4">
+    <%= paginate @notifications %>
+  </div>
+</div>
