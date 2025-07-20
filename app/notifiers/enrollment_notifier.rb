@@ -3,13 +3,24 @@
 # EnrollmentNotifier.with(record: @post, message: "New post").deliver(User.all)
 
 class EnrollmentNotifier < ApplicationNotifier
-  deliver_by :action_cable, format: :to_action_cable, message: -> { params[:message] }
+  recipients ->{ params[:recipient] }
 
-  def to_action_cable
-    {
-      message: params[:message],
-      url: params[:url]
-    }
+  deliver_by :database
+  deliver_by :action_cable,
+          stream: -> { "notifications_#{recipient.id}" },
+          message: -> { params[:message] },
+          url: -> { params[:url] },
+          id: -> { notification.id }
+
+  required_param :message
+  required_param :url
+
+  def message
+    params[:message]
+  end
+
+  def url
+    params[:url]
   end
   # Add your delivery methods
   #
