@@ -10,7 +10,7 @@ consumer.subscriptions.create("NotificationsChannel", {
   },
 
   received(data) {
-    console.log("Received via ActionCable:", data)
-    alert(data.message)
+    const badge = document.getElementById("notification-badge");
+    badge.classList.remove("d-none");
   }
 });
