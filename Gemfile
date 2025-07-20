@@ -82,8 +82,16 @@ group :test do
   gem "simplecov", require: false
 end
 
+# Authentication
+gem "omniauth"
+gem "omniauth-google-oauth2"
+gem "omniauth-rails_csrf_protection"
 gem "devise", "~> 4.9"
 
 gem "kaminari"
 
 gem "sidekiq", "~> 8.0"
+
+# Uploads service
+gem "carrierwave", "~> 3.0"
+gem "mini_magick"

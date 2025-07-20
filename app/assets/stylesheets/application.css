@@ -1,10 +1,288 @@
-/*
- * This is a manifest file that'll be compiled into application.css.
- *
- * With Propshaft, assets are served efficiently without preprocessing steps. You can still include
- * application-wide styles in this file, but keep in mind that CSS precedence will follow the standard
- * cascading order, meaning styles declared later in the document or manifest will override earlier ones,
- * depending on specificity.
- *
- * Consider organizing styles into separate files for maintainability.
- */
+:root {
+    --primary-color: #c39a7c;
+    --secondary-color: #8b6c51;
+    --background-color: #f8f9fa;
+    --text-color: #333;
+    --success-color: #28a745;
+    --danger-color: #dc3545;
+    --warning-color: #ffc107;
+    --info-color: #17a2b8;
+}
+
+body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Layout */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Sidebar */
+.left-side {
+    width: 250px;
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-right: 20px;
+}
+
+.user-avatar {
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    margin-bottom: 15px;
+    border: 3px solid var(--primary-color);
+}
+
+.user-name {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: 5px;
+}
+
+.user-email,
+.user-role,
+.user-stats {
+    color: #6c757d;
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+}
+
+/* Center Content */
+.center {
+    flex: 1;
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Navigation */
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+nav button {
+    flex: 1;
+    min-width: 120px;
+    padding: 8px 15px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+nav button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Course Cards */
+.course {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.course:hover {
+    transform: translateY(-5px);
+}
+
+.course-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.course-title {
+    font-size: 1.5rem;
+    color: var(--text-color);
+    margin-bottom: 10px;
+}
+
+.course-description {
+    color: #6c757d;
+    margin-bottom: 15px;
+    line-height: 1.6;
+}
+
+.instructor,
+.archived {
+    color: #6c757d;
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+}
+
+/* Badges */
+.badge {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    margin-right: 5px;
+}
+
+.badge-public {
+    background-color: #226c33;
+    color: #155724;
+}
+
+.badge-private {
+    background-color: #980909;
+    color: #856404;
+}
+
+.badge-enrolled {
+    background-color: #4f84bd;
+    color: #004085;
+}
+
+/* Buttons */
+.btn {
+    margin-right: 5px;
+    margin-bottom: 5px;
+    padding: 8px 15px;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+}
+
+.btn-danger {
+    background-color: var(--danger-color);
+    color: white;
+    border: none;
+}
+
+.btn-warning {
+    background-color: var(--warning-color);
+    color: black;
+    border: none;
+}
+
+.btn-info {
+    background-color: var(--info-color);
+    color: white;
+    border: none;
+}
+
+/* Pagination */
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.pagination a {
+    padding: 5px 10px;
+    border-radius: 5px;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.pagination a:hover {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+/* Course Links */
+.course-link {
+    display: inline-block;
+    text-decoration: none;
+    padding: 0.4rem 0.5rem;
+    border-width: 0;
+    border-radius: 0.25rem;
+    transition: all 0.2s ease-in-out;
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
+    text-align: center;
+    font-weight: 500;
+    font-size: 0.9rem;
+    line-height: 1.2;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.course-link-primary {
+    background-color: #1fa2a4;
+    color: white;
+}
+
+.course-link-primary:hover {
+    background-color: #8e5e0c;
+}
+
+.course-link-danger {
+    background-color: #c30417;
+    color: white;
+}
+
+.course-link-danger:hover {
+    background-color: #8e5e0c;
+}
+
+.course-link-warning {
+    background-color: #454545;
+    color: white;
+}
+
+.course-link-warning:hover {
+    background-color: #8e5e0c;
+}
+
+.course-link-success {
+    background-color: #28a745;
+    color: white;
+}
+
+.course-link-success:hover {
+    background-color: #1e7e34;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .left-side {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .center {
+        width: 100%;
+    }
+
+    nav ul {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    nav button {
+        width: 100%;
+    }
+}

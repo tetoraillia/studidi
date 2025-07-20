@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_17_094616) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_18_072844) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -72,6 +72,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_17_094616) do
     t.bigint "student_response_id"
     t.datetime "ends_at"
     t.boolean "is_open", default: true
+    t.string "attachment"
     t.index ["student_response_id"], name: "index_lessons_on_student_response_id"
     t.index ["topic_id"], name: "index_lessons_on_topic_id"
   end
@@ -120,6 +121,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_17_094616) do
     t.text "content"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "attachment"
     t.index ["lesson_id"], name: "index_responses_on_lesson_id"
     t.index ["mark_id"], name: "index_responses_on_mark_id"
     t.index ["user_id"], name: "index_responses_on_user_id"
@@ -145,6 +147,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_17_094616) do
     t.datetime "remember_created_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "avatar"
+    t.string "uid"
+    t.string "provider"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end

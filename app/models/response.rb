@@ -1,4 +1,6 @@
 class Response < ApplicationRecord
+    mount_uploader :attachment, ResponseAttachmentUploader
+
     belongs_to :lesson, optional: true
     belongs_to :user
     has_one :mark

@@ -2,7 +2,6 @@ class Mark < ApplicationRecord
   belongs_to :lesson
   belongs_to :user
   belongs_to :response, optional: true
-  belongs_to :response_user, class_name: "User", optional: true
 
   has_many :notifications, dependent: :destroy, as: :recipient, class_name: "Noticed::Notification"
 
@@ -15,6 +14,6 @@ class Mark < ApplicationRecord
   end
 
   def teacher?
-    response_user&.role == "teacher"
+    response&.user&.role == "teacher"
   end
 end

@@ -35,3 +35,6 @@
 
 # Ignore coverage directory
 /coverage
+
+# Ignore uploaded files
+/public/uploads

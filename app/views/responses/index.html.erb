@@ -1,17 +1,78 @@
-<h1>Responses</h1>
+<div class="container">
+  <div class="left-side">
+    <% if current_user.present? %>
+      <div class="user-profile">
+        <%= image_tag current_user.avatar.present? ? current_user.avatar.url : "default_avatar.jpg", class: "user-avatar" %>
+        <div class="user-info">
+          <p class="user-name"><%= current_user.first_name %></p>
+          <p class="user-email"><%= current_user.email %></p>
+          <p class="user-role"><%= current_user.role %></p>
+          <% if current_user.teacher? %>
+            <p class="user-stats">Created courses: <%= current_user.courses.count %></p>
+          <% else %>
+            <p class="user-stats">Enrolled courses: <%= current_user.enrollments.count %></p>
+          <% end %>
+        </div>
+        <div class="user-actions">
+          <%= button_to "Log Out", destroy_user_session_path, method: :delete, 
+                       data: { confirm: "Are you sure you want to log out?" }, 
+                       class: "btn btn-outline-secondary" %>
+          <%= link_to "Edit profile", edit_user_registration_path, class: "btn btn-outline-secondary" %>
+        </div>
+      </div>
+    <% else %>
+      <div class="auth-buttons">
+        <%= link_to "Sign In", new_user_session_path, class: "btn btn-outline-primary" %>
+        <%= link_to "Sign Up", new_user_registration_path, class: "btn btn-outline-primary" %>
+      </div>
+    <% end %>
+  </div>
+<br>
+  <div class="center">
+    <% if current_user %>
+      <nav>
+        <ul>
+          <li>
+            <%= link_to "Responses", total_responses_path(current_user), 
+                         class: "btn btn-primary" %>
+          </li>
+          <li>
+            <%= link_to "Courses", courses_path, 
+                         class: "btn btn-primary" %>
+          </li>
+          <li>
+            <%= link_to "Bookmarks", bookmarks_path(current_user), 
+                         class: "btn btn-primary" %>
+          </li>
+        </ul>
+      </nav>
+    <% end %>
 
-<% @responses.each do |response| %>
-   You have answered:
-   <%= response.lesson.topic.course.title %>
-   lesson: <%= response.lesson.title %>
-
-   <p>Answer: <%= response.content %></p>
-   <% if response.mark %>
-      <p>Mark: <%= response.mark.value %></p>
-      <p>Comment: <%= response.mark.comment %></p>
-      <p>Marked by: <%= response.mark.user.first_name %> <%= response.mark.user.last_name %></p>
-   <% else %>
-      <p>No mark yet</p>
-   <% end %>
-   <hr>
-<% end %>  
+    <div class="responses-list">
+      <% @responses.each do |response| %>
+        <div class="response">
+          <div class="response-header">
+            <h3 class="response-title">Lesson: <%= response.lesson.title %></h3>
+            <div class="response-meta">
+              <p class="course-name">Course: <%= response.lesson.topic.course.title %></p>
+              <p class="submitted-at">Submitted: <%= response.created_at.strftime("%B %d, %Y") %></p>
+            </div>
+          </div>
+          <div class="response-content">
+            <p class="answer">Answer: <%= response.content %></p>
+            <% if response.mark %>
+              <div class="mark-info">
+                <p class="mark-value">Mark: <%= response.mark.value %></p>
+                <p class="mark-comment">Comment: <%= response.mark.comment %></p>
+                <p class="marker">Marked by: <%= response.mark.user.first_name %> <%= response.mark.user.last_name %></p>
+              </div>
+            <% else %>
+              <p class="no-mark">No mark yet</p>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+    <%= paginate @responses %>
+  </div>
+</div>  

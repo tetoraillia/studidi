@@ -1,7 +1,7 @@
 class LessonsController < ApplicationController
     before_action :authenticate_user!
     before_action :set_lesson, only: [ :show, :edit, :update, :destroy ]
-    before_action :set_course_data, only: [ :new, :create, :edit, :update, :destroy, :select_lesson_type ]
+    before_action :set_course_data, only: [ :new, :create, :edit, :update, :destroy, :select_lesson_type, :show ]
 
     def select_lesson_type
     end

@@ -5,7 +5,7 @@ class ResponsesController < ApplicationController
 
     def index
         @user = User.find(current_user.id)
-        @responses = Response.where(user: @user)
+        @responses = Response.where(user: @user).page(params[:page]).per(10)
     end
 
     def create
@@ -46,6 +46,6 @@ class ResponsesController < ApplicationController
     end
 
     def response_params
-        params.require(:response).permit(:content, :mark_id, :lesson_id, :user_id)
+        params.require(:response).permit(:content, :mark_id, :lesson_id, :user_id, :attachment)
     end
 end
