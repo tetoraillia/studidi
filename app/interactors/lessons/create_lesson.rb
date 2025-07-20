@@ -17,7 +17,7 @@ module Lessons
                         recipient: student,
                     ).deliver_later(student)
                 end
-                
+
                 context.lesson = @lesson
             else
                 context.fail!(error: @lesson.errors.full_messages.to_sentence)

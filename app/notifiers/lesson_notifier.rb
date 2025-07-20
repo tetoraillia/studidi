@@ -3,7 +3,7 @@
 # LessonNotifier.with(record: @post, message: "New post").deliver(User.all)
 
 class LessonNotifier < ApplicationNotifier
-  recipients ->{ params[:recipient] }
+  recipients -> { params[:recipient] }
 
   deliver_by :database
   deliver_by :action_cable,

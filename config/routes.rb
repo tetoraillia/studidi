@@ -2,7 +2,7 @@ require "sidekiq/web"
 
 Rails.application.routes.draw do
   mount Sidekiq::Web => "/sidekiq"
-  mount ActionCable.server => '/cable'
+  mount ActionCable.server => "/cable"
 
   root "courses#index"
 
@@ -42,5 +42,5 @@ Rails.application.routes.draw do
       end
     end
   end
-  resources :notifications, only: [:index, :update]
+  resources :notifications, only: [ :index, :update ]
 end
