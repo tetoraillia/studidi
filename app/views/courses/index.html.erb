@@ -29,25 +29,55 @@
   </div>
 <br>
   <div class="center">
-    <% if current_user %>
-      <nav>
-        <ul>
-          <li>
-            <%= link_to "Responses", total_responses_path(current_user), 
+  <% if current_user %>
+    <div class="search-container">
+      <%= search_form_for @q, url: courses_path, method: :get do |f| %>
+        <span class="search-field">
+          <%= f.label :title_cont, "Title" %>
+          <%= f.search_field :title_cont, placeholder: "Search title" %>
+        </span>
+        <span class="search-field">
+          <%= label_tag "q[lessonable]", "Has Lessons" %>
+          <%= check_box_tag "q[lessonable]", "1", params.dig(:q, :lessonable) == "1" %>
+        </span>
+        <span class="search-field">
+          <%= label_tag "q[enrolled]", "My Courses" %>
+          <%= check_box_tag "q[enrolled]", "1", params.dig(:q, :enrolled) == "1" %>
+        </span>
+        <span class="search-field">
+          <%= label_tag "q[recent]", "Recent Courses" %>
+          <%= check_box_tag "q[recent]", "1", params.dig(:q, :recent) == "1" %>
+        </span>
+        <span class="search-field">
+          <%= label_tag "q[description_cont]", "Description" %>
+          <%= text_field_tag "q[description_cont]", params.dig(:q, :description_cont), placeholder: "Search description" %>
+        </span>
+        <br>
+        <span class="search-actions">
+          <%= f.submit "Search", class: "btn btn-primary" %>
+          <%= link_to "Clear", courses_path, class: "btn btn-secondary" %>
+          <%= sort_link(@q, :title, "Title") %>
+        </span>
+      <% end %>
+    </div>
+    <nav>
+      <ul>
+        <li>
+          <%= link_to "Responses", total_responses_path(current_user), 
+                       class: "btn btn-primary" %>
+        </li>
+        <li>
+          <%= link_to "Courses", courses_path, 
                          class: "btn btn-primary" %>
-          </li>
-          <li>
-            <%= link_to "Courses", courses_path, 
+        </li>
+        <li>
+          <%= link_to "Bookmarks", bookmarks_path(current_user), 
                          class: "btn btn-primary" %>
-          </li>
-          <li>
-            <%= link_to "Bookmarks", bookmarks_path(current_user), 
-                         class: "btn btn-primary" %>
-          </li>
-        </ul>
-      </nav>
+        </li>
+      </ul>
+    </nav>
     <% end %>
-<br>
+    <br>
     <% if policy(Course).create? %>
       <div class="new-course-button">
         <%= link_to "New Course", new_course_path, class: "btn btn-outline-primary" %>
@@ -100,6 +130,5 @@
         </div>
       <% end %>
     </div>
-    <%= paginate @courses %>
   </div>
 </div>
