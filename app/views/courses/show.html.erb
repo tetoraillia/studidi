@@ -79,7 +79,17 @@
         
         <div class="card-body">
           <% if @topics.any? %>
-            <div class="accordion" id="topicsAccordion">
+            <%= search_form_for @lesson_q, url: course_path(@course), method: :get, html: {class: 'lesson-search d-flex mb-3'} do |f| %>
+  <%= f.search_field :title_cont, placeholder: 'Search lessons...', class: 'form-control me-2' %>
+  <%= f.button :submit, class: 'btn btn-primary btn-sm d-flex align-items-center' do %>
+    <i class="fas fa-search me-1"></i> Search
+  <% end %>
+  <% if params.dig(:q, :title_cont).present? %>
+    <%= link_to 'Clear', course_path(@course), class: 'btn btn-link btn-sm' %>
+  <% end %>
+<% end %>
+
+<div class="accordion" id="topicsAccordion">
               <% @topics.each_with_index do |topic, index| %>
                 <div class="accordion-item border-0 mb-2">
                   <h3 class="accordion-header" id="heading<%= topic.id %>">
@@ -101,9 +111,10 @@
                        aria-labelledby="heading<%= topic.id %>" 
                        data-bs-parent="#topicsAccordion">
                     <div class="accordion-body pt-3">
-                      <% if topic.lessons.any? %>
+                      <% lessons = @lessons_by_topic[topic.id] || [] %>
+                      <% if lessons.any? %>
                         <div class="list-group list-group-flush">
-                          <% topic.lessons.each do |lesson| %>
+                          <% lessons.each do |lesson| %>
                             <%= link_to course_topic_lesson_path(@course, topic, lesson), 
                                       class: "list-group-item list-group-item-action d-flex justify-content-between align-items-center" do %>
                               <span><%= lesson.title %></span>
