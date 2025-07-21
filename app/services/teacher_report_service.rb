@@ -42,7 +42,7 @@ class TeacherReportService
       ORDER BY c.title;
     SQL
 
-    sanitized_sql = ActiveRecord::Base.send(:sanitize_sql_array, [sql, @teacher_id])
+    sanitized_sql = ActiveRecord::Base.send(:sanitize_sql_array, [ sql, @teacher_id ])
     results = ActiveRecord::Base.connection.execute(sql)
     results.map do |row|
       Report.new(

@@ -23,7 +23,7 @@ class StudentReportService
         COUNT(DISTINCT l.id) AS total_lessons,
         COUNT(DISTINCT CASE WHEN r.id IS NOT NULL THEN l.id END) AS lessons_completed,
         ROUND(AVG(m.value)::numeric, 2) AS average_mark,
-        CASE 
+        CASE
           WHEN COUNT(DISTINCT l.id) = 0 THEN 0
           ELSE ROUND(
             100.0 * COUNT(DISTINCT CASE WHEN r.id IS NOT NULL THEN l.id END) / COUNT(DISTINCT l.id),
@@ -41,7 +41,7 @@ class StudentReportService
       ORDER BY c.title;
     SQL
 
-    sanitized_sql = ActiveRecord::Base.send(:sanitize_sql_array, [sql, @student_id, @student_id])
+    sanitized_sql = ActiveRecord::Base.send(:sanitize_sql_array, [ sql, @student_id, @student_id ])
     results = ActiveRecord::Base.connection.execute(sanitized_sql)
 
     results.map do |row|
