@@ -50,7 +50,7 @@
 
     <% if current_user&.student? %>
       <% student_reports = StudentReportService.new(current_user.id).reports %>
-      <%= render partial: 'reports/student_report', locals: { reports: student_reports } %>
+      <%= render partial: "reports/student_report", locals: { reports: student_reports } %>
     <% elsif current_user&.teacher? %>
       <% teacher_reports = TeacherReportService.new(current_user.id).reports %>
       <%= render partial: "reports/teacher_report", locals: { reports: teacher_reports } %>
