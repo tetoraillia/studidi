@@ -3,12 +3,31 @@ class CoursesController < ApplicationController
     before_action :authenticate_user!, except: [ :index, :show ]
 
     def index
-        @courses = policy_scope(Course).order(created_at: :asc).page(params[:page]).per(10)
+        @q = policy_scope(Course).ransack(params[:q])
+        @courses = @q.result
+
+        if params.dig(:q, :lessonable).present?
+          @courses = @courses.lessonable(true)
+        end
+
+        if params.dig(:q, :enrolled).present? && current_user
+          @courses = @courses.enrolled(current_user.id)
+        end
+
+        if params.dig(:q, :recent).present?
+          @courses = @courses.recent
+        end
+
+        @courses = @courses.order(created_at: :asc).page(params[:page]).per(10)
     end
 
     def show
         authorize @course
         @topics = Topic.where(course_id: params[:id])
+
+        # Lesson search (Ransack)
+        @lesson_q = @course.lessons.ransack(params[:q])
+        @lessons_by_topic = @lesson_q.result.includes(:topic).group_by(&:topic_id)
     end
 
     def new
