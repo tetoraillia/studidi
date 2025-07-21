@@ -10,6 +10,7 @@ module Marks
                 return
             end
 
+            response = mark.response
             mark_params = context.params.slice(:value, :comment)
 
             if mark.update(mark_params)
