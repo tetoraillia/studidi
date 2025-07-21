@@ -79,13 +79,13 @@
         
         <div class="card-body">
           <% if @topics.any? %>
-            <%= search_form_for @lesson_q, url: course_path(@course), method: :get, html: {class: 'lesson-search d-flex mb-3'} do |f| %>
-  <%= f.search_field :title_cont, placeholder: 'Search lessons...', class: 'form-control me-2' %>
-  <%= f.button :submit, class: 'btn btn-primary btn-sm d-flex align-items-center' do %>
+            <%= search_form_for @lesson_q, url: course_path(@course), method: :get, html: { class: "lesson-search d-flex mb-3" } do |f| %>
+  <%= f.search_field :title_cont, placeholder: "Search lessons...", class: "form-control me-2" %>
+  <%= f.button :submit, class: "btn btn-primary btn-sm d-flex align-items-center" do %>
     <i class="fas fa-search me-1"></i> Search
   <% end %>
   <% if params.dig(:q, :title_cont).present? %>
-    <%= link_to 'Clear', course_path(@course), class: 'btn btn-link btn-sm' %>
+    <%= link_to "Clear", course_path(@course), class: "btn btn-link btn-sm" %>
   <% end %>
 <% end %>
 

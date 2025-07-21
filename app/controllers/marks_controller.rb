@@ -39,7 +39,7 @@ class MarksController < ApplicationController
       )
 
       if result.success?
-        redirect_to course_topic_lesson_path(@course, @topic, @lesson), 
+        redirect_to course_topic_lesson_path(@course, @topic, @lesson),
                     notice: "Mark was successfully updated."
       else
         @mark = result.mark || Mark.find(params[:id])
