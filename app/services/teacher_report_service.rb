@@ -37,11 +37,12 @@ class TeacherReportService
       LEFT JOIN lessons l ON l.topic_id = t.id
       LEFT JOIN responses r ON r.lesson_id = l.id AND r.user_id = e.user_id
       LEFT JOIN marks m ON m.response_id = r.id
-      WHERE c.instructor_id = #{@teacher_id}
+      WHERE c.instructor_id = ?
       GROUP BY c.id, c.title
       ORDER BY c.title;
     SQL
 
+    sanitized_sql = ActiveRecord::Base.send(:sanitize_sql_array, [sql, @teacher_id])
     results = ActiveRecord::Base.connection.execute(sql)
     results.map do |row|
       Report.new(
