@@ -2,6 +2,7 @@ class Lesson < ApplicationRecord
   has_many :marks, dependent: :destroy
   has_many :responses, dependent: :destroy
   has_many :responses, through: :marks, dependent: :destroy
+  has_many :notifications, dependent: :destroy, as: :recipient, class_name: "Noticed::Notification"
   belongs_to :topic
 
   scope :ordered, -> { order(Arel.sql("COALESCE(position, 9999) ASC"), :created_at) }

@@ -10,6 +10,19 @@ module Responses
             @response.user = context.user
 
             if @response.save
+                message = "Student #{@response.user.first_name} sent you a response to #{@response.lesson.title}"
+                url = Rails.application.routes.url_helpers.course_topic_lesson_path(
+                    @response.lesson.topic.course,
+                    @response.lesson.topic,
+                    @response.lesson
+                )
+
+                ResponseNotifier.with(
+                    message: message,
+                    url: url,
+                    recipient: @response.lesson.topic.course.instructor
+                ).deliver_later(@response.lesson.topic.course.instructor)
+
                 context.response = @response
                 context.lesson.update!(student_response_id: @response.id)
             else

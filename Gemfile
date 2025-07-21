@@ -32,6 +32,8 @@ gem "interactor"
 
 gem "pundit"
 
+gem "noticed"
+
 gem "dotenv-rails"
 
 # Reduces boot times through caching; required in config/boot.rb

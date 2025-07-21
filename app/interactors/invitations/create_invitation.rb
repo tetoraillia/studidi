@@ -9,6 +9,17 @@ module Invitations
 
             if context.invitation.persisted?
                 InvitationMailer.invite_email(context.invitation).deliver_now
+
+                recipient = User.find_by(email: context.invitation.email)
+                message = "You have been invited to join the course: #{context.course.title}. Check your email."
+                url = Rails.application.routes.url_helpers.accept_course_invitation_path(context.course, context.invitation)
+
+                InvitationNotifier.with(
+                    message: message,
+                    url: url,
+                    recipient: recipient
+                ).deliver_later(recipient)
+
                 context.success
             else
                 context.fail!(error: "Failed to create invitation.")

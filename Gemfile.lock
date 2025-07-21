@@ -92,7 +92,7 @@ GEM
     bindex (0.8.1)
     bootsnap (1.18.6)
       msgpack (~> 1.2)
-    brakeman (7.0.2)
+    brakeman (7.1.0)
       racc
     builder (3.3.0)
     capybara (3.40.0)
@@ -264,6 +264,8 @@ GEM
       racc (~> 1.4)
     nokogiri (1.18.8-x86_64-linux-musl)
       racc (~> 1.4)
+    noticed (2.7.1)
+      rails (>= 6.1.0)
     oauth2 (2.0.12)
       faraday (>= 0.17.3, < 4.0)
       jwt (>= 1.0, < 4.0)
@@ -534,6 +536,7 @@ DEPENDENCIES
   kamal
   kaminari
   mini_magick
+  noticed
   omniauth
   omniauth-google-oauth2
   omniauth-rails_csrf_protection
