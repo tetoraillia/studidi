@@ -1,6 +1,6 @@
 class MarksController < ApplicationController
     before_action :authenticate_user!
-    before_action :set_parent_objects, only: [ :create ]
+    before_action :set_parent_objects, only: [ :create, :update ]
 
     def create
         @user = current_user

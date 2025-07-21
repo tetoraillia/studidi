@@ -53,7 +53,7 @@
                 <td>
                   <% if response.mark %>
                     <span class="badge bg-<%= response.mark.value.to_i >= 5 ? "success" : "danger" %>">
-                      <%= response.mark.value %> / 10
+                      <%= response.mark.value %> / 100
                     </span>
                   <% else %>
                     <span class="text-muted">—</span>

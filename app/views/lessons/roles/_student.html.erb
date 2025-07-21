@@ -32,7 +32,7 @@
               <div class="d-flex justify-content-between align-items-center mb-2">
                 <strong>Grade:</strong>
                 <span class="badge bg-<%= @user_response.mark.value.to_i >= 5 ? "success" : "warning" %>">
-                  <%= @user_response.mark.value %> / 10
+                  <%= @user_response.mark.value %> / 100
                 </span>
               </div>
               <% if @user_response.mark.comment.present? %>
