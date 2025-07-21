@@ -95,3 +95,5 @@ gem "sidekiq", "~> 8.0"
 # Uploads service
 gem "carrierwave", "~> 3.0"
 gem "mini_magick"
+
+gem "ransack"

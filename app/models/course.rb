@@ -8,6 +8,21 @@ class Course < ApplicationRecord
   has_many :bookmarks, dependent: :destroy
 
   scope :ordered, -> { order(created_at: :asc) }
+  scope :lessonable, ->(value = true) {
+    if ActiveRecord::Type::Boolean.new.cast(value)
+      joins(:topics).where(topics: { id: Lesson.select(:topic_id) }).distinct
+    else
+      all
+    end
+  }
+  scope :enrolled, ->(user_id = nil) {
+    if user_id.present?
+      joins(:enrollments).where(enrollments: { user_id: user_id }).distinct
+    else
+      all
+    end
+  }
+  scope :recent, -> { where("created_at >= ?", 1.week.ago) }
 
   validates :title, valid_characters: true, presence: true, length: { minimum: 5, maximum: 50 }
   validates :description, valid_characters: true, presence: true, length: { minimum: 10, maximum: 300 }
@@ -28,6 +43,22 @@ class Course < ApplicationRecord
   end
 
   private
+
+  def self.ransackable_attributes(auth_object = nil)
+    [ "description", "instructor_id", "is_archived", "public", "title" ]
+  end
+
+  def self.ransackable_associations(auth_object = nil)
+    [ "bookmarks", "enrollments", "instructor", "invitations", "lessons", "students", "topics" ]
+  end
+
+  def self.ransackable_associations(auth_object = nil)
+    [ "bookmarks", "enrollments", "instructor", "invitations", "lessons", "students", "topics" ]
+  end
+
+  def self.ransackable_scopes(auth_object = nil)
+    [ "lessonable", "enrolled", "recent" ]
+  end
 
   def schedule_reminder
     return unless public? && ends_at.present?
