@@ -1,6 +1,7 @@
 class MarksController < ApplicationController
     before_action :authenticate_user!
-    before_action :set_parent_objects, only: [ :create ]
+    before_action :set_parent_objects, only: [ :create, :update ]
+    before_action :set_mark, only: [ :edit, :update ]
 
     def create
         @user = current_user
@@ -31,25 +32,33 @@ class MarksController < ApplicationController
     end
 
     def update
-        result = Marks::UpdateMark.call(
-            id: params[:id],
-            params: mark_params
-        )
+      result = Marks::UpdateMark.call(
+        id: params[:id],
+        params: mark_params,
+        current_user: current_user
+      )
 
-        if result.success?
-            redirect_to course_topic_lesson_path(@course, @topic, @lesson), notice: "Your mark was updated successfully."
-        else
-            flash.now[:alert] = "Failed to update mark: #{result.error}"
-            render "lessons/show", status: :unprocessable_entity
-        end
+      if result.success?
+        redirect_to course_topic_lesson_path(@course, @topic, @lesson),
+                    notice: "Mark was successfully updated."
+      else
+        @mark = result.mark || Mark.find(params[:id])
+        flash.now[:alert] = "Failed to update mark: #{result.error}"
+        render :edit, status: :unprocessable_entity
+      end
     end
 
     private
 
+    def set_mark
+      @mark = Mark.find(params[:id])
+      authorize @mark
+    end
+
     def set_parent_objects
-        @course = Course.find(params[:course_id])
-        @topic = @course.topics.find(params[:topic_id])
-        @lesson = @topic.lessons.find(params[:lesson_id])
+      @course = Course.find(params[:course_id])
+      @topic = @course.topics.find(params[:topic_id])
+      @lesson = @topic.lessons.find(params[:lesson_id])
     end
 
     def mark_params

@@ -53,7 +53,7 @@
                 <td>
                   <% if response.mark %>
                     <span class="badge bg-<%= response.mark.value.to_i >= 5 ? "success" : "danger" %>">
-                      <%= response.mark.value %> / 10
+                      <%= response.mark.value %> / 100
                     </span>
                   <% else %>
                     <span class="text-muted">—</span>
@@ -141,12 +141,13 @@
                       </h5>
                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <%= form_with(model: [ @course, @topic, @lesson, response.mark || @lesson.marks.build ], 
+                    <%= form_with(model: response.mark || Mark.new, 
                                 url: response.mark ? 
                                   course_topic_lesson_mark_path(@course, @topic, @lesson, response.mark) : 
                                   course_topic_lesson_marks_path(@course, @topic, @lesson), 
                                 method: response.mark ? :patch : :post,
-                                local: true) do |f| %>
+                                local: true,
+                                data: { turbo: false }) do |f| %>
                       <div class="modal-body">
                         <%= f.hidden_field :response_id, value: response.id %>
                         

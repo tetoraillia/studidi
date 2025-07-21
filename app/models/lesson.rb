@@ -20,6 +20,14 @@ class Lesson < ApplicationRecord
   before_validation :ensure_lesson_ends_before_course
   after_save :schedule_expiration, if: :saved_change_to_ends_at?
 
+  def self.ransackable_attributes(auth_object = nil)
+    %w[title content_type topic_id]
+  end
+
+  def self.ransackable_associations(auth_object = nil)
+    %w[topic marks responses]
+  end
+
   def end_date
     ends_at&.strftime("%Y-%m-%d %H:%M")
   end
