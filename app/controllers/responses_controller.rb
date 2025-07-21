@@ -6,7 +6,7 @@ class ResponsesController < ApplicationController
     def index
         @user = User.find(current_user.id)
         @responses = Response.where(user: @user).page(params[:page]).per(10)
-        
+
         if current_user.student?
             @student_reports = StudentReportService.new(current_user.id).reports
         elsif current_user.teacher?

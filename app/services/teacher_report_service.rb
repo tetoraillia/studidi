@@ -22,10 +22,10 @@ class TeacherReportService
         COUNT(DISTINCT e.user_id) AS total_students,
         COUNT(DISTINCT l.id) AS total_lessons,
         ROUND(AVG(m.value)::numeric, 2) AS average_mark,
-        CASE 
+        CASE#{' '}
           WHEN COUNT(DISTINCT l.id) = 0 OR COUNT(DISTINCT e.user_id) = 0 THEN 0
           ELSE ROUND(
-            100.0 * COUNT(DISTINCT CONCAT(r.user_id, '-', r.lesson_id)) 
+            100.0 * COUNT(DISTINCT CONCAT(r.user_id, '-', r.lesson_id))#{' '}
             / (COUNT(DISTINCT l.id) * COUNT(DISTINCT e.user_id)),
             2
           )
@@ -45,13 +45,13 @@ class TeacherReportService
     results = ActiveRecord::Base.connection.execute(sql)
     results.map do |row|
       Report.new(
-        row['course_id'],
-        row['course_title'],
-        row['total_students']&.to_i,
-        row['total_lessons']&.to_i,
-        row['average_mark']&.to_f&.round(2),
-        row['average_completion_percentage']&.to_f,
-        row['total_responses']&.to_i
+        row["course_id"],
+        row["course_title"],
+        row["total_students"]&.to_i,
+        row["total_lessons"]&.to_i,
+        row["average_mark"]&.to_f&.round(2),
+        row["average_completion_percentage"]&.to_f,
+        row["total_responses"]&.to_i
       )
     end
   end

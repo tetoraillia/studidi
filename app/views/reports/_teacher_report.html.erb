@@ -40,7 +40,7 @@
               <% completion = report.average_completion_percentage || 0 %>
               <div class="d-flex align-items-center">
                 <div class="progress me-2" style="width: 60px; height: 8px;">
-                  <div class="progress-bar <%= completion >= 80 ? 'bg-success' : completion >= 50 ? 'bg-warning' : 'bg-danger' %>" 
+                  <div class="progress-bar <%= completion >= 80 ? "bg-success" : completion >= 50 ? "bg-warning" : "bg-danger" %>" 
                        style="width: <%= completion %>%"></div>
                 </div>
                 <small><%= completion %>%</small>

@@ -24,7 +24,7 @@ class StudentReportService
         COUNT(DISTINCT l.id) AS total_lessons,
         COUNT(DISTINCT CASE WHEN r.id IS NOT NULL THEN l.id END) AS lessons_completed,
         ROUND(AVG(m.value)::numeric, 2) AS average_mark,
-        CASE 
+        CASE#{' '}
           WHEN COUNT(DISTINCT l.id) = 0 THEN 0
           ELSE ROUND(
             100.0 * COUNT(DISTINCT CASE WHEN r.id IS NOT NULL THEN l.id END) / COUNT(DISTINCT l.id),
@@ -45,14 +45,14 @@ class StudentReportService
     results = ActiveRecord::Base.connection.execute(sql)
     results.map do |row|
       Report.new(
-        row['course_id'],
-        row['course_title'],
-        row['course_ends_at'],
-        row['total_lessons']&.to_i,
-        row['lessons_completed']&.to_i,
-        row['average_mark']&.to_f&.round(2),
-        row['completion_percentage']&.to_f,
-        row['marks_received']&.to_i
+        row["course_id"],
+        row["course_title"],
+        row["course_ends_at"],
+        row["total_lessons"]&.to_i,
+        row["lessons_completed"]&.to_i,
+        row["average_mark"]&.to_f&.round(2),
+        row["completion_percentage"]&.to_f,
+        row["marks_received"]&.to_i
       )
     end
   end
