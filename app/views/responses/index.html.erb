@@ -49,38 +49,69 @@
     <% end %>
 
     <% if current_user&.student? %>
-      <% student_reports = StudentReportService.new(current_user.id).reports %>
-      <%= render partial: "reports/student_report", locals: { reports: student_reports } %>
+      <%= render partial: "reports/student_report", locals: { reports: @student_reports } %>
     <% elsif current_user&.teacher? %>
-      <% teacher_reports = TeacherReportService.new(current_user.id).reports %>
-      <%= render partial: "reports/teacher_report", locals: { reports: teacher_reports } %>
+      <%= render partial: "reports/teacher_report", locals: { reports: @teacher_reports } %>
     <% end %>
 
-    <div class="responses-list">
-      <% @responses.each do |response| %>
-        <div class="response">
-          <div class="response-header">
-            <h3 class="response-title">Lesson: <%= response.lesson.title %></h3>
-            <div class="response-meta">
-              <p class="course-name">Course: <%= response.lesson.topic.course.title %></p>
-              <p class="submitted-at">Submitted: <%= response.created_at.strftime("%B %d, %Y") %></p>
-            </div>
-          </div>
-          <div class="response-content">
-            <p class="answer">Answer: <%= response.content %></p>
-            <% if response.mark %>
-              <div class="mark-info">
-                <p class="mark-value">Mark: <%= response.mark.value %></p>
-                <p class="mark-comment">Comment: <%= response.mark.comment %></p>
-                <p class="marker">Marked by: <%= response.mark.user.first_name %> <%= response.mark.user.last_name %></p>
-              </div>
-            <% else %>
-              <p class="no-mark">No mark yet</p>
-            <% end %>
-          </div>
+    <% if current_user&.student? %>
+      <div class="responses-table-container">
+        <div>
+          <table class="responses-table">
+            <thead>
+              <tr>
+                <th>Lesson</th>
+                <th>Course</th>
+                <th>Response</th>
+                <th>Mark</th>
+                <th>Comment</th>
+                <th>Marked By</th>
+                <th>Submitted</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @responses.each do |response| %>
+                <tr class="response-row">
+                  <td class="lesson-title"><%= response.lesson.title %></td>
+                  <td class="course-title"><%= response.lesson.topic.course.title %></td>
+                  <td class="response-content">
+                    <div class="content-preview">
+                      <%= truncate(response.content, length: 100) %>
+                    </div>
+                  </td>
+                  <td class="mark-value">
+                    <% if response.mark %>
+                      <span class="badge badge-success"><%= response.mark.value %></span>
+                    <% else %>
+                      <span class="badge badge-secondary">No mark</span>
+                    <% end %>
+                  </td>
+                  <td class="mark-comment">
+                    <% if response.mark && response.mark.comment.present? %>
+                      <div class="comment-preview">
+                        <%= truncate(response.mark.comment, length: 50) %>
+                      </div>
+                    <% else %>
+                      <span class="text-muted">-</span>
+                    <% end %>
+                  </td>
+                  <td class="marker-name">
+                    <% if response.mark %>
+                      <%= response.mark.user.first_name %> <%= response.mark.user.last_name %>
+                    <% else %>
+                      <span class="text-muted">-</span>
+                    <% end %>
+                  </td>
+                  <td class="submitted-date">
+                    <%= response.created_at.strftime("%m/%d/%Y") %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
         </div>
-      <% end %>
-    </div>
-    <%= paginate @responses %>
+      </div>
+      <%= paginate @responses, param_name: :responses_page %>
+    <% end %>
   </div>
 </div>

@@ -43,7 +43,7 @@ class TeacherReportService
     SQL
 
     sanitized_sql = ActiveRecord::Base.send(:sanitize_sql_array, [ sql, @teacher_id ])
-    results = ActiveRecord::Base.connection.execute(sql)
+    results = ActiveRecord::Base.connection.execute(sanitized_sql)
     results.map do |row|
       Report.new(
         row["course_id"],
