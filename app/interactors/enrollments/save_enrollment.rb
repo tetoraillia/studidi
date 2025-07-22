@@ -21,7 +21,6 @@ module Enrollments
             message = "Student #{context.user.first_name} enrolled on your course: #{context.course.title}"
             url = Rails.application.routes.url_helpers.course_path(context.course)
             EnrollmentNotifier.with(
-                recipient: context.course.instructor,
                 message: message,
                 url: url
             ).deliver_later(context.course.instructor)

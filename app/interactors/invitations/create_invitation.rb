@@ -17,7 +17,6 @@ module Invitations
                 InvitationNotifier.with(
                     message: message,
                     url: url,
-                    recipient: recipient
                 ).deliver_later(recipient)
 
                 context.success
