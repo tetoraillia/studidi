@@ -5,12 +5,19 @@ class ResponsesController < ApplicationController
 
     def index
         @user = User.find(current_user.id)
-        @responses = Response.where(user: @user).page(params[:page]).per(10)
-
+        
         if current_user.student?
-            @student_reports = StudentReportService.new(current_user.id).reports
+            reports = StudentReportService.new(current_user.id).reports
+            @student_reports = Kaminari.paginate_array(reports).page(params[:reports_page]).per(10)
+            
+            base_responses = Response.joins(:lesson => {:topic => :course})
+                                    .where(user: @user)
+            @responses = base_responses.includes(:lesson => {:topic => :course}, :mark => :user)
+                                  .order(created_at: :desc)
+                                  .page(params[:responses_page]).per(10)
         elsif current_user.teacher?
-            @teacher_reports = TeacherReportService.new(current_user.id).reports
+            reports = TeacherReportService.new(current_user.id).reports
+            @teacher_reports = Kaminari.paginate_array(reports).page(params[:reports_page]).per(10)
         end
     end
 
