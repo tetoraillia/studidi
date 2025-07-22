@@ -16,6 +16,8 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
   get "responses/:user_id", to: "responses#index", as: :total_responses
 
+  resources :messages, only: [ :index, :create ]
+
   resources :bookmarks, only: [ :index, :create, :destroy ]
   resources :courses do
     member do
