@@ -1,14 +1,13 @@
 import React from 'react'
 import { createRoot } from 'react-dom/client'
+import ChatPage from '../features/pages/chats/ChatPage'
 
 const App = () => {
-    return <h1>App</h1>
+    return <ChatPage />
 }
 
 const container = document.getElementById('react-root')
 if (container) {
     const root = createRoot(container)
     root.render(React.createElement(App))
-} else {
-    console.error('Container #react-root not found')
 }
