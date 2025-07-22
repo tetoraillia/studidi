@@ -20,7 +20,6 @@ module Responses
                 ResponseNotifier.with(
                     message: message,
                     url: url,
-                    recipient: @response.lesson.topic.course.instructor
                 ).deliver_later(@response.lesson.topic.course.instructor)
 
                 context.response = @response

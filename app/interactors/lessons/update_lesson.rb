@@ -14,7 +14,6 @@ module Lessons
                     LessonNotifier.with(
                         message: message,
                         url: url,
-                        recipient: student,
                     ).deliver_later(student)
                 end
 

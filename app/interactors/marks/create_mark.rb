@@ -25,7 +25,6 @@ module Marks
                 MarkNotifier.with(
                     message: message,
                     url: url,
-                    recipient: response.user
                 ).deliver_later(response.user)
 
                 context.mark = mark
