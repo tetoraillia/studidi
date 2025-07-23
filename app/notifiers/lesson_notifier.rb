@@ -3,7 +3,6 @@
 # LessonNotifier.with(record: @post, message: "New post").deliver(User.all)
 
 class LessonNotifier < ApplicationNotifier
-
   # Add your delivery methods
   #
   # deliver_by :email do |config|

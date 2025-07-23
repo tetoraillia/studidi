@@ -30,7 +30,7 @@ class StudentReportQuery
       ORDER BY c.title;
     SQL
 
-    sanitized_sql = ActiveRecord::Base.send(:sanitize_sql_array, [sql, @student_id, @student_id])
+    sanitized_sql = ActiveRecord::Base.send(:sanitize_sql_array, [ sql, @student_id, @student_id ])
     ActiveRecord::Base.connection.execute(sanitized_sql)
   end
 end

@@ -3,7 +3,6 @@
 # EnrollmentNotifier.with(record: @post, message: "New post").deliver(User.all)
 
 class EnrollmentNotifier < ApplicationNotifier
-  
   # Add your delivery methods
   #
   # deliver_by :email do |config|
