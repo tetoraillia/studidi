@@ -33,7 +33,7 @@ class UserAvatarUploader < CarrierWave::Uploader::Base
     end
 
     def default_url(*args)
-      ActionController::Base.helpers.asset_path("default_avatar.png")
+      ActionController::Base.helpers.asset_path("default_avatar.jpg")
     end
 
     def extension_allowlist
