@@ -24,7 +24,7 @@ module Courses
         end
 
         def check_archived_status
-            @course.update!(is_archived: false) if @course.ends_at > Time.current
+            @course.update!(is_archived: false) if @course.ends_at.present? && @course.ends_at > Time.current
         end
 
         def update_course(id, params)

@@ -33,7 +33,7 @@ module Lessons
         end
 
         def check_lesson_open_status
-            @lesson.update!(is_open: true) if @lesson.ends_at > Time.current
+            @lesson.update!(is_open: true) if @lesson.ends_at.present? && @lesson.ends_at > Time.current
         end
 
         def update_lesson(id, params)
