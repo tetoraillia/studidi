@@ -53,8 +53,7 @@ class LessonsController < ApplicationController
         if result.success?
             redirect_to course_topic_path(@course, @topic), notice: "Lesson was successfully updated."
         else
-            @lesson = Lesson.new(lesson_params)
-            render :edit
+            render :edit, status: :unprocessable_entity
         end
     end
 
