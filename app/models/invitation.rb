@@ -11,7 +11,7 @@ class Invitation < ApplicationRecord
 
   private
 
-  def generate_token
-    self.token ||= SecureRandom.hex(20)
-  end
+    def generate_token
+      self.token ||= SecureRandom.hex(20)
+    end
 end

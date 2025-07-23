@@ -31,16 +31,16 @@ class ResponseAttachmentUploader < CarrierWave::Uploader::Base
 
   protected
 
-  def secure_token
-    var = :"@#{mounted_as}_secure_token"
-    model.instance_variable_get(var) || model.instance_variable_set(var, SecureRandom.uuid)
-  end
+    def secure_token
+      var = :"@#{mounted_as}_secure_token"
+      model.instance_variable_get(var) || model.instance_variable_set(var, SecureRandom.uuid)
+    end
 
-  def default_url(*args)
-    "/images/fallback/" + [ version_name, "default.png" ].compact.join("_")
-  end
+    def default_url(*args)
+      "/images/fallback/" + [ version_name, "default.png" ].compact.join("_")
+    end
 
-  def extension_allowlist
-    %w[jpg jpeg gif png pdf doc docx]
-  end
+    def extension_allowlist
+      %w[jpg jpeg gif png pdf doc docx]
+    end
 end

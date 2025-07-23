@@ -38,43 +38,43 @@ module Invitations
 
     private
 
-    def validate_context!
-      if context.invitation.nil? || context.current_user.nil? || context.course.nil?
-        context.fail!(error: "Invalid context: missing required parameters")
+      def validate_context!
+        if context.invitation.nil? || context.current_user.nil? || context.course.nil?
+          context.fail!(error: "Invalid context: missing required parameters")
+        end
       end
-    end
 
-    def invalid_invitation?
-      @invitation = context.invitation
-      @course = context.course
+      def invalid_invitation?
+        @invitation = context.invitation
+        @course = context.course
 
-      @invitation.nil? ||
-        @invitation.status != "pending" ||
-        @invitation.course != @course
-    end
+        @invitation.nil? ||
+          @invitation.status != "pending" ||
+          @invitation.course != @course
+      end
 
-    def user_not_signed_in?
-      @user = context.current_user
-      @user.nil?
-    end
+      def user_not_signed_in?
+        @user = context.current_user
+        @user.nil?
+      end
 
-    def already_enrolled?
-      @user ||= context.current_user
-      @course ||= context.course
+      def already_enrolled?
+        @user ||= context.current_user
+        @course ||= context.course
 
-      @user.enrolled_in?(@course)
-    end
+        @user.enrolled_in?(@course)
+      end
 
-    def enroll_user
-      Enrollment.create!(
-        user: @user,
-        course: @course,
-        enrolled_at: Time.current
-      )
-    end
+      def enroll_user
+        Enrollment.create!(
+          user: @user,
+          course: @course,
+          enrolled_at: Time.current
+        )
+      end
 
-    def mark_invitation_as_accepted
-      @invitation.update!(status: "accepted")
-    end
+      def mark_invitation_as_accepted
+        @invitation.update!(status: "accepted")
+      end
   end
 end

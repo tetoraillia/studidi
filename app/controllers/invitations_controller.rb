@@ -44,16 +44,16 @@ class InvitationsController < ApplicationController
 
   private
 
-  def set_course
-    if params[:course_id]
-      @course = Course.find(params[:course_id])
-    elsif params[:id]
-      @invitation = Invitation.find_by(token: params[:id])
-      @course = @invitation&.course
+    def set_course
+      if params[:course_id]
+        @course = Course.find(params[:course_id])
+      elsif params[:id]
+        @invitation = Invitation.find_by(token: params[:id])
+        @course = @invitation&.course
+      end
     end
-  end
 
-  def invitation_params
-    params.require(:invitation).permit(:email)
-  end
+    def invitation_params
+      params.require(:invitation).permit(:email)
+    end
 end

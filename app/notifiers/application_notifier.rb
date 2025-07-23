@@ -1,7 +1,7 @@
 class ApplicationNotifier < Noticed::Event
-    deliver_by :action_cable,
-          stream: -> { "notifications_#{recipient.id}" },
-          message: -> { params[:message] },
-          url: -> { params[:url] },
-          id: -> { notification.id }
+  deliver_by :action_cable,
+        stream: -> { "notifications_#{recipient.id}" },
+        message: -> { params[:message] },
+        url: -> { params[:url] },
+        id: -> { notification.id }
 end

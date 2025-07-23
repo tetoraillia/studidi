@@ -16,9 +16,9 @@ User.create!(
 )
 
 20.times do |i|
-    Course.create!(
-        title: "Course #{i}",
-        description: "Description for course #{i}",
-        instructor_id: User.last.id,
-    )
+  Course.create!(
+      title: "Course #{i}",
+      description: "Description for course #{i}",
+      instructor_id: User.last.id,
+  )
 end

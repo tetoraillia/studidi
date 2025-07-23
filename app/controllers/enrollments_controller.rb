@@ -36,7 +36,7 @@ class EnrollmentsController < ApplicationController
 
   private
 
-  def set_course
-    @course = Course.find(params[:course_id])
-  end
+    def set_course
+      @course = Course.find(params[:course_id])
+    end
 end
