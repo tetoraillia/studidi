@@ -7,9 +7,9 @@ module Lessons
         def call
             update_lesson(context.id, context.params)
 
-            if @lesson.save
-                message = "Teacher #{@lesson.topic.course.instructor.first_name} posted a new lesson: #{@lesson.title}"
-                url = Rails.application.routes.url_helpers.lesson_path(@lesson)
+            if @lesson.persisted?
+                message = "Teacher #{@lesson.topic.course.instructor.first_name} updated lesson: #{@lesson.title}"
+                url = Rails.application.routes.url_helpers.course_topic_lesson_path(@lesson.topic.course, @lesson.topic, @lesson)
                 @lesson.topic.course.students.each do |student|
                     LessonNotifier.with(
                         message: message,
