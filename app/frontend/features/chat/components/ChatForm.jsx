@@ -1,45 +1,52 @@
-import React, { useEffect, useRef } from 'react'
+import React from 'react';
 import '../../../../assets/stylesheets/chat.css'
 
-function ChatForm({ messages, users, message, setMessage, handleSend, currentUserId }) {
-    const messagesEndRef = useRef(null);
+function ChatForm({ messages, sendMessage, message, setMessage, user }) {
+  if (!messages) {
+    return <div className="chat-container">Loading...</div>;
+  }
 
-    const scrollToBottom = () => {
-        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    };
+  return (
+    <div className="chat-container">
+      <div className="message-list">
+        {messages.length === 0 ? (
+          <div className="no-messages">No messages </div>
+        ) : (
+          messages.map((message) => (
+            message.user_id === user.id ? (
+              <div key={message.id} className="message my-message">
+                <span className="message-user">{message.user.first_name}: </span>
+                <span className="message-content">{message.content}</span>
+              </div>
+            ) : (
+              <div key={message.id} className="message">
+                <span className="message-user">{message.user.first_name}: </span>
+                <span className="message-content">{message.content}</span>
+              </div>
+            )
+          ))
+        )}
+      </div>
 
-    useEffect(() => {
-        scrollToBottom();
-    }, [messages]);
-
-    return (
-        <div className="chat-container">
-            <div className="messages">
-                {messages.map((msg) => {
-                    const user = users.find((u) => u.id === msg.user_id);
-                    const isMe = msg.user_id === currentUserId;
-
-                    return (
-                        <div key={msg.id} className={`message ${isMe ? "me" : "other"}`}>
-                            <strong>{user ? `${user.first_name} ${user.last_name}` : "Unknown"}</strong>
-                            {msg.content}
-                        </div>
-                    );
-                })}
-                <div ref={messagesEndRef} />
-            </div>
-
-            <div className="input-area">
-                <input
-                    type="text"
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
-                    placeholder="Type your message..."
-                />
-                <button onClick={handleSend}>Send</button>
-            </div>
-        </div>
-    );
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          sendMessage();
+          setMessage('');
+        }}
+        className="message-form"
+      >
+        <input
+          type="text"
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          placeholder="Type your message..."
+          className="message-input"
+        />
+        <button type="submit" className="message-button">Send</button>
+      </form>
+    </div>
+  );
 }
 
 export default ChatForm;

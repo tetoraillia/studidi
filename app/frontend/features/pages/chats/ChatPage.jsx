@@ -1,54 +1,75 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import ChatForm from '../../chat/components/ChatForm'
 
-function Chat() {
-    const [message, setMessage] = React.useState('');
-    const [messages, setMessages] = React.useState([]);
-    const [users, setUsers] = React.useState([]);
-    const [currentUserId, setCurrentUserId] = React.useState(null);
 
-    React.useEffect(() => {
-        const rootEl = document.getElementById('react-root');
-        if (rootEl) {
-            const data = rootEl.dataset.messages || '[]';
-            const usersData = rootEl.dataset.users || '[]';
-            try {
-                setMessages(JSON.parse(data));
-                setUsers(JSON.parse(usersData));
-                setCurrentUserId(parseInt(rootEl.dataset.currentUserId, 10));
-            } catch (e) {
-                console.error('Failed to parse messages JSON', e);
-            }
+function ChatPage() {
+
+  const [messages, setMessages] = useState([])
+  const [message, setMessage] = useState('')
+  const user = JSON.parse(document.getElementById('react-root').dataset.user)
+
+  useEffect(() => {
+    const messageList = document.querySelector('.message-list');
+    if (messageList) {
+      messageList.scrollTop = messageList.scrollHeight;
+    }
+  }, [messages]);
+
+  useEffect(() => {
+    fetch('/messages', {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    })
+      .then(response => response.json())
+      .then(data => {
+        setMessages(data)
+        console.log(data)
+      })
+      .catch(error => console.error('Error fetching messages:', error))
+  }, [])
+
+
+  function sendMessage() {
+    if (!message.trim()) return
+
+    console.log('Sending message:', message)
+
+    fetch('/messages', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
+      },
+      body: JSON.stringify({ message: { content: message } })
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Failed to send message')
         }
-    }, []);
+        return response.json()
+      })
+      .then(data => {
+        setMessages(prevMessages => [...prevMessages, data])
+        setMessage('')
+      })
+      .catch(error => {
+        console.error('Error sending message:', error)
+        alert('Failed to send message. Please try again.')
+      })
+  }
 
-    const handleSend = async () => {
-        if (!message.trim()) return;
-        try {
-            const res = await fetch('/messages', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                    'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                },
-                body: JSON.stringify({ message: { content: message } })
-            });
-            if (res.ok) {
-                const newMsg = await res.json();
-                setMessages(prev => [...prev, newMsg]);
-                setMessage('');
-            } else {
-                console.error('Failed to send');
-            }
-        } catch (err) {
-            console.error(err);
-        }
-    };
-
-    return (
-        <ChatForm messages={messages} users={users} message={message} setMessage={setMessage} handleSend={handleSend} currentUserId={currentUserId} />
-    )
+  return (
+    <ChatForm
+      messages={messages}
+      sendMessage={sendMessage}
+      message={message}
+      setMessage={setMessage}
+      user={user}
+    />
+  )
 }
 
-export default Chat;
+export default ChatPage;
