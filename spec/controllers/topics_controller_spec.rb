@@ -94,7 +94,7 @@ RSpec.describe "Topics", type: :request do
       it 'renders the new template' do
         sign_in user
         post course_topics_path(course), params: { topic: invalid_params[:topic] }
-        expect(response).to render_template(:new)
+        expect(response).to redirect_to(new_course_topic_path(course))
       end
     end
   end
