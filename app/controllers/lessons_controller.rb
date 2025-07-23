@@ -32,8 +32,9 @@ class LessonsController < ApplicationController
             authorize result.lesson
             redirect_to course_topic_path(@course, @topic), notice: "Lesson was successfully created."
         else
-            @lesson = Lesson.new(lesson_params)
-            redirect_to new_course_topic_lesson_path(@course, @topic), alert: "Error creating lesson: #{result.error}"
+            @lesson = result.lesson || Lesson.new(lesson_params)
+            flash.now[:alert] = "Error creating lesson: #{result.error}"
+            render :new, status: :unprocessable_entity
         end
     end
 
