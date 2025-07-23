@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_18_072844) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_22_095142) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -90,6 +90,14 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_18_072844) do
     t.index ["user_id"], name: "index_marks_on_user_id"
   end
 
+  create_table "messages", force: :cascade do |t|
+    t.string "content"
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_messages_on_user_id"
+  end
+
   create_table "noticed_events", force: :cascade do |t|
     t.string "type"
     t.string "record_type"
@@ -166,6 +174,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_18_072844) do
   add_foreign_key "marks", "lessons"
   add_foreign_key "marks", "responses", on_delete: :cascade
   add_foreign_key "marks", "users"
+  add_foreign_key "messages", "users"
   add_foreign_key "responses", "lessons", on_delete: :cascade
   add_foreign_key "responses", "marks"
   add_foreign_key "responses", "users"

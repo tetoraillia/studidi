@@ -13,6 +13,7 @@ class User < ApplicationRecord
   has_many :enrollments, dependent: :destroy
   has_many :enrolled_courses, through: :enrollments, source: :course
   has_many :marks, dependent: :destroy
+  has_many :messages, dependent: :destroy
   has_many :responses, dependent: :destroy
   has_many :notifications, dependent: :destroy, as: :recipient, class_name: "Noticed::Notification"
 
