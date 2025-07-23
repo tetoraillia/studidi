@@ -1,1 +1,5 @@
-<div id="react-root" data-messages='<%= raw(@messages.to_json) %>' data-users='<%= raw(@users.to_json) %>' data-current-user-id='<%= current_user.id %>'></div>
+<div
+  id="react-root"
+  data-messages='<%= raw(@messages.to_json) %>'
+  data-user='<%= raw(@user.to_json) %>'
+></div>

@@ -1,29 +1,27 @@
 class MessagesController < ApplicationController
-    before_action :authenticate_user!
+  before_action :authenticate_user!
 
-    def index
-        @messages = Message.all
-        @users = User.all
+  def index
+    @messages = Message.all.order(created_at: :asc)
+    @user = current_user
+    respond_to do |format|
+      format.html
+      format.json { render json: @messages, include: [:user] }
     end
+  end
 
-    def create
-        @message = current_user.messages.build(message_params.except(:user_id))
-        if @message.save
-            respond_to do |format|
-                format.html { redirect_to messages_path, notice: 'Message created successfully' }
-                format.json { render json: @message, status: :created }
-            end
-        else
-            respond_to do |format|
-                format.html { render :new, alert: @message.errors.full_messages.join(', ') }
-                format.json { render json: { errors: @message.errors.full_messages }, status: :unprocessable_entity }
-            end
-        end
+  def create
+    @message = current_user.messages.build(message_params)
+    if @message.save
+      render json: @message, include: [:user], status: :created
+    else
+      render json: { errors: @message.errors.full_messages }, status: :unprocessable_entity
     end
+  end
 
     private
 
-    def message_params
+      def message_params
         params.require(:message).permit(:content)
-    end
+      end
 end
