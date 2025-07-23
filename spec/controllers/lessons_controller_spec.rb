@@ -72,7 +72,7 @@ RSpec.describe "Lessons", type: :request do
       it 'renders the new template' do
         sign_in user
         post course_topic_lessons_path(course, topic), params: { lesson: invalid_params[:lesson] }
-        expect(response).to render_template(:new)
+        expect(response).to redirect_to(new_course_topic_lesson_path(course, topic))
       end
     end
   end
@@ -125,8 +125,9 @@ RSpec.describe "Lessons", type: :request do
       end
 
       it 'renders the edit template' do
+        sign_in user
         put course_topic_lesson_path(course, topic, lesson), params: { lesson: invalid_params[:lesson] }
-        expect(response).to render_template(:edit)
+        expect(response).to redirect_to(course_topic_path(course, topic))
       end
     end
   end
