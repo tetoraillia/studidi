@@ -20,7 +20,7 @@ class User < ApplicationRecord
 
   mount_uploader :avatar, UserAvatarUploader
 
-  before_validation :set_last_name
+  before_create :set_last_name
 
   def set_last_name
     self.last_name = "unknown" if last_name.blank?
