@@ -3,13 +3,13 @@ module Topics
     include Interactor
 
     def call
-        topic = Topic.new(context.params)
+      topic = Topic.new(context.params)
 
-        if topic.save
-            context.topic = topic
-        else
-            context.fail!(error: topic.errors.full_messages.to_sentence)
-        end
+      if topic.save
+        context.topic = topic
+      else
+        context.fail!(error: topic.errors.full_messages.to_sentence)
+      end
     end
   end
 end

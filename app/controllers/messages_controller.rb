@@ -12,7 +12,7 @@ class MessagesController < ApplicationController
             id: m.id,
             content: m.content,
             user_id: m.user_id,
-            user_name: m.user&.first_name || 'Anonymous',
+            user_name: m.user&.first_name || "Anonymous",
             created_at: m.created_at.strftime("%H:%M")
           }
         }

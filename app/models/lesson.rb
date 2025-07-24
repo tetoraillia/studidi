@@ -34,27 +34,27 @@ class Lesson < ApplicationRecord
 
   private
 
-  def ensure_lesson_ends_before_course
-    return unless topic&.course&.ends_at.present? && ends_at.present?
+    def ensure_lesson_ends_before_course
+      return unless topic&.course&.ends_at.present? && ends_at.present?
 
-    if ends_at > topic.course.ends_at
-      self.ends_at = topic.course.ends_at
+      if ends_at > topic.course.ends_at
+        self.ends_at = topic.course.ends_at
+      end
     end
-  end
 
-  def schedule_expiration
-    return unless is_open? && ends_at.present?
+    def schedule_expiration
+      return unless is_open? && ends_at.present?
 
-    LessonCloseJob.set(wait_until: ends_at).perform_later(id)
-  end
+      LessonCloseJob.set(wait_until: ends_at).perform_later(id)
+    end
 
-  def content_required?
-    content_type != "video"
-  end
+    def content_required?
+      content_type != "video"
+    end
 
   private
 
-  def set_default_content_type
-    self.content_type = "text" if content_type.blank? || !ALLOWED_CONTENT_TYPES.include?(content_type)
-  end
+    def set_default_content_type
+      self.content_type = "text" if content_type.blank? || !ALLOWED_CONTENT_TYPES.include?(content_type)
+    end
 end
