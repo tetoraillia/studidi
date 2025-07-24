@@ -17,13 +17,17 @@
 }
 
 .message {
-  padding: 12px;
+  max-width: 80%;
+  padding: 10px 16px;
+  border-radius: 18px;
+  line-height: 1.4;
+  position: relative;
+  word-wrap: break-word;
   margin-bottom: 8px;
-  border-radius: 8px;
-  background-color: #f5f5f5;
   display: flex;
   align-items: flex-start;
   gap: 8px;
+  background-color: #f1f1f1; /* Default background for other messages */
 }
 
 .message-user {
@@ -74,7 +78,16 @@
 }
 
 .my-message {
-  background-color: #62a9f439;
+  background-color: #62a9f4;
+  color: white;
   align-self: flex-end;
-  width: fit-content;
+  margin-left: 20%;
+  border-bottom-right-radius: 0;
+}
+
+.other-message {
+  background-color: #f1f1f1;
+  align-self: flex-start;
+  margin-right: 20%;
+  border-bottom-left-radius: 0;
 }

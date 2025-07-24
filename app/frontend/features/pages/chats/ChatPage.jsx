@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from 'react'
-import ChatForm from '../../chat/components/ChatForm'
-
+import React, { useState, useEffect, useRef } from 'react';
+import ChatForm from '../../chat/components/ChatForm';
+import * as ActionCable from '@rails/actioncable';
 
 function ChatPage() {
+  const [messages, setMessages] = useState([]);
+  const [message, setMessage] = useState('');
+  const user = JSON.parse(document.getElementById('react-root').dataset.user);
 
-  const [messages, setMessages] = useState([])
-  const [message, setMessage] = useState('')
-  const user = JSON.parse(document.getElementById('react-root').dataset.user)
+  const cableRef = useRef(null);
+  const subscriptionRef = useRef(null);
 
   useEffect(() => {
     const messageList = document.querySelector('.message-list');
@@ -16,6 +18,35 @@ function ChatPage() {
   }, [messages]);
 
   useEffect(() => {
+    cableRef.current = ActionCable.createConsumer('ws://localhost:3000/cable');
+
+    subscriptionRef.current = cableRef.current.subscriptions.create(
+      { channel: 'ChatChannel' },
+      {
+        received: (data) => {
+          setMessages((prevMessages) => {
+            if (prevMessages.some(msg => msg.id === data.id)) return prevMessages;
+
+            const tempMessageIndex = prevMessages.findIndex(msg =>
+              String(msg.id).startsWith('temp-') &&
+              msg.content === data.content &&
+              msg.user_id === user.id
+            );
+
+            if (tempMessageIndex !== -1) {
+              return prevMessages.filter((_, index) => index !== tempMessageIndex).concat({
+                ...data,
+                user_id: user.id,
+                user_name: user.name
+              });
+            }
+
+            return [...prevMessages, data];
+          });
+        },
+      }
+    );
+
     fetch('/messages', {
       headers: {
         'Accept': 'application/json',
@@ -23,43 +54,36 @@ function ChatPage() {
       }
     })
       .then(response => response.json())
-      .then(data => {
-        setMessages(data)
-        console.log(data)
-      })
-      .catch(error => console.error('Error fetching messages:', error))
-  }, [])
+      .then(data => setMessages(data))
+      .catch(error => console.error('Error fetching messages:', error));
 
+    return () => {
+      subscriptionRef.current?.unsubscribe();
+      cableRef.current?.disconnect();
+    };
+  }, []);
 
   function sendMessage() {
-    if (!message.trim()) return
+    if (!message.trim()) return;
 
-    console.log('Sending message:', message)
+    if (!subscriptionRef.current) {
+      alert('Connection not stable. Please refresh.');
+      return;
+    }
 
-    fetch('/messages', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
-      },
-      body: JSON.stringify({ message: { content: message } })
-    })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Failed to send message')
-        }
-        return response.json()
-      })
-      .then(data => {
-        setMessages(prevMessages => [...prevMessages, data])
-        setMessage('')
-      })
-      .catch(error => {
-        console.error('Error sending message:', error)
-        alert('Failed to send message. Please try again.')
-      })
+    const tempMessage = {
+      id: `temp-${Date.now()}`,
+      content: message,
+      user_id: user.id,
+      user_name: user.name,
+      created_at: new Date().toISOString()
+    };
+
+    setMessages(prev => [...prev, tempMessage]);
+    subscriptionRef.current.perform("receive", { content: message });
+    setMessage('');
   }
+
 
   return (
     <ChatForm
@@ -69,7 +93,7 @@ function ChatPage() {
       setMessage={setMessage}
       user={user}
     />
-  )
+  );
 }
 
 export default ChatPage;
