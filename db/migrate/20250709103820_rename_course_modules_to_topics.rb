@@ -11,7 +11,6 @@ class RenameCourseModulesToTopics < ActiveRecord::Migration[8.0]
       rename_index :topics, 'index_course_modules_on_position', 'index_topics_on_position'
     end
 
-
     if index_exists?(:lessons, :topic_id, name: 'index_lessons_on_course_module_id')
       rename_index :lessons, 'index_lessons_on_course_module_id', 'index_lessons_on_topic_id'
     end

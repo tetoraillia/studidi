@@ -32,7 +32,6 @@ class Course < ApplicationRecord
   after_save :schedule_expiration, if: :saved_change_to_ends_at?
   after_save :schedule_reminder, if: :saved_change_to_ends_at?
 
-
   def end_date
     ends_at&.strftime("%Y-%m-%d")
   end
