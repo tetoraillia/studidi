@@ -88,7 +88,7 @@ RSpec.describe "Courses", type: :request do
       it 'renders the new template' do
         sign_in user
         post courses_path, params: invalid_params
-        expect(response).to render_template(:new)
+        expect(response).to redirect_to(new_course_path)
       end
     end
   end

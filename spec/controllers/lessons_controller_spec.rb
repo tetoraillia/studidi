@@ -69,10 +69,11 @@ RSpec.describe "Lessons", type: :request do
         }.to_not change(Lesson, :count)
       end
 
-      it 'renders the new template' do
+      it 'renders the new template with an unprocessable_entity status' do
         sign_in user
         post course_topic_lessons_path(course, topic), params: { lesson: invalid_params[:lesson] }
         expect(response).to render_template(:new)
+        expect(response).to have_http_status(:unprocessable_entity)
       end
     end
   end
@@ -125,8 +126,9 @@ RSpec.describe "Lessons", type: :request do
       end
 
       it 'renders the edit template' do
+        sign_in user
         put course_topic_lesson_path(course, topic, lesson), params: { lesson: invalid_params[:lesson] }
-        expect(response).to render_template(:edit)
+        expect(response).to redirect_to(course_topic_path(course, topic))
       end
     end
   end
