@@ -41,9 +41,9 @@ class TopicsController < ApplicationController
     if result.success?
       redirect_to course_topics_path(@course), notice: "Topic was successfully updated."
     else
-      @topic = Topic.new(topic_params)
+      @topic.assign_attributes(topic_params)
       flash[:alert] = result.error
-      render :edit
+      render :edit, status: :unprocessable_entity
     end
   end
 
