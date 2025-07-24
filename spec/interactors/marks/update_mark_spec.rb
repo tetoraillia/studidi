@@ -15,7 +15,6 @@ RSpec.describe Marks::UpdateMark, type: :interactor do
     )
   }
 
-
   context 'with valid params' do
     it 'updates the mark' do
       expect { context }.not_to change(Mark, :count)

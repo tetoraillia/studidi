@@ -5,7 +5,6 @@ FactoryBot.define do
     type { 'Noticed::Notification' }
     read_at { nil }
     seen_at { nil }
-
   end
 
   factory :read_noticed_notification, parent: :noticed_notification do
