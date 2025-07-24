@@ -370,6 +370,8 @@ GEM
     rdoc (6.14.2)
       erb
       psych (>= 4.0.0)
+    redis (5.4.1)
+      redis-client (>= 0.22.0)
     redis-client (0.25.1)
       connection_pool
     regexp_parser (2.10.0)
@@ -559,6 +561,7 @@ DEPENDENCIES
   rails (~> 8.0.2)
   rails-controller-testing
   ransack
+  redis
   rspec-rails
   rubocop-erb
   rubocop-rails-omakase

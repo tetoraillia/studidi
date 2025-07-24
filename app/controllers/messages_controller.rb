@@ -6,7 +6,17 @@ class MessagesController < ApplicationController
     @user = current_user
     respond_to do |format|
       format.html
-      format.json { render json: @messages, include: [:user] }
+      format.json do
+        render json: @messages.map { |m|
+          {
+            id: m.id,
+            content: m.content,
+            user_id: m.user_id,
+            user_name: m.user&.first_name || "Anonymous",
+            created_at: m.created_at.strftime("%H:%M")
+          }
+        }
+      end
     end
   end
 

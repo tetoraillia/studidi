@@ -12,19 +12,20 @@ function ChatForm({ messages, sendMessage, message, setMessage, user }) {
         {messages.length === 0 ? (
           <div className="no-messages">No messages </div>
         ) : (
-          messages.map((message) => (
-            message.user_id === user.id ? (
-              <div key={message.id} className="message my-message">
-                <span className="message-user">{message.user.first_name}: </span>
+          messages.map((message, index) => {
+            const isCurrentUser = message.user_id === user.id;
+            return (
+              <div
+                key={message.id || `msg-${index}`}
+                className={`message ${isCurrentUser ? 'my-message' : 'other-message'}`}
+              >
+                {!isCurrentUser && (
+                  <span className="message-user">{message.user_name || 'Anonymous'}: </span>
+                )}
                 <span className="message-content">{message.content}</span>
               </div>
-            ) : (
-              <div key={message.id} className="message">
-                <span className="message-user">{message.user.first_name}: </span>
-                <span className="message-content">{message.content}</span>
-              </div>
-            )
-          ))
+            );
+          })
         )}
       </div>
 
