@@ -3,7 +3,7 @@ module Marks
     include Interactor
 
     def call
-      mark = Mark.find_by(id: context.id) || Mark.find_by(response_id: context.response_id)
+      mark = Mark.find_by(id: context.id)
 
       if mark.nil?
         context.fail!(error: "Mark not found")

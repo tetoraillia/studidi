@@ -1,7 +1,7 @@
 class MarkPolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
-      if user.admin? || user.instructor?
+      if user.teacher?
         scope.all
       else
         scope.where(user: user)
@@ -10,11 +10,11 @@ class MarkPolicy < ApplicationPolicy
   end
 
   def create?
-    user.teacher? || user.admin?
+    user.teacher?
   end
 
   def update?
-    user.teacher? || user.admin?
+    user.teacher?
   end
 
   def edit?
