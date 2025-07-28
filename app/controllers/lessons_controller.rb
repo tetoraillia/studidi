@@ -9,10 +9,11 @@ class LessonsController < ApplicationController
   def show
     authorize @lesson
     @user = current_user
-    @response = Response.new(lesson: @lesson, user: current_user)
-    @responses = Response.where(lesson: @lesson)
-    @user_response = Response.find_by(lesson: @lesson, user: current_user)
+    @response = Response.new(responseable: @lesson, user: current_user)
+    @responses = Response.where(responseable: @lesson)
+    @user_response = Response.find_by(responseable: @lesson, user: current_user)
     @mark = Mark.new(lesson: @lesson)
+    @response_mark = Mark.where(lesson_id: @lesson.id)
   end
 
   def new
