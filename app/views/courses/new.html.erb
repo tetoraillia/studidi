@@ -1,5 +1,5 @@
 <div class="container">
-<div class="center">
+  <div class="center">
     <nav>
       <ul>
         <li><%= link_to "Responses", total_responses_path(current_user), class: "btn btn-primary" %></li>
@@ -35,7 +35,7 @@
             <%= form.datetime_select :ends_at, { start_year: Time.current.year }, { class: "form-control" } %>
           </div>
         </div>
-        
+        <br>
         <div class="form-actions">
           <%= form.submit "Create Course", class: "btn btn-primary" %>
           <%= link_to "Cancel", courses_path, class: "btn btn-outline-secondary" %>

@@ -33,7 +33,7 @@
             <%= form.datetime_select :ends_at, { start_year: Time.current.year }, { class: "form-control" } %>
           </div>
         </div>
-        
+        <br>
         <div class="form-actions">
           <%= form.submit "Update Course", class: "btn btn-primary" %>
           <%= link_to "Cancel", course_path(@course), class: "btn btn-outline-secondary" %>
