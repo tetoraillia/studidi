@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_22_095142) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_27_121500) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -123,15 +123,16 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_22_095142) do
   end
 
   create_table "responses", force: :cascade do |t|
-    t.bigint "lesson_id", null: false
     t.bigint "user_id", null: false
     t.bigint "mark_id"
     t.text "content"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "attachment"
-    t.index ["lesson_id"], name: "index_responses_on_lesson_id"
+    t.string "responseable_type"
+    t.bigint "responseable_id"
     t.index ["mark_id"], name: "index_responses_on_mark_id"
+    t.index ["responseable_type", "responseable_id"], name: "index_responses_on_responseable"
     t.index ["user_id"], name: "index_responses_on_user_id"
   end
 
@@ -169,13 +170,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_22_095142) do
   add_foreign_key "enrollments", "users"
   add_foreign_key "invitations", "courses"
   add_foreign_key "invitations", "users", column: "invited_by_id"
-  add_foreign_key "lessons", "responses", column: "student_response_id"
+  add_foreign_key "lessons", "responses", column: "student_response_id", on_delete: :nullify
   add_foreign_key "lessons", "topics"
   add_foreign_key "marks", "lessons"
   add_foreign_key "marks", "responses", on_delete: :cascade
   add_foreign_key "marks", "users"
   add_foreign_key "messages", "users"
-  add_foreign_key "responses", "lessons", on_delete: :cascade
   add_foreign_key "responses", "marks"
   add_foreign_key "responses", "users"
   add_foreign_key "topics", "courses"
