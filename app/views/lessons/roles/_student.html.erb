@@ -35,10 +35,10 @@
                   <%= @user_response.mark.value %> / 100
                 </span>
               </div>
-              <% if @user_response.mark.comment.present? %>
+              <% @response_mark.each do |mark| %>
                 <div class="feedback-comment mt-2 p-2 bg-white rounded">
                   <strong>Instructor's Note:</strong>
-                  <p class="mb-0"><%= @user_response.mark.comment %></p>
+                  <p class="mb-0"><%= mark.comment %></p>
                 </div>
               <% end %>
             </div>
@@ -58,6 +58,8 @@
                       local: true,
                       html: { class: "needs-validation", novalidate: true }) do |form| %>
                       
+            <%= form.hidden_field :responseable_type, value: "Lesson" %>
+            <%= form.hidden_field :responseable_id, value: @lesson.id %>
             <div class="mb-3">
               <%= form.label :content, "Your Answer", class: "form-label fw-bold" %>
               <%= form.text_area :content, 

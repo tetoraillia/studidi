@@ -72,8 +72,8 @@
             <tbody>
               <% @responses.each do |response| %>
                 <tr class="response-row">
-                  <td class="lesson-title"><%= response.lesson.title %></td>
-                  <td class="course-title"><%= response.lesson.topic.course.title %></td>
+                  <td class="lesson-title"><%= response.responseable.title %></td>
+                  <td class="course-title"><%= response.responseable.topic.course.title %></td>
                   <td class="response-content">
                     <div class="content-preview">
                       <%= truncate(response.content, length: 100) %>
