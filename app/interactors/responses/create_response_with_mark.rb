@@ -2,11 +2,13 @@ module Responses
   class CreateResponseWithMark
     include Interactor::Organizer
 
-    organize Responses::CreateResponse, Marks::CreateMark
-
     def call
-      super
-      context.mark_id = context.mark.id
+      if context.user.student?
+        Responses::CreateResponse.call(context.to_h)
+      else
+        Responses::CreateResponse.call(context.to_h)
+        Marks::CreateMark.call(context.to_h)
+      end
     end
   end
 end

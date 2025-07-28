@@ -15,7 +15,7 @@ class TeacherReportQuery
         CASE
           WHEN COUNT(DISTINCT l.id) = 0 OR COUNT(DISTINCT e.user_id) = 0 THEN 0
           ELSE ROUND(
-            100.0 * COUNT(DISTINCT CONCAT(r.user_id, '-', r.lesson_id))
+            100.0 * COUNT(DISTINCT CONCAT(r.user_id, '-', r.responseable_id))
             / (COUNT(DISTINCT l.id) * COUNT(DISTINCT e.user_id)),
             2
           )
@@ -25,7 +25,7 @@ class TeacherReportQuery
       LEFT JOIN enrollments e ON e.course_id = c.id
       LEFT JOIN topics t ON t.course_id = c.id
       LEFT JOIN lessons l ON l.topic_id = t.id
-      LEFT JOIN responses r ON r.lesson_id = l.id AND r.user_id = e.user_id
+      LEFT JOIN responses r ON r.responseable_type = 'Lesson' AND r.responseable_id = l.id AND r.user_id = e.user_id
       LEFT JOIN marks m ON m.response_id = r.id
       WHERE c.instructor_id = ?
       GROUP BY c.id, c.title

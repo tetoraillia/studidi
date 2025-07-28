@@ -24,7 +24,7 @@ class StudentReportQuery
       INNER JOIN enrollments e ON e.course_id = c.id AND e.user_id = ?
       LEFT JOIN topics t ON t.course_id = c.id
       LEFT JOIN lessons l ON l.topic_id = t.id
-      LEFT JOIN responses r ON r.lesson_id = l.id AND r.user_id = ?
+      LEFT JOIN responses r ON r.responseable_type = 'Lesson' AND r.responseable_id = l.id AND r.user_id = ?
       LEFT JOIN marks m ON m.response_id = r.id
       GROUP BY c.id, c.title, c.ends_at
       ORDER BY c.title;
