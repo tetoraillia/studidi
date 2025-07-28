@@ -1,20 +1,21 @@
-<div class="auth-form">
-  <h2>Log in</h2>
+<div class="container">
+  <div class="auth-form">
+    <h2>Log in</h2>
 
-  <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: "needs-validation", novalidate: true }) do |f| %>
-    <div class="field mb-3">
-      <%= f.label :email, class: "form-label" %>
-      <%= f.email_field :email, autofocus: true, autocomplete: "email", 
+    <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: "needs-validation", novalidate: true }) do |f| %>
+      <div class="field mb-3">
+        <%= f.label :email, class: "form-label" %>
+        <%= f.email_field :email, autofocus: true, autocomplete: "email", 
                        class: "form-control", 
                        required: true %>
-    </div>
+      </div>
 
-    <div class="field mb-3">
-      <%= f.label :password, class: "form-label" %>
-      <%= f.password_field :password, autocomplete: "current-password", 
+      <div class="field mb-3">
+        <%= f.label :password, class: "form-label" %>
+        <%= f.password_field :password, autocomplete: "current-password", 
                           class: "form-control", 
                           required: true %>
-    </div>
+      </div>
 
     <% if devise_mapping.rememberable? %>
       <div class="field mb-3">
@@ -28,9 +29,10 @@
     <div class="actions">
       <%= f.submit "Log in", class: "btn btn-primary" %>
     </div>
-  <% end %>
+    <% end %>
 
-  <div class="links mt-3">
-    <%= render "devise/shared/links" %>
+    <div class="links mt-3">
+      <%= render "devise/shared/links" %>
+    </div>
   </div>
 </div>
