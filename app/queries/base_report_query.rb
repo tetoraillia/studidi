@@ -28,9 +28,9 @@ class BaseReportQuery
 
   protected
 
-  def exec_query(sql, *params)
-    ActiveRecord::Base.connection.exec_query(
-      ActiveRecord::Base.send(:sanitize_sql_array, [sql, *params])
-    )
-  end
+    def exec_query(sql, *params)
+      ActiveRecord::Base.connection.exec_query(
+        ActiveRecord::Base.send(:sanitize_sql_array, [sql, *params])
+      )
+    end
 end
