@@ -3,5 +3,6 @@ class ApplicationNotifier < Noticed::Event
         stream: -> { "notifications_#{recipient.id}" },
         message: -> { params[:message] },
         url: -> { params[:url] },
-        id: -> { notification.id }
+        id: -> { notification.id },
+        type: -> {params[:type]}
 end
