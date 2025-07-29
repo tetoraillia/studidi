@@ -4,5 +4,5 @@ class ApplicationNotifier < Noticed::Event
         message: -> { params[:message] },
         url: -> { params[:url] },
         id: -> { notification.id },
-        type: -> {params[:type]}
+        type: -> { params[:type] }
 end
