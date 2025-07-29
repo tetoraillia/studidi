@@ -1,6 +1,11 @@
 class NotificationsController < ApplicationController
   before_action :authenticate_user!
 
+  def unread_count
+    count = current_user.notifications.where(read_at: nil).count
+    render json: { unread: count }
+  end
+
   def index
     notifications = current_user.notifications.order(created_at: :desc)
 

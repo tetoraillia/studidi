@@ -11,9 +11,10 @@ module Lessons
         message = "Teacher #{@lesson.topic.course.instructor.first_name} edited the lesson: #{@lesson.title}"
         url = Rails.application.routes.url_helpers.course_topic_lesson_path(@lesson.topic.course, @lesson.topic, @lesson)
         @lesson.topic.course.students.each do |student|
-          LessonNotifier.with(
+          ApplicationNotifier.with(
               message: message,
               url: url,
+              type: "Lesson"
           ).deliver_later(student)
         end
 
