@@ -1,8 +1,4 @@
-class TeacherReportQuery
-  def initialize(teacher_id)
-    @teacher_id = teacher_id
-  end
-
+class TeacherReportQuery < BaseReportQuery
   def call
     sql = <<-SQL
       SELECT
@@ -20,14 +16,12 @@ class TeacherReportQuery
           )
         END AS average_completion_percentage,
         COUNT(DISTINCT response_id) AS total_responses
-      FROM #{Base::BaseReportQuery.base_subquery}
+      FROM #{BaseReportQuery.base_subquery}
       WHERE teacher_id = ?
       GROUP BY course_id, course_title
       ORDER BY course_title;
     SQL
 
-    ActiveRecord::Base.connection.exec_query(
-      ActiveRecord::Base.send(:sanitize_sql_array, [sql, @teacher_id])
-    )
+    exec_query(sql, @id)
   end
 end

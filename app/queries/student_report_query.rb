@@ -1,8 +1,4 @@
-class StudentReportQuery
-  def initialize(student_id)
-    @student_id = student_id
-  end
-
+class StudentReportQuery < BaseReportQuery
   def call
     sql = <<-SQL
       SELECT
@@ -20,14 +16,12 @@ class StudentReportQuery
           )
         END AS completion_percentage,
         COUNT(mark_value) AS marks_received
-      FROM #{Base::BaseReportQuery.base_subquery}
+      FROM #{BaseReportQuery.base_subquery}
       WHERE student_id = ?
       GROUP BY course_id, course_title, course_ends_at
       ORDER BY course_title;
     SQL
 
-    ActiveRecord::Base.connection.exec_query(
-      ActiveRecord::Base.send(:sanitize_sql_array, [sql, @student_id])
-    )
+    exec_query(sql, @id)
   end
 end
