@@ -1,15 +1,9 @@
-<% type = notification.params[:type].to_s.capitalize.presence || "Other" %>
-<% badge_class = {
-  "Enrollment" => "primary",
-  "Invitation" => "warning",
-  "Lesson"     => "success",
-  "Mark"       => "info",
-  "Response"   => "dark"
-}[type] || "secondary" %>
+<% type_label = notification_type_label(notification) %>
+<% badge_class = badge_class_for(notification) %>
 
 <div class="list-group-item d-flex justify-content-between align-items-start">
   <div>
-    <span class="badge bg-<%= badge_class %> me-2"><%= type %></span>
+    <span class="badge bg-<%= badge_class %> me-2"><%= type_label %></span>
     <strong><%= notification.params[:message] %></strong><br>
     <% if notification.params[:url].present? %>
       <a href="<%= notification.params[:url] %>">Go to link</a>
