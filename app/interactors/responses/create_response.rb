@@ -17,9 +17,10 @@ module Responses
             @response.lesson
         )
 
-        ResponseNotifier.with(
+        ApplicationNotifier.with(
             message: message,
             url: url,
+            type: "Response"
         ).deliver_later(@response.lesson.topic.course.instructor)
 
         context.response = @response

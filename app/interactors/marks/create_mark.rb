@@ -22,9 +22,10 @@ module Marks
             mark.lesson.topic,
             mark.lesson
         )
-        MarkNotifier.with(
+        ApplicationNotifier.with(
             message: message,
             url: url,
+            type: "Mark"
         ).deliver_later(response.user)
 
         context.mark = mark
