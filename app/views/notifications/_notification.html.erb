@@ -1,6 +1,4 @@
-<% full_type = notification.type || "" %>
-<% type = full_type.gsub("Notifier::Notification", "").split("::").first %>
-
+<% type = notification.params[:type].to_s.capitalize.presence || "Other" %>
 <% badge_class = {
   "Enrollment" => "primary",
   "Invitation" => "warning",
