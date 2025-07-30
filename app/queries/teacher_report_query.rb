@@ -10,7 +10,7 @@ class TeacherReportQuery < BaseReportQuery
         CASE
           WHEN COUNT(DISTINCT student_id) = 0 OR COUNT(DISTINCT lesson_id) = 0 THEN 0
           ELSE ROUND(
-            100.0 * COUNT(DISTINCT student_id || '-' || lesson_id)
+            100.0 * COUNT(DISTINCT (lesson_id))
             / (COUNT(DISTINCT student_id) * COUNT(DISTINCT lesson_id)),
             2
           )
