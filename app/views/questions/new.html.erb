@@ -21,7 +21,7 @@
     <h3>Options:</h3>
     <div id="options" data-dynamic-options-target="container">
       <%= form.fields_for :options do |options_form| %>
-        <%= render 'option_fields', form: options_form %>
+        <%= render "option_fields", form: options_form %>
       <% end %>
     </div>
 
@@ -36,7 +36,7 @@
 
     <template data-dynamic-options-target="template">
       <%= form.fields_for :options, Option.new do |options_form| %>
-        <%= render 'option_fields', form: options_form %>
+        <%= render "option_fields", form: options_form %>
       <% end %>
     </template>
   <% end %>

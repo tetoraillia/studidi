@@ -25,10 +25,10 @@
                              id="option_<%= option.id %>" 
                              value="<%= option.id %>"
                              <% if current_user.responses.find_by(responseable: question)&.content == option.id.to_s %>checked<% end %>
-                             <% if current_user.role == 'teacher' %>disabled<% end %>>
+                             <% if current_user.role == "teacher" %>disabled<% end %>>
                       <label class="form-check-label" for="option_<%= option.id %>">
                         <%= option.title %>
-                        <% if current_user.role == 'teacher' && option.is_correct %>
+                        <% if current_user.role == "teacher" && option.is_correct %>
                           <span class="badge bg-success ms-2">Correct</span>
                         <% end %>
                       </label>
@@ -40,7 +40,7 @@
           </div>
         <% end %>
         
-        <% if current_user.role == 'student' %>
+        <% if current_user.role == "student" %>
           <div class="text-center mt-4">
           <% if !@user_mark.present? %>
             <%= submit_tag "Submit Quiz", class: "btn btn-primary" %>
