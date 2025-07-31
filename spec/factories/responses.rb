@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :response do
     association :user
-    association :lesson
+    association :responseable, factory: :lesson
     content { "This is a test response content." }
   end
 end
