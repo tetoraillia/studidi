@@ -44,10 +44,10 @@
                   </div>
                 </td>
                 <td>
-                  <span class="badge bg-<%= response.responseable_type == 'Lesson' ? 'primary' : 'info' %>">
-                    <%= response.responseable_type == 'Lesson' ? 'Lesson' : 'Question' %>
+                  <span class="badge bg-<%= response.responseable_type == "Lesson" ? "primary" : "info" %>">
+                    <%= response.responseable_type == "Lesson" ? "Lesson" : "Question" %>
                   </span>
-                  <% if response.responseable_type == 'Question' %>
+                  <% if response.responseable_type == "Question" %>
                     <br><small class="text-muted"><%= response.responseable.title.truncate(30) %></small>
                   <% end %>
                 </td>

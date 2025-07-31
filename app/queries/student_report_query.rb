@@ -15,7 +15,7 @@ class StudentReportQuery
         CASE
           WHEN COUNT(DISTINCT l.id) = 0 THEN 0
           ELSE ROUND(
-            100.0 * COUNT(DISTINCT CASE WHEN r.id IS NOT NULL OR qr.id IS NOT NULL THEN l.id END) / 
+            100.0 * COUNT(DISTINCT CASE WHEN r.id IS NOT NULL OR qr.id IS NOT NULL THEN l.id END) /#{' '}
                     COUNT(DISTINCT l.id),
             2
           )
