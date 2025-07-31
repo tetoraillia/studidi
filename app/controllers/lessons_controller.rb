@@ -1,7 +1,7 @@
 class LessonsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_lesson, only: [ :show, :edit, :update, :destroy ]
-  before_action :set_course_data, only: [ :new, :create, :edit, :update, :destroy, :select_lesson_type, :show ]
+  before_action :set_lesson, only: [ :show, :edit, :update, :destroy, :submit_quiz_answers]
+  before_action :set_course_data, only: [ :new, :create, :edit, :update, :destroy, :select_lesson_type, :show, :submit_quiz_answers]
 
   def select_lesson_type
   end
@@ -9,11 +9,10 @@ class LessonsController < ApplicationController
   def show
     authorize @lesson
     @user = current_user
-    @response = Response.new(responseable: @lesson, user: current_user)
-    @responses = Response.where(responseable: @lesson)
-    @user_response = Response.find_by(responseable: @lesson, user: current_user)
-    @mark = Mark.new(lesson: @lesson)
-    @response_mark = Mark.where(lesson_id: @lesson.id)
+    @questions = @lesson.questions
+    @user_responses = Response.for_questions(@questions).for_user(current_user)
+    @user_mark = Mark.for_user(current_user).for_lesson(@lesson).first
+    @lesson_responses = Response.for_lesson(@lesson)
   end
 
   def new
@@ -65,18 +64,29 @@ class LessonsController < ApplicationController
     redirect_to course_topic_path(@course, @topic), notice: "Lesson was successfully destroyed."
   end
 
-    private
+  def submit_quiz_answers
+    Responses::SubmitQuizAnswers.call(
+      lesson: @lesson,
+      user: current_user,
+      params: params,
+      topic: @topic,
+      course: @course
+    )
+    redirect_to course_topic_lesson_path(@course, @topic, @lesson)
+  end
 
-      def set_course_data
-        @topic = Topic.find(params[:topic_id])
-        @course = Course.find(params[:course_id])
-      end
+  private
 
-      def set_lesson
-        @lesson = Lesson.find(params[:id])
-      end
+    def set_course_data
+      @topic = Topic.find(params[:topic_id])
+      @course = Course.find(params[:course_id])
+    end
 
-      def lesson_params
-        params.require(:lesson).permit(:title, :content, :content_type, :topic_id, :position, :video_url, :student_response_id, :ends_at)
-      end
+    def set_lesson
+      @lesson = Lesson.find(params[:id])
+    end
+
+    def lesson_params
+      params.require(:lesson).permit(:title, :content, :content_type, :topic_id, :position, :video_url, :student_response_id, :ends_at)
+    end
 end

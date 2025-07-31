@@ -42,6 +42,8 @@ Rails.application.routes.draw do
         collection do
           get "select_lesson_type"
         end
+        resources :questions, only: [ :index, :new, :create ]
+        post "submit_quiz_answers", to: "lessons#submit_quiz_answers", on: :member
       end
     end
   end
