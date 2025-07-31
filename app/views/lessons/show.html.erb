@@ -23,6 +23,11 @@
             <%= link_to "Edit", edit_course_topic_lesson_path(@course, @topic, @lesson), class: "btn btn-outline-secondary btn-sm" %>
           <% end %>
           <%= link_to "Back to Topic", course_topic_path(@course, @topic), class: "btn btn-outline-secondary btn-sm ms-2" %>
+          <% if @lesson.content_type == "quiz" %>
+            <% if @user.role.in?(%w[teacher])  %>
+              <%= link_to "Add Question", new_course_topic_lesson_question_path(@course, @topic, @lesson), class: "btn btn-outline-secondary btn-sm ms-2" %>
+            <% end %>
+          <% end %>
         </div>
       </div>
 
@@ -41,9 +46,9 @@
         </div>
       </div>
 
+
       <% if @user.role.in?(%w[student teacher]) %>
         <div class="lesson-interaction">
-          <h3 class="mb-3">Your Response</h3>
           <%= render partial: "lessons/roles/#{@user.role}", locals: { 
             lesson: @lesson, 
             response: @response, 

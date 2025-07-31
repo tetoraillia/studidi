@@ -1,20 +1,22 @@
-<div class="card mb-4">
-  <div class="card-header">
-    <h3 class="mb-0">
+<% if @lesson.content_type == "quiz" %>
+<% else %>
+  <div class="card mb-4">
+    <div class="card-header">
+      <h3 class="mb-0">
+        <% if @user_response %>
+          <i class="fas fa-check-circle text-success me-2"></i>Your Submission
+        <% else %>
+          <i class="fas fa-edit me-2"></i>Your Response
+        <% end %>
+      </h3>
+    </div>
+    <div class="card-body">
       <% if @user_response %>
-        <i class="fas fa-check-circle text-success me-2"></i>Your Submission
-      <% else %>
-        <i class="fas fa-edit me-2"></i>Your Response
-      <% end %>
-    </h3>
-  </div>
-  <div class="card-body">
-    <% if @user_response %>
-      <div class="response-content mb-4">
-        <h5>Your Answer:</h5>
-        <div class="bg-light p-3 rounded">
-          <%= simple_format(@user_response.content) %>
-        </div>
+        <div class="response-content mb-4">
+          <h5>Your Answer:</h5>
+          <div class="bg-light p-3 rounded">
+            <%= simple_format(@user_response.content) %>
+          </div>
         
         <% if @user_response.attachment.present? %>
           <div class="mt-3">
@@ -49,41 +51,21 @@
           </div>
         <% end %>
       </div>
-      
     <% else %>
       <% if @lesson.is_open? %>
         <div class="response-form">
-          <%= form_with(model: @response, 
-                      url: course_lesson_responses_path(@lesson.topic.course, @lesson), 
-                      local: true,
-                      html: { class: "needs-validation", novalidate: true }) do |form| %>
-                      
-            <%= form.hidden_field :responseable_type, value: "Lesson" %>
-            <%= form.hidden_field :responseable_id, value: @lesson.id %>
-            <div class="mb-3">
-              <%= form.label :content, "Your Answer", class: "form-label fw-bold" %>
-              <%= form.text_area :content, 
-                              class: "form-control", 
-                              rows: 5,
-                              required: true,
-                              placeholder: "Type your response here..." %>
-              <div class="invalid-feedback">
-                Please provide your answer.
+          <%= form_with url: course_lesson_responses_path(@lesson.topic.course, @lesson), local: true, html: { class: "needs-validation", novalidate: true } do |f| %>
+            <% @lesson.questions.each do |question| %>
+              <div class="mb-4">
+                <strong><%= question.title %></strong>
+                <%= fields_for "responses[]", Response.new do |rf| %>
+                  <%= rf.hidden_field :question_id, value: question.id %>
+                  <%= rf.text_area :content, class: "form-control", rows: 2, placeholder: "Ваш ответ..." %>
+                <% end %>
               </div>
-            </div>
-            
-            <div class="mb-3">
-              <%= form.label :attachment, "Attach a file (optional)", class: "form-label fw-bold" %>
-              <%= form.file_field :attachment, class: "form-control" %>
-              <div class="form-text">
-                You can upload a document, image, or other file (Max: 5MB)
-              </div>
-            </div>
-            
+            <% end %>
             <div class="d-flex justify-content-end">
-              <%= form.submit "Submit Response", 
-                            class: "btn btn-primary",
-                            data: { disable_with: "Submitting..." } %>
+              <%= f.submit "Отправить все ответы", class: "btn btn-primary", data: { disable_with: "Submitting..." } %>
             </div>
           <% end %>
         </div>
@@ -94,11 +76,11 @@
         </div>
       <% end %>
     <% end %>
-  </div>
-  
-  <% if @user_response && @user_response.updated_at != @user_response.created_at %>
-    <div class="card-footer text-muted small">
-      Last updated: <%= time_ago_in_words(@user_response.updated_at) %> ago
     </div>
-  <% end %>
-</div>
+    <% if @user_response && @user_response.updated_at != @user_response.created_at %>
+      <div class="card-footer text-muted small">
+        Last updated: <%= time_ago_in_words(@user_response.updated_at) %> ago
+      </div>
+    <% end %>
+  </div>
+<% end %>
