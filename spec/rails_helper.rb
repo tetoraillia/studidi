@@ -8,6 +8,12 @@ require 'rspec/rails'
 require 'devise'
 require 'rails-controller-testing'
 
+Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
+
+RSpec.configure do |config|
+  config.include SystemHelpers, type: :system
+end
+
 RSpec.configure do |config|
   config.include Devise::Test::ControllerHelpers, type: :controller
   config.include Devise::Test::IntegrationHelpers, type: :request
