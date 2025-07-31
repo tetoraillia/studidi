@@ -1,4 +1,5 @@
 class Lesson < ApplicationRecord
+  has_many :questions
   has_many :responses, as: :responseable
   has_many :marks, dependent: :destroy
   has_many :responses, through: :marks, dependent: :destroy
@@ -15,7 +16,7 @@ class Lesson < ApplicationRecord
   validates :topic, presence: true
   validates :position, numericality: { greater_than_or_equal_to: 1 }, allow_nil: true
 
-  ALLOWED_CONTENT_TYPES = [ "text", "video" ].freeze
+  ALLOWED_CONTENT_TYPES = [ "text", "video", "quiz" ].freeze
 
   before_validation :ensure_lesson_ends_before_course
   after_save :schedule_expiration, if: :saved_change_to_ends_at?
@@ -51,8 +52,6 @@ class Lesson < ApplicationRecord
     def content_required?
       content_type != "video"
     end
-
-  private
 
     def set_default_content_type
       self.content_type = "text" if content_type.blank? || !ALLOWED_CONTENT_TYPES.include?(content_type)

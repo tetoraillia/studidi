@@ -7,6 +7,9 @@ class Response < ApplicationRecord
 
   has_many :notifications, dependent: :destroy, as: :recipient, class_name: "Noticed::Notification"
 
+  scope :for_user, ->(user) { where(user: user) }
+  scope :for_lesson, ->(lesson) { where(responseable: lesson) }
+  scope :for_questions, ->(questions) { where(responseable: questions) }
+
   validates :content, presence: true
-  validates :user_id, uniqueness: { scope: [:responseable_type, :responseable_id], message: "can only have one response per item" }
 end
