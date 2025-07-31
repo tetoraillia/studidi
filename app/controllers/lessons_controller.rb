@@ -13,6 +13,9 @@ class LessonsController < ApplicationController
     @user_responses = Response.for_questions(@questions).for_user(current_user)
     @user_mark = Mark.for_user(current_user).for_lesson(@lesson).first
     @lesson_responses = Response.for_lesson(@lesson)
+    @responses = Response.for_lesson_and_questions(@lesson).includes(:user, :mark).order(created_at: :desc)
+    @response = Response.new
+    @user_response = Response.for_lesson(@lesson).for_user(current_user).first
   end
 
   def new
