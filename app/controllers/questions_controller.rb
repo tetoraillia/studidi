@@ -1,24 +1,17 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_course_data, only: [ :index, :new, :create ]
+  before_action :set_course_data, only: [ :new, :create, :destroy ]
   before_action :set_lesson, only: [ :new ]
 
-  def index
-    @questions = Question.all
-    @options = Option.with_questions(@questions)
-  end
-
-  def show
-    @question = Question.find(params[:id])
-  end
-
   def new
-    @question = Question.new
+    @question = Question.new(lesson: @lesson)
+    authorize @question
     2.times { @question.options.build }
   end
 
   def create
     @question = Question.new(question_params)
+    authorize @question
     if @question.save
       redirect_to course_topic_lesson_path(@course, @topic, @lesson)
     else
@@ -28,8 +21,9 @@ class QuestionsController < ApplicationController
 
   def destroy
     @question = Question.find(params[:id])
+    authorize @question
     @question.destroy
-    redirect_to questions_path
+    redirect_to course_topic_lesson_path(@course, @topic, @lesson)
   end
 
   private
