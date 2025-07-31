@@ -20,4 +20,16 @@ RSpec.describe 'Course enrollment', type: :system do
     expect(page).to have_content('Successfully enrolled in the course')
     expect(student.enrolled_in?(course)).to be_truthy
   end
+
+  it 'allows a user to unenroll from a course' do
+    create(:enrollment, course: course, user: student)
+    visit courses_path
+
+    expect(page).to have_content('Enrolled')
+
+    click_button 'Leave'
+
+    expect(page).to have_content('You have left the course.')
+    expect(student.enrolled_in?(course)).to be_falsey
+  end
 end
