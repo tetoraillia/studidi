@@ -19,7 +19,7 @@ RSpec.describe 'Topic creation', type: :system do
     expect(page).to have_content('Topic was successfully created.')
     expect(page).to have_content('New Topic Title')
   end
-  
+
   it 'allows a user to delete a topic' do
     visit course_topics_path(course)
 
@@ -33,7 +33,7 @@ RSpec.describe 'Topic creation', type: :system do
     visit course_topic_path(course, topic)
 
     click_link 'New Lesson'
-    
+
     choose 'Text Lesson'
     click_button 'Continue'
 
