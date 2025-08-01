@@ -6,25 +6,16 @@ class TeacherReportQuery < BaseReportQuery
         course_title,
         COUNT(DISTINCT student_id) AS total_students,
         COUNT(DISTINCT lesson_id) AS total_lessons,
-        ROUND(AVG(mark_value)::numeric, 2) AS average_mark,
+        ROUND(AVG(COALESCE(mark_value, quiz_mark_value))::numeric, 2) AS average_mark,
         CASE
           WHEN COUNT(DISTINCT student_id) = 0 OR COUNT(DISTINCT lesson_id) = 0 THEN 0
           ELSE ROUND(
-            100.0 * COUNT(DISTINCT CONCAT(r.user_id, '-', r.responseable_id))
-            / (COUNT(DISTINCT l.id) * COUNT(DISTINCT e.user_id)),
+            100.0 * COUNT(DISTINCT CASE WHEN lesson_response_id IS NOT NULL OR question_response_id IS NOT NULL THEN (student_id::text || '-' || lesson_id::text) END) /
+              (COUNT(DISTINCT lesson_id) * COUNT(DISTINCT student_id)),
             2
           )
         END AS average_completion_percentage,
-        COUNT(DISTINCT r.id) AS total_responses
-      FROM courses c
-      LEFT JOIN enrollments e ON e.course_id = c.id
-      LEFT JOIN topics t ON t.course_id = c.id
-      LEFT JOIN lessons l ON l.topic_id = t.id
-      LEFT JOIN responses r ON r.responseable_type = 'Lesson' AND r.responseable_id = l.id AND r.user_id = e.user_id
-      LEFT JOIN marks m ON m.response_id = r.id
-      WHERE c.instructor_id = ?
-      GROUP BY c.id, c.title
-      ORDER BY c.title;
+        COUNT(DISTINCT lesson_response_id) + COUNT(DISTINCT question_response_id) AS total_responses
       FROM #{BaseReportQuery.base_subquery}
       WHERE teacher_id = ?
       GROUP BY course_id, course_title
