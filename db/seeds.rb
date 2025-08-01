@@ -12,7 +12,8 @@ User.create!(
     first_name: "John",
     last_name: "Doe",
     email: "john@example.com",
-    password: "password"
+    password: "password",
+    role: "teacher"
 )
 
 20.times do |i|
@@ -20,5 +21,7 @@ User.create!(
       title: "Course #{i}",
       description: "Description for course #{i}",
       instructor_id: User.last.id,
+      public: true,
+      archived: false
   )
 end
