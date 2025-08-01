@@ -17,6 +17,7 @@ RSpec.describe TeacherReportQuery, type: :query do
       let!(:response3) { create(:response, user: students[1], lesson: lessons[0]) }
       let!(:mark1) { create(:mark, response: response1, value: 80) }
       let!(:mark2) { create(:mark, response: response3, value: 90) }
+      let!(:quiz_mark) { create(:mark, lesson: lessons[2], user: students[0], value: 75) }
 
       it 'returns the correct report data for the teacher' do
         report = TeacherReportQuery.new(teacher.id).call
@@ -26,7 +27,7 @@ RSpec.describe TeacherReportQuery, type: :query do
         expect(result['course_id']).to eq(course.id)
         expect(result['total_students']).to eq(2)
         expect(result['total_lessons']).to eq(3)
-        expect(result['average_mark'].to_f).to eq(85.0)
+        expect(result['average_mark'].to_f).to eq(81.67)
         expect(result['average_completion_percentage'].to_f).to eq(50)
         expect(result['total_responses']).to eq(3)
       end
