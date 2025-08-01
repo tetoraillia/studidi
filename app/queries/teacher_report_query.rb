@@ -1,19 +1,14 @@
-# app/queries/teacher_report_query.rb
-class TeacherReportQuery
-  def initialize(teacher_id)
-    @teacher_id = teacher_id
-  end
-
+class TeacherReportQuery < BaseReportQuery
   def call
     sql = <<-SQL
       SELECT
-        c.id AS course_id,
-        c.title AS course_title,
-        COUNT(DISTINCT e.user_id) AS total_students,
-        COUNT(DISTINCT l.id) AS total_lessons,
-        ROUND(AVG(m.value)::numeric, 2) AS average_mark,
+        course_id,
+        course_title,
+        COUNT(DISTINCT student_id) AS total_students,
+        COUNT(DISTINCT lesson_id) AS total_lessons,
+        ROUND(AVG(mark_value)::numeric, 2) AS average_mark,
         CASE
-          WHEN COUNT(DISTINCT l.id) = 0 OR COUNT(DISTINCT e.user_id) = 0 THEN 0
+          WHEN COUNT(DISTINCT student_id) = 0 OR COUNT(DISTINCT lesson_id) = 0 THEN 0
           ELSE ROUND(
             100.0 * COUNT(DISTINCT CONCAT(r.user_id, '-', r.responseable_id))
             / (COUNT(DISTINCT l.id) * COUNT(DISTINCT e.user_id)),
@@ -30,9 +25,12 @@ class TeacherReportQuery
       WHERE c.instructor_id = ?
       GROUP BY c.id, c.title
       ORDER BY c.title;
+      FROM #{BaseReportQuery.base_subquery}
+      WHERE teacher_id = ?
+      GROUP BY course_id, course_title
+      ORDER BY course_title;
     SQL
 
-    sanitized_sql = ActiveRecord::Base.send(:sanitize_sql_array, [ sql, @teacher_id ])
-    ActiveRecord::Base.connection.execute(sanitized_sql)
+    exec_query(sql, @id)
   end
 end

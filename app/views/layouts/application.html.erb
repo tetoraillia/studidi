@@ -24,6 +24,13 @@
     
     <%= vite_client_tag %>
     <%= vite_javascript_tag "application.jsx" %>
+    <% if user_signed_in? %>
+      <script>
+        document.addEventListener("DOMContentLoaded", function() {
+          window.setupNotificationBadge(<%= current_user.id %>);
+        });
+      </script>
+    <% end %>
   </head>
 
   <body>

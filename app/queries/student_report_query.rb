@@ -1,19 +1,15 @@
-class StudentReportQuery
-  def initialize(student_id)
-    @student_id = student_id
-  end
-
+class StudentReportQuery < BaseReportQuery
   def call
     sql = <<-SQL
       SELECT
-        c.id AS course_id,
-        c.title AS course_title,
-        c.ends_at AS course_ends_at,
-        COUNT(DISTINCT l.id) AS total_lessons,
-        COUNT(DISTINCT CASE WHEN r.id IS NOT NULL OR qr.id IS NOT NULL THEN l.id END) AS lessons_completed,
-        ROUND(AVG(m.value)::numeric, 2) AS average_mark,
+        course_id,
+        course_title,
+        course_ends_at,
+        COUNT(DISTINCT lesson_id) AS total_lessons,
+        COUNT(DISTINCT CASE WHEN response_id IS NOT NULL THEN lesson_id END) AS lessons_completed,
+        ROUND(AVG(mark_value)::numeric, 2) AS average_mark,
         CASE
-          WHEN COUNT(DISTINCT l.id) = 0 THEN 0
+          WHEN COUNT(DISTINCT lesson_id) = 0 THEN 0
           ELSE ROUND(
             100.0 * COUNT(DISTINCT CASE WHEN r.id IS NOT NULL OR qr.id IS NOT NULL THEN l.id END) /#{' '}
                     COUNT(DISTINCT l.id),
@@ -29,11 +25,13 @@ class StudentReportQuery
       LEFT JOIN responses r ON r.responseable_type = 'Lesson' AND r.responseable_id = l.id AND r.user_id = ?
       LEFT JOIN responses qr ON qr.responseable_type = 'Question' AND qr.responseable_id = q.id AND qr.user_id = ?
       LEFT JOIN marks m ON (m.response_id = r.id OR m.response_id = qr.id)
-      GROUP BY c.id, c.title, c.ends_at
-      ORDER BY c.title;
+
+      FROM #{BaseReportQuery.base_subquery}
+      WHERE student_id = ?
+      GROUP BY course_id, course_title, course_ends_at
+      ORDER BY course_title;
     SQL
 
-    sanitized_sql = ActiveRecord::Base.send(:sanitize_sql_array, [ sql, @student_id, @student_id, @student_id ])
-    ActiveRecord::Base.connection.execute(sanitized_sql)
+    exec_query(sql, @id)
   end
 end

@@ -14,9 +14,10 @@ module Invitations
         message = "You have been invited to join the course: #{context.course.title}. Check your email."
         url = Rails.application.routes.url_helpers.accept_course_invitation_path(context.course, context.invitation)
 
-        InvitationNotifier.with(
+        ApplicationNotifier.with(
             message: message,
             url: url,
+            type: "Invitation"
         ).deliver_later(recipient)
 
         context.success

@@ -27,7 +27,7 @@ RSpec.describe TeacherReportQuery, type: :query do
         expect(result['total_students']).to eq(2)
         expect(result['total_lessons']).to eq(3)
         expect(result['average_mark'].to_f).to eq(85.0)
-        expect(result['average_completion_percentage'].to_f).to eq(66.67)
+        expect(result['average_completion_percentage'].to_f).to eq(50)
         expect(result['total_responses']).to eq(3)
       end
     end

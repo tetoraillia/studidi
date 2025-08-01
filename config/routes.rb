@@ -47,5 +47,9 @@ Rails.application.routes.draw do
       end
     end
   end
-  resources :notifications, only: [ :index, :update ]
+  resources :notifications, only: [ :index, :update ] do
+    collection do
+      get :unread_count
+    end
+  end
 end

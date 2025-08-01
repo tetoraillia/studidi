@@ -20,7 +20,7 @@ module Responses
             lesson
         )
 
-        ResponseNotifier.with(
+        ApplicationNotifier.with(
             message: message,
             url: url,
         ).deliver_later(lesson.topic.course.instructor)

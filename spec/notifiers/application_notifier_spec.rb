@@ -4,16 +4,9 @@ RSpec.describe ApplicationNotifier, type: :notifier do
   let(:recipient) { create(:user) }
   let(:message) { "Test notification message" }
   let(:url) { "/test/path" }
-  let(:notification_class) do
-    Class.new(ApplicationNotifier) do
-      def self.name
-        "EnrollmentNotifier"
-      end
-    end
-  end
 
   let(:notification) do
-    notification_class.with(message: message, url: url).deliver(recipient)
+    ApplicationNotifier.with(message: message, url: url).deliver(recipient)
     recipient.notifications.last
   end
 
