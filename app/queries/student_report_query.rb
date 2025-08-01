@@ -11,7 +11,7 @@ class StudentReportQuery < BaseReportQuery
         CASE
           WHEN COUNT(DISTINCT lesson_id) = 0 THEN 0
           ELSE ROUND(
-            100.0 * COUNT(DISTINCT CASE WHEN lesson_response_id IS NOT NULL OR question_response_id IS NOT NULL THEN lesson_id END) / 
+            100.0 * COUNT(DISTINCT CASE WHEN lesson_response_id IS NOT NULL OR question_response_id IS NOT NULL THEN lesson_id END) /#{' '}
                     COUNT(DISTINCT lesson_id),
             2
           )
