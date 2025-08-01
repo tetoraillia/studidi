@@ -22,6 +22,7 @@
           <thead class="table-light">
             <tr>
               <th>Student</th>
+              <th>Type</th>
               <th>Submitted</th>
               <th>Status</th>
               <th>Grade</th>
@@ -41,6 +42,14 @@
                       <small class="text-muted"><%= response.user.email %></small>
                     </div>
                   </div>
+                </td>
+                <td>
+                  <span class="badge bg-<%= response.responseable_type == "Lesson" ? "primary" : "info" %>">
+                    <%= response.responseable_type == "Lesson" ? "Lesson" : "Question" %>
+                  </span>
+                  <% if response.responseable_type == "Question" %>
+                    <br><small class="text-muted"><%= response.responseable.title.truncate(30) %></small>
+                  <% end %>
                 </td>
                 <td><%= time_ago_in_words(response.created_at) %> ago</td>
                 <td>

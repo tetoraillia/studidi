@@ -5,26 +5,28 @@ module Responses
     before :validate_params!
 
     def call
-      @response = Response.new(context.params)
-      @response.lesson = context.lesson
+      params = context.params.dup
+      params.delete(:lesson_id)
+      @response = Response.new(params)
+      @response.responseable = context.lesson
       @response.user = context.user
 
       if @response.save
-        message = "Student #{@response.user.first_name} sent you a response to #{@response.lesson.title}"
+        lesson = @response.responseable # теперь это Lesson
+        message = "Student #{@response.user.first_name} sent you a response to #{lesson.title}"
         url = Rails.application.routes.url_helpers.course_topic_lesson_path(
-            @response.lesson.topic.course,
-            @response.lesson.topic,
-            @response.lesson
+            lesson.topic.course,
+            lesson.topic,
+            lesson
         )
 
         ApplicationNotifier.with(
             message: message,
             url: url,
-            type: "Response"
-        ).deliver_later(@response.lesson.topic.course.instructor)
+        ).deliver_later(lesson.topic.course.instructor)
 
         context.response = @response
-        context.lesson.update!(student_response_id: @response.id)
+        lesson.update!(student_response_id: @response.id)
       else
         context.fail!(error: @response.errors.full_messages.to_sentence)
       end

@@ -1,0 +1,43 @@
+<div class="container" data-controller="dynamic-options">
+  <%= form_with(model: [ @course, @topic, @lesson, @question ], local: true) do |form| %>
+    <% if @question.errors.any? %>
+      <div id="error_explanation" class="alert alert-danger">
+        <h2><%= pluralize(@question.errors.count, "error") %> Errors:</h2>
+        <ul>
+          <% @question.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="field">
+      <%= form.label :title, "Question title", class: "form-label" %>
+      <%= form.text_field :title, class: "form-control" %>
+    </div>
+
+    <%= form.hidden_field :lesson_id, value: @lesson.id %>
+
+    <h3>Options:</h3>
+    <div id="options" data-dynamic-options-target="container">
+      <%= form.fields_for :options do |options_form| %>
+        <%= render "option_fields", form: options_form %>
+      <% end %>
+    </div>
+
+    <div class="mt-3 mb-3">
+      <%= button_tag "+ Add Option", type: "button", class: "btn btn-outline-primary", 
+          data: { action: "click->dynamic-options#add", "dynamic-options-target": "addButton" } %>
+    </div>
+
+    <div class="actions">
+      <%= form.submit "Create", class: "btn btn-primary" %>
+    </div>
+
+    <template data-dynamic-options-target="template">
+      <%= form.fields_for :options, Option.new do |options_form| %>
+        <%= render "option_fields", form: options_form %>
+      <% end %>
+    </template>
+  <% end %>
+</div>

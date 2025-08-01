@@ -1,4 +1,6 @@
-<div class="card mb-4">
+<% if @lesson.content_type == "quiz" %>
+<% else %>
+  <div class="card mb-4">
   <div class="card-header">
     <h3 class="mb-0">
       <% if @user_response %>
@@ -53,14 +55,14 @@
     <% else %>
       <% if @lesson.is_open? %>
         <div class="response-form">
-          <%= form_with(model: @response, 
-                      url: course_lesson_responses_path(@lesson.topic.course, @lesson), 
+          <%= form_with(url: course_lesson_responses_path(@lesson.topic.course, @lesson), 
                       local: true,
                       html: { class: "needs-validation", novalidate: true }) do |form| %>
                       
             <div class="mb-3">
               <%= form.label :content, "Your Answer", class: "form-label fw-bold" %>
               <%= form.text_area :content, 
+                              name: "response[content]",
                               class: "form-control", 
                               rows: 5,
                               required: true,
@@ -72,7 +74,9 @@
             
             <div class="mb-3">
               <%= form.label :attachment, "Attach a file (optional)", class: "form-label fw-bold" %>
-              <%= form.file_field :attachment, class: "form-control" %>
+              <%= form.file_field :attachment, 
+                              name: "response[attachment]",
+                              class: "form-control" %>
               <div class="form-text">
                 You can upload a document, image, or other file (Max: 5MB)
               </div>
@@ -100,3 +104,4 @@
     </div>
   <% end %>
 </div>
+<% end %>

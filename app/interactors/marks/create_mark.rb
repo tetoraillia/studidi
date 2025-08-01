@@ -16,7 +16,7 @@ module Marks
       mark.response = response
 
       if mark.save
-        message = "Your response to #{response.lesson.title} was marked #{mark.value} by #{mark.lesson.topic.course.instructor.first_name}"
+        message = "Your response to #{response.responseable.title} was marked #{mark.value} by #{mark.lesson.topic.course.instructor.first_name}"
         url = Rails.application.routes.url_helpers.course_topic_lesson_path(
             mark.lesson.topic.course,
             mark.lesson.topic,

@@ -149,6 +149,17 @@ RSpec.describe "Lessons", type: :request do
     end
   end
 
+  describe 'POST #submit_quiz_answers' do
+    before { sign_in user }
+    let!(:lesson_to_submit) { create(:lesson, topic: topic) }
+
+    it 'redirects to lesson page after submission' do
+      sign_in user
+      post submit_quiz_answers_course_topic_lesson_path(course, topic, lesson_to_submit), params: { responses: {} }
+      expect(response).to redirect_to(course_topic_lesson_path(course, topic, lesson_to_submit))
+    end
+  end
+
   describe 'authorization' do
     let(:other_user) { create(:user, :teacher) }
 

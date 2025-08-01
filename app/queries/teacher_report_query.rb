@@ -10,12 +10,21 @@ class TeacherReportQuery < BaseReportQuery
         CASE
           WHEN COUNT(DISTINCT student_id) = 0 OR COUNT(DISTINCT lesson_id) = 0 THEN 0
           ELSE ROUND(
-            100.0 * COUNT(DISTINCT (lesson_id))
-            / (COUNT(DISTINCT student_id) * COUNT(DISTINCT lesson_id)),
+            100.0 * COUNT(DISTINCT CONCAT(r.user_id, '-', r.responseable_id))
+            / (COUNT(DISTINCT l.id) * COUNT(DISTINCT e.user_id)),
             2
           )
         END AS average_completion_percentage,
-        COUNT(DISTINCT response_id) AS total_responses
+        COUNT(DISTINCT r.id) AS total_responses
+      FROM courses c
+      LEFT JOIN enrollments e ON e.course_id = c.id
+      LEFT JOIN topics t ON t.course_id = c.id
+      LEFT JOIN lessons l ON l.topic_id = t.id
+      LEFT JOIN responses r ON r.responseable_type = 'Lesson' AND r.responseable_id = l.id AND r.user_id = e.user_id
+      LEFT JOIN marks m ON m.response_id = r.id
+      WHERE c.instructor_id = ?
+      GROUP BY c.id, c.title
+      ORDER BY c.title;
       FROM #{BaseReportQuery.base_subquery}
       WHERE teacher_id = ?
       GROUP BY course_id, course_title

@@ -1,0 +1,19 @@
+<div class="container">
+  <h1 class="center text-center"> Questions </h1>
+  <% if @user.role == "teacher" %>
+    <%= link_to "New Question", new_course_topic_lesson_question_path(@course, @topic, @lesson), class: "btn btn-primary" %>
+  <% end %>
+
+  <% @questions.each do |question| %>
+    <div class="card">
+      <div class="card-body center text-center">
+        <h5 class="card-title"><%= question.title %></h5>
+        <% @options.each do |option| %>
+          <%= option.title %>
+          /
+        <% end %>
+      </div>
+    </div>
+    <br>
+  <% end %>
+</div>

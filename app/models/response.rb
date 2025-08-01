@@ -1,18 +1,21 @@
 class Response < ApplicationRecord
   mount_uploader :attachment, ResponseAttachmentUploader
 
-  belongs_to :lesson, optional: true
+  belongs_to :responseable, polymorphic: true, optional: true
   belongs_to :user
   has_one :mark
-  before_destroy :nullify_lesson_id
 
   has_many :notifications, dependent: :destroy, as: :recipient, class_name: "Noticed::Notification"
 
-  validates :content, presence: true
-  validates :user_id, uniqueness: { scope: :lesson_id, message: "can only have one response per lesson" }
-  private
+  scope :for_user, ->(user) { where(user: user) }
+  scope :for_lesson, ->(lesson) { where(responseable: lesson) }
+  scope :for_questions, ->(questions) { where(responseable: questions) }
+  scope :for_lesson_and_questions, ->(lesson) {
+    where(
+      "(responseable_type = 'Lesson' AND responseable_id = ?) OR (responseable_type = 'Question' AND responseable_id IN (?))",
+      lesson.id, lesson.questions.pluck(:id)
+    )
+  }
 
-    def nullify_lesson_id
-      self.lesson_id = nil
-    end
+  validates :content, presence: true
 end
