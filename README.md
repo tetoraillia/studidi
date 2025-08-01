@@ -48,7 +48,7 @@ Ensure you have the following installed on your system:
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/yourusername/studidi.git
+   git clone https://github.com/tetoraillia/studidi.git
    cd studidi
    ```
 
