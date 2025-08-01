@@ -16,12 +16,12 @@ User.create!(
     role: "teacher"
 )
 
-20.times do |i|
+15.times do |i|
   Course.create!(
       title: "Course #{i}",
       description: "Description for course #{i}",
       instructor_id: User.last.id,
       public: true,
-      archived: false
+      ends_at: Time.zone.now + 1.month
   )
 end
