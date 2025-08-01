@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Marks::CreateMark, type: :interactor do
   let(:user) { create(:user) }
   let(:lesson) { create(:lesson) }
-  let(:response) { create(:response, lesson: lesson, user: user) }
+  let(:response) { create(:response, responseable: lesson, user: user) }
   let(:params) { { value: 5, comment: 'Great work', response_id: response.id } }
 
   subject(:context) { described_class.call(user: user, lesson: lesson, response: response, params: params) }

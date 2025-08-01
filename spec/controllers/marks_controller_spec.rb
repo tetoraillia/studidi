@@ -5,7 +5,7 @@ RSpec.describe MarksController, type: :controller do
   let(:course) { create(:course) }
   let(:topic) { create(:topic, course: course) }
   let(:lesson) { create(:lesson, topic: topic) }
-  let(:user_response) { create(:response, lesson: lesson, user: user, content: "Response content") }
+  let(:user_response) { create(:response, responseable: lesson, user: user, content: "Response content") }
   let!(:mark) { create(:mark, lesson: lesson, user: user, response: user_response) }
 
   before do

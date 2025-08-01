@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Marks::UpdateMark, type: :interactor do
   let(:user) { create(:user) }
   let(:lesson) { create(:lesson) }
-  let(:response) { create(:response, lesson: lesson, user: user) }
+  let(:response) { create(:response, responseable: lesson, user: user) }
   let!(:mark) { create(:mark, response: response, lesson: lesson, user: user) }
   let(:params) { { value: 4, comment: 'Updated' } }
 

@@ -100,3 +100,5 @@ gem "mini_magick"
 
 gem "ransack"
 gem "vite_rails"
+
+gem "active_model_serializers"
