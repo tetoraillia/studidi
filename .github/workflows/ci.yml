@@ -3,7 +3,7 @@ name: CI
 on:
   pull_request:
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   scan_ruby:
@@ -18,6 +18,9 @@ jobs:
         with:
           ruby-version: .ruby-version
           bundler-cache: true
+
+      - name: Disable bundler frozen mode
+        run: bundle config set frozen false
 
       - name: Scan for common Rails security vulnerabilities using static analysis
         run: bin/brakeman --no-pager
@@ -63,5 +66,3 @@ jobs:
 
       - name: Lint code for consistent style
         run: bin/rubocop -f github
-
-
