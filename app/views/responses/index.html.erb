@@ -1,0 +1,117 @@
+<div class="container">
+  <div class="left-side">
+    <% if current_user.present? %>
+      <div class="user-profile">
+        <%= image_tag current_user.avatar.present? ? current_user.avatar.url : "default_avatar.jpg", class: "user-avatar" %>
+        <div class="user-info">
+          <p class="user-name"><%= current_user.first_name %></p>
+          <p class="user-email"><%= current_user.email %></p>
+          <p class="user-role"><%= current_user.role %></p>
+          <% if current_user.teacher? %>
+            <p class="user-stats">Created courses: <%= current_user.courses.count %></p>
+          <% else %>
+            <p class="user-stats">Enrolled courses: <%= current_user.enrollments.count %></p>
+          <% end %>
+        </div>
+        <div class="user-actions">
+          <%= button_to "Log Out", destroy_user_session_path, method: :delete, 
+                       data: { confirm: "Are you sure you want to log out?" }, 
+                       class: "btn btn-outline-secondary" %>
+          <%= link_to "Edit profile", edit_user_registration_path, class: "btn btn-outline-secondary" %>
+        </div>
+      </div>
+    <% else %>
+      <div class="auth-buttons">
+        <%= link_to "Sign In", new_user_session_path, class: "btn btn-outline-primary" %>
+        <%= link_to "Sign Up", new_user_registration_path, class: "btn btn-outline-primary" %>
+      </div>
+    <% end %>
+  </div>
+<br>
+  <div class="center">
+    <% if current_user %>
+      <nav>
+        <ul>
+          <li>
+            <%= link_to "Responses", total_responses_path(current_user), 
+                         class: "btn btn-primary" %>
+          </li>
+          <li>
+            <%= link_to "Courses", courses_path, 
+                         class: "btn btn-primary" %>
+          </li>
+          <li>
+            <%= link_to "Bookmarks", bookmarks_path(current_user), 
+                         class: "btn btn-primary" %>
+          </li>
+        </ul>
+      </nav>
+    <% end %>
+
+    <% if current_user&.student? %>
+      <%= render partial: "reports/student_report", locals: { reports: @student_reports } %>
+    <% elsif current_user&.teacher? %>
+      <%= render partial: "reports/teacher_report", locals: { reports: @teacher_reports } %>
+    <% end %>
+
+    <% if current_user&.student? %>
+      <div class="responses-table-container">
+        <div>
+          <table class="responses-table">
+            <thead>
+              <tr>
+                <th>Lesson</th>
+                <th>Course</th>
+                <th>Response</th>
+                <th>Mark</th>
+                <th>Comment</th>
+                <th>Marked By</th>
+                <th>Submitted</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @responses.each do |response| %>
+                <tr class="response-row">
+                  <td class="lesson-title"><%= response.responseable.title %></td>
+                  <td class="course-title"><%= response.responseable.topic.course.title %></td>
+                  <td class="response-content">
+                    <div class="content-preview">
+                      <%= truncate(response.content, length: 100) %>
+                    </div>
+                  </td>
+                  <td class="mark-value">
+                    <% if response.mark %>
+                      <span class="badge badge-success"><%= response.mark.value %></span>
+                    <% else %>
+                      <span class="badge badge-secondary">No mark</span>
+                    <% end %>
+                  </td>
+                  <td class="mark-comment">
+                    <% if response.mark && response.mark.comment.present? %>
+                      <div class="comment-preview">
+                        <%= truncate(response.mark.comment, length: 50) %>
+                      </div>
+                    <% else %>
+                      <span class="text-muted">-</span>
+                    <% end %>
+                  </td>
+                  <td class="marker-name">
+                    <% if response.mark %>
+                      <%= response.mark.user.first_name %> <%= response.mark.user.last_name %>
+                    <% else %>
+                      <span class="text-muted">-</span>
+                    <% end %>
+                  </td>
+                  <td class="submitted-date">
+                    <%= response.created_at.strftime("%m/%d/%Y") %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <%= paginate @responses, param_name: :responses_page %>
+    <% end %>
+  </div>
+</div>

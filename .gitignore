@@ -32,3 +32,17 @@
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
+
+# Ignore coverage directory
+/coverage
+
+# Ignore uploaded files
+/public/uploads
+
+# Vite Ruby
+/public/vite*
+node_modules
+# Vite uses dotenv and suggests to ignore local-only env files. See
+# https://vitejs.dev/guide/env-and-mode.html#env-files
+*.local
+

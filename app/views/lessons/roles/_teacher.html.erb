@@ -1,0 +1,248 @@
+<div class="card mb-4">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <h3 class="mb-0">
+      <i class="fas fa-users me-2"></i>Student Submissions
+      <% if @responses&.any? %>
+        <span class="badge bg-primary rounded-pill"><%= @responses.size %></span>
+      <% end %>
+    </h3>
+    <div class="dropdown">
+      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="submissionsFilter">
+        <li><a class="dropdown-item active" href="#" data-filter="all">All Submissions</a></li>
+        <li><a class="dropdown-item" href="#" data-filter="graded">Graded</a></li>
+        <li><a class="dropdown-item" href="#" data-filter="ungraded">Ungraded</a></li>
+      </ul>
+    </div>
+  </div>
+  
+  <div class="card-body">
+    <% if @responses && @responses.any? %>
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead class="table-light">
+            <tr>
+              <th>Student</th>
+              <th>Type</th>
+              <th>Submitted</th>
+              <th>Status</th>
+              <th>Grade</th>
+              <th class="text-end">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @responses.each do |response| %>
+              <tr class="submission-row <%= response.mark ? "table-success" : "table-warning" %>" 
+                  data-status="<%= response.mark ? "graded" : "ungraded" %>">
+                <td>
+                  <div class="d-flex align-items-center">
+                    <div class="avatar me-2">
+                    </div>
+                    <div>
+                      <div class="fw-bold"><%= response.user.first_name %> <%= response.user.last_name %></div>
+                      <small class="text-muted"><%= response.user.email %></small>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <span class="badge bg-<%= response.responseable_type == "Lesson" ? "primary" : "info" %>">
+                    <%= response.responseable_type == "Lesson" ? "Lesson" : "Question" %>
+                  </span>
+                  <% if response.responseable_type == "Question" %>
+                    <br><small class="text-muted"><%= response.responseable.title.truncate(30) %></small>
+                  <% end %>
+                </td>
+                <td><%= time_ago_in_words(response.created_at) %> ago</td>
+                <td>
+                  <% if response.mark %>
+                    <span class="badge bg-success">Graded</span>
+                  <% else %>
+                    <span class="badge bg-warning text-dark">Pending Review</span>
+                  <% end %>
+                </td>
+                <td>
+                  <% if response.mark %>
+                    <span class="badge bg-<%= response.mark.value.to_i >= 5 ? "success" : "danger" %>">
+                      <%= response.mark.value %> / 100
+                    </span>
+                  <% else %>
+                    <span class="text-muted">—</span>
+                  <% end %>
+                </td>
+                <td class="text-end">
+                  <div class="btn-group btn-group-sm" role="group">
+                    <% if response.mark %>
+                      <button type="button" 
+                              class="btn btn-outline-secondary edit-grade" 
+                              data-bs-toggle="modal" 
+                              data-bs-target="#gradeModal<%= response.id %>">
+                        <i class="fas fa-edit"></i>Edit Grade
+                      </button>
+                    <% else %>
+                      <button type="button" 
+                              class="btn btn-outline-success add-grade" 
+                              data-bs-toggle="modal" 
+                              data-bs-target="#gradeModal<%= response.id %>">
+                        <i class="fas fa-check"></i>Grade
+                      </button>
+                    <% end %>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Response Modal -->
+              <div class="modal fade" id="responseModal<%= response.id %>" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title">
+                        <%= response.user.first_name %> <%= response.user.last_name %>'s Submission
+                        <small class="text-muted ms-2">
+                          Submitted <%= time_ago_in_words(response.created_at) %> ago
+                        </small>
+                      </h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      <h6>Response:</h6>
+                      <div class="p-3 mb-3 bg-light rounded">
+                        <%= simple_format(response.content) %>
+                      </div>
+                      
+                      <% if response.attachment.present? %>
+                        <h6>Attachment:</h6>
+                        <div class="p-3 bg-light rounded mb-3">
+                          <%= render_attachment(response.attachment) %>
+                        </div>
+                      <% end %>
+                      
+                      <% if response.mark.present? %>
+                        <div class="p-3 bg-light rounded">
+                          <h6>Your Feedback:</h6>
+                          <div class="d-flex justify-content-between align-items-center mb-2">
+                            <strong>Grade:</strong>
+                            <span class="badge bg-<%= response.mark.value.to_i >= 5 ? "success" : "danger" %>">
+                              <%= response.mark.value %> / 10
+                            </span>
+                          </div>
+                          <% if response.mark.comment.present? %>
+                            <div class="mt-2 p-2 bg-white rounded">
+                              <strong>Your Comment:</strong>
+                              <p class="mb-0"><%= response.mark.comment %></p>
+                            </div>
+                          <% end %>
+                        </div>
+                      <% end %>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Grade Modal -->
+              <div class="modal fade" id="gradeModal<%= response.id %>" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title">
+                        <%= response.mark ? "Update Grade" : "Add Grade" %> for <%= response.user.first_name %>
+                      </h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <%= form_with(model: response.mark || Mark.new, 
+                                url: response.mark ? 
+                                  course_topic_lesson_mark_path(@course, @topic, @lesson, response.mark) : 
+                                  course_topic_lesson_marks_path(@course, @topic, @lesson), 
+                                method: response.mark ? :patch : :post,
+                                local: true,
+                                data: { turbo: false }) do |f| %>
+                      <div class="modal-body">
+                        <%= f.hidden_field :response_id, value: response.id %>
+                        
+                        <div class="mb-3">
+                          <%= f.label :value, "Grade (0-100)", class: "form-label" %>
+                          <%= f.number_field :value, 
+                                          step: 0.5, 
+                                          class: "form-control",
+                                          required: true,
+                                          value: response.mark&.value %>
+                        </div>
+                        
+                        <div class="mb-3">
+                          <%= f.label :comment, "Feedback Comments", class: "form-label" %>
+                          <%= f.text_area :comment, 
+                                        rows: 4, 
+                                        class: "form-control",
+                                        placeholder: "Provide feedback on this submission...",
+                                        value: response.mark&.comment %>
+                        </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <%= f.submit response.mark ? "Update Grade" : "Submit Grade", 
+                                  class: "btn btn-primary" %>
+                      </div>
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% else %>
+      <div class="text-center py-5">
+        <div class="mb-3">
+          <i class="fas fa-inbox fa-4x text-muted"></i>
+        </div>
+        <h5 class="text-muted">No submissions yet</h5>
+        <p class="text-muted">Student responses will appear here once they submit their work.</p>
+      </div>
+    <% end %>
+  </div>
+  
+  <% if @responses&.any? %>
+    <div class="card-footer bg-light">
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <span class="badge bg-success"><%= @responses.count(&:mark) %> graded</span>
+          <span class="badge bg-warning text-dark ms-2"><%= @responses.reject(&:mark).count %> to grade</span>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<% content_for :javascript do %>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Filter submissions
+      document.querySelectorAll('[data-filter]').forEach(filter => {
+        filter.addEventListener('click', function(e) {
+          e.preventDefault();
+          const status = this.dataset.filter;
+          
+          // Update active filter
+          document.querySelectorAll('[data-filter]').forEach(f => f.classList.remove('active'));
+          this.classList.add('active');
+          
+          // Show/hide rows
+          document.querySelectorAll('.submission-row').forEach(row => {
+            if (status === 'all' || row.dataset.status === status) {
+              row.style.display = '';
+            } else {
+              row.style.display = 'none';
+            }
+          });
+        });
+      });
+      
+      // Initialize tooltips
+      var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+      var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+      });
+    });
+  </script>
+<% end %>

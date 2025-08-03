@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+    <style>
+      body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+      .header { color:rgb(51, 72, 92); }
+      .footer { margin-top: 20px; font-size: 0.9em; color:rgb(132, 149, 150); }
+    </style>
+  </head>
+  <body>
+    <h1 class="header">Hi <%= @student.first_name %>,</h1>
+    
+    <p>This is a friendly reminder that the course "<strong><%= @course.title %></strong>" is ending in 3 days.</p>
+    
+    <p>Course end date: <strong><%= @course.ends_at.strftime("%B %d, %Y") %></strong></p>
+    
+    <p>Make sure to complete all your assignments and review the course materials before it ends!</p>
+    
+    <p>If you have any questions, please don't hesitate to contact your instructor.</p>
+    
+    <div class="footer">
+      <p>Best regards,<br>The Studidi Team</p>
+    </div>
+  </body>
+</html>

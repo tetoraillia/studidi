@@ -1,0 +1,43 @@
+<div class="container">
+  <div class="center">
+    <nav>
+      <ul>
+        <li><%= link_to "Responses", total_responses_path(current_user), class: "btn btn-primary" %></li>
+        <li><%= link_to "Courses", courses_path, class: "btn btn-primary" %></li>
+        <li><%= link_to "Bookmarks", bookmarks_path(current_user), class: "btn btn-primary" %></li>
+      </ul>
+    </nav>
+
+    <div class="form-container">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Edit Topic: <%= @topic.title %></h1>
+        <%= link_to "Back to Topic", course_topic_path(@course, @topic), class: "btn btn-outline-secondary" %>
+      </div>
+
+      <div class="card">
+        <div class="card-body">
+          <%= form_with(model: [ @course, @topic ], class: "topic-form") do |form| %>
+            <div class="mb-3">
+              <%= form.label :title, class: "form-label" %>
+              <%= form.text_field :title, class: "form-control", required: true, placeholder: "Enter topic title" %>
+            </div>
+
+            <div class="mb-3">
+              <%= form.label :position, class: "form-label" %>
+              <%= form.number_field :position, class: "form-control", min: 1 %>
+              <div class="form-text">Lower numbers appear first</div>
+            </div>
+
+            <%= form.hidden_field :course_id, value: @course.id %>
+
+            <div class="form-actions mt-4">
+              <%= form.submit "Update Topic", class: "btn btn-primary" %>
+              <%= link_to "Cancel", course_topic_path(@course, @topic), class: "btn btn-outline-secondary ms-2" %>
+              <%= link_to "View All Topics", course_topics_path(@course), class: "btn btn-link" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

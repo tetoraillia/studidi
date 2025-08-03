@@ -4,6 +4,24 @@
 #
 # Example:
 #
-#   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
+#   [ "Action", "Comedy", "Drama", "Horror" ].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+
+User.create!(
+    first_name: "John",
+    last_name: "Doe",
+    email: "john@example.com",
+    password: "password",
+    role: "teacher"
+)
+
+15.times do |i|
+  Course.create!(
+      title: "Course #{i}",
+      description: "Description for course #{i}",
+      instructor_id: User.last.id,
+      public: true,
+      ends_at: Time.zone.now + 1.month
+  )
+end

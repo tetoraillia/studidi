@@ -1,0 +1,58 @@
+<%# Teacher Report Partial - expects: reports (array of TeacherReportService::Report) %>
+<div class="card mb-4">
+  <div class="card-header bg-success text-white">
+    <h5 class="mb-0">My Teaching Reports</h5>
+  </div>
+  <div class="card-body p-0">
+    <table class="table table-striped mb-0">
+      <thead class="table-light">
+        <tr>
+          <th scope="col">Course</th>
+          <th scope="col">Students</th>
+          <th scope="col">Lessons</th>
+          <th scope="col">Avg. Mark</th>
+          <th scope="col">Completion (%)</th>
+          <th scope="col">Responses</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% reports.each do |report| %>
+          <tr>
+            <td>
+              <strong><%= report.course_title %></strong>
+            </td>
+            <td>
+              <span class="badge bg-info"><%= report.total_students || 0 %></span>
+            </td>
+            <td>
+              <span class="badge bg-secondary"><%= report.total_lessons || 0 %></span>
+            </td>
+            <td>
+              <% if report.average_mark %>
+                <span class="badge <%= report.average_mark >= 7 ? "bg-success" : report.average_mark >= 5 ? "bg-warning" : "bg-danger" %>">
+                  <%= report.average_mark %>
+                </span>
+              <% else %>
+                <span class="text-muted">—</span>
+              <% end %>
+            </td>
+            <td>
+              <% completion = report.average_completion_percentage || 0 %>
+              <div class="d-flex align-items-center">
+                <div class="progress me-2" style="width: 60px; height: 8px;">
+                  <div class="progress-bar <%= completion >= 80 ? "bg-success" : completion >= 50 ? "bg-warning" : "bg-danger" %>" 
+                       style="width: <%= completion %>%"></div>
+                </div>
+                <small><%= completion %>%</small>
+              </div>
+            </td>
+            <td>
+              <span class="badge bg-primary"><%= report.total_responses || 0 %></span>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+<%= paginate reports, param_name: :reports_page %>

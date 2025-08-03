@@ -1,0 +1,16 @@
+  <div class="submission-form">
+    <%= form_with(model: Mark.new(response_id: response.id), url: course_topic_lesson_marks_path(@lesson.topic.course, @lesson.topic, @lesson)) do |f| %>
+      <%= f.hidden_field :response_id %>
+      <div class="form-group">
+        <%= f.label :value, "Mark" %>
+        <%= f.number_field :value, class: "form-control" %>
+      </div>
+      <div class="form-group">
+        <%= f.label :comment, "Comment" %>
+        <%= f.text_area :comment, class: "form-control", rows: 5 %>
+      </div>
+      <div class="form-group">
+        <%= f.submit "Set mark", class: "btn btn-primary" %>
+      </div>
+    <% end %>
+  </div>

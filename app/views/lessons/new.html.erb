@@ -1,0 +1,71 @@
+<div class="container">
+  <div class="center">
+    <nav>
+      <ul>
+        <li><%= link_to "Responses", total_responses_path(current_user), class: "btn btn-primary" %></li>
+        <li><%= link_to "Courses", courses_path, class: "btn btn-primary" %></li>
+        <li><%= link_to "Bookmarks", bookmarks_path(current_user), class: "btn btn-primary" %></li>
+      </ul>
+    </nav>
+
+    <div class="form-container">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>New <%= @lesson.content_type.titleize %> Lesson</h1>
+        <%= link_to "Back to Topic", course_topic_path(@course, @topic), class: "btn btn-outline-secondary" %>
+      </div>
+
+      <div class="card">
+        <div class="card-body">
+          <%= form_with(model: [ @course, @topic, @lesson ], class: "lesson-form") do |form| %>
+            <div class="mb-3">
+              <%= form.label :title, class: "form-label" %>
+              <%= form.text_field :title, class: "form-control", required: true, placeholder: "Enter lesson title" %>
+            </div>
+
+            <%= form.hidden_field :topic_id, value: @topic.id %>
+            <%= form.hidden_field :content_type %>
+
+            <div class="mb-3">
+              <%= form.label :content, class: "form-label" %>
+              <%= form.text_area :content, class: "form-control", rows: 8, placeholder: "Enter lesson content" %>
+            </div>
+
+            <% if @lesson.content_type == "video" %>
+              <div class="mb-3">
+                <%= form.label :video_url, "Video URL", class: "form-label" %>
+                <%= form.url_field :video_url, class: "form-control", placeholder: "https://example.com/video" %>
+                <div class="form-text">Enter the URL of the video (YouTube, Vimeo, etc.)</div>
+              </div>
+            <% end %>
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <%= form.label :position, class: "form-label" %>
+                <%= form.number_field :position, 
+                                    class: "form-control", 
+                                    min: 1, 
+                                    value: @lesson.position || @topic.lessons.maximum(:position).to_i + 1 %>
+                <div class="form-text">Lower numbers appear first in the topic</div>
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <%= form.label :ends_at, "Lesson end date", class: "form-label" %>
+                <div class="input-group">
+                  <%= form.datetime_local_field :ends_at, 
+                                              class: "form-control",
+                                              value: @lesson.ends_at || 1.week.from_now.strftime("%Y-%m-%dT%H:%M") %>
+                </div>
+                <div class="form-text">When this lesson will stop accepting responses</div>
+              </div>
+            </div>
+
+            <div class="form-actions mt-4">
+              <%= form.submit "Create Lesson", class: "btn btn-primary" %>
+              <%= link_to "Cancel", course_topic_path(@course, @topic), class: "btn btn-outline-secondary ms-2" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

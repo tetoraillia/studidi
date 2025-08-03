@@ -1,14 +1,55 @@
+require "sidekiq/web"
+
 Rails.application.routes.draw do
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+  mount Sidekiq::Web => "/sidekiq"
+  mount ActionCable.server => "/cable"
 
-  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
-  # Can be used by load balancers and uptime monitors to verify that the app is live.
+  root "courses#index"
+
+  devise_for :users, controllers: {
+    sessions: "users/sessions",
+    registrations: "users/registrations",
+    passwords: "users/passwords",
+    confirmations: "users/confirmations",
+    omniauth_callbacks: "users/omniauth_callbacks"
+  }
   get "up" => "rails/health#show", as: :rails_health_check
+  get "responses/:user_id", to: "responses#index", as: :total_responses
 
-  # Render dynamic PWA files from app/views/pwa/* (remember to link manifest in application.html.erb)
-  # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
-  # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
+  resources :messages, only: [ :index, :create ]
 
-  # Defines the root path route ("/")
-  # root "posts#index"
+  resources :bookmarks, only: [ :index, :create, :destroy ]
+  resources :courses do
+    member do
+      get :invite
+    end
+    resources :enrollments, only: [ :create, :destroy ] do
+      member do
+        delete :kick
+      end
+    end
+    resources :lessons do
+      resources :responses, only: [ :create, :update, :show ]
+    end
+    resources :invitations, only: [ :new, :create ] do
+      member do
+        get :accept
+      end
+    end
+    resources :topics do
+      resources :lessons do
+        resources :marks, only: [ :index, :create, :edit, :update ]
+        collection do
+          get "select_lesson_type"
+        end
+        resources :questions, only: [ :new, :create, :destroy ]
+        post "submit_quiz_answers", to: "lessons#submit_quiz_answers", on: :member
+      end
+    end
+  end
+  resources :notifications, only: [ :index, :update ] do
+    collection do
+      get :unread_count
+    end
+  end
 end

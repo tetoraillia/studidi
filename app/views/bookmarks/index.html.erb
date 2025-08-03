@@ -1,0 +1,56 @@
+<div class="container">
+  <div class="center">
+    <% if current_user %>
+      <nav>
+        <ul>
+          <li>
+            <%= link_to "Responses", total_responses_path(current_user), 
+                         class: "btn btn-primary" %>
+          </li>
+          <li>
+            <%= link_to "Courses", courses_path, 
+                         class: "btn btn-primary" %>
+          </li>
+          <li>
+            <%= link_to "Bookmarks", bookmarks_path(current_user), 
+                         class: "btn btn-primary" %>
+          </li>
+        </ul>
+      </nav>
+    <% end %>
+
+    <div class="bookmarks-list">
+      <% if @bookmarks.any? %>
+        <% @bookmarks.each do |bookmark| %>
+          <div class="bookmark">
+            <div class="bookmark-header">
+              <h3 class="bookmark-title"><%= bookmark.course.title %></h3>
+              <div class="bookmark-meta">
+                <p class="instructor">Instructor: <%= bookmark.course.instructor.first_name %></p>
+                <% if bookmark.course.is_archived %>
+                  <span class="badge badge-public">Archived</span>
+                <% end %>
+                <span class="badge <%= bookmark.course.public ? "badge-public" : "badge-private" %>">
+                  <%= bookmark.course.public ? "Public" : "Private" %>
+                </span>
+              </div>
+            </div>
+            <div class="bookmark-actions">
+            <br>
+              <%= link_to "View", course_path(bookmark.course), class: "btn btn-outline-primary" %>
+              <%= button_to "Unbookmark", bookmark_path(bookmark), 
+                         method: :delete,
+                         data: { confirm: "Are you sure you want to remove this bookmark?" },
+                         class: "btn btn-outline-danger" %>
+            </div>
+          </div>
+        <% end %>
+      <% else %>
+        <div class="no-bookmarks">
+          <p>You haven't bookmarked any courses yet.</p>
+        </div>
+      <% end %>
+    </div>
+    <%= paginate @bookmarks %>
+  </div>
+</div>

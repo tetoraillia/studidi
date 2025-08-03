@@ -1,0 +1,78 @@
+<%# Student Report Partial - expects: reports (array of StudentReportService::Report) %>
+<div class="card mb-4">
+  <div class="card-header bg-primary text-white">
+    <h5 class="mb-0">My Course Reports</h5>
+  </div>
+  <div class="card-body p-0">
+    <table class="table table-striped mb-0">
+      <thead class="table-light">
+        <tr>
+          <th>Course</th>
+          <th>End Date</th>
+          <th>Progress</th>
+          <th>Avg. Mark</th>
+          <th>Completion (%)</th>
+          <th>Marks</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% reports.each do |report| %>
+          <tr>
+            <td>
+              <strong><%= report.course_title %></strong>
+            </td>
+            <td>
+              <% if report.course_ends_at %>
+                <% end_date = Date.parse(report.course_ends_at.to_s) %>
+                <% days_left = (end_date - Date.current).to_i %>
+                <small class="<%= days_left < 0 ? "text-danger" : days_left < 7 ? "text-warning" : "text-muted" %>">
+                  <%= end_date.strftime("%b %d, %Y") %>
+                  <% if days_left >= 0 %>
+                    <br><span class="badge bg-light text-dark"><%= days_left %> days left</span>
+                  <% else %>
+                    <br><span class="badge bg-danger">Ended</span>
+                  <% end %>
+                </small>
+              <% else %>
+                <span class="text-muted">—</span>
+              <% end %>
+            </td>
+            <td>
+              <div class="d-flex align-items-center">
+                <small class="me-2"><%= report.lessons_completed || 0 %>/<%= report.total_lessons || 0 %></small>
+                <div class="progress" style="width: 60px; height: 8px;">
+                  <% progress = report.total_lessons && report.total_lessons > 0 ? ((report.lessons_completed || 0).to_f / report.total_lessons * 100) : 0 %>
+                  <div class="progress-bar <%= progress >= 80 ? "bg-success" : progress >= 50 ? "bg-warning" : "bg-danger" %>" 
+                       style="width: <%= progress %>%"></div>
+                </div>
+              </div>
+            </td>
+            <td>
+              <% if report.average_mark %>
+                <span class="badge <%= report.average_mark >= 7 ? "bg-success" : report.average_mark >= 5 ? "bg-warning" : "bg-danger" %>">
+                  <%= report.average_mark %>
+                </span>
+              <% else %>
+                <span class="text-muted">—</span>
+              <% end %>
+            </td>
+            <td>
+              <% completion = report.completion_percentage || 0 %>
+              <div class="d-flex align-items-center">
+                <div class="progress me-2" style="width: 60px; height: 8px;">
+                  <div class="progress-bar <%= completion >= 80 ? "bg-success" : completion >= 50 ? "bg-warning" : "bg-danger" %>" 
+                       style="width: <%= completion %>%"></div>
+                </div>
+                <small><%= completion %>%</small>
+              </div>
+            </td>
+            <td>
+              <span class="badge bg-info"><%= report.marks_received || 0 %></span>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+<%= paginate reports, param_name: :reports_page %>

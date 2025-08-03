@@ -1,0 +1,46 @@
+<div class="container">
+  <div class="center">
+    <nav>
+      <ul>
+        <li><%= link_to "Responses", total_responses_path(current_user), class: "btn btn-primary" %></li>
+        <li><%= link_to "Courses", courses_path, class: "btn btn-primary" %></li>
+        <li><%= link_to "Bookmarks", bookmarks_path(current_user), class: "btn btn-primary" %></li>
+      </ul>
+    </nav>
+
+    <div class="course-form-container">
+      <h1>Create New Course</h1>
+      
+      <%= form_with(model: @course, class: "course-form") do |form| %>
+        <div class="form-group">
+          <%= form.label :title, class: "form-label" %>
+          <%= form.text_field :title, class: "form-control" %>
+        </div>
+        
+        <div class="form-group">
+          <%= form.label :description, class: "form-label" %>
+          <%= form.text_area :description, class: "form-control", rows: 5 %>
+        </div>
+        
+        <%= form.hidden_field :instructor_id, value: current_user.id %>
+        
+        <div class="form-group form-check">
+          <%= form.check_box :public, class: "form-check-input" %>
+          <%= form.label :public, "Make this course public", class: "form-check-label" %>
+        </div>
+        
+        <div class="form-group">
+          <%= form.label :ends_at, "Course end date", class: "form-label" %>
+          <div class="datetime-select">
+            <%= form.datetime_select :ends_at, { start_year: Time.current.year }, { class: "form-control" } %>
+          </div>
+        </div>
+        <br>
+        <div class="form-actions">
+          <%= form.submit "Create Course", class: "btn btn-primary" %>
+          <%= link_to "Cancel", courses_path, class: "btn btn-outline-secondary" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

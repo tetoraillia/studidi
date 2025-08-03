@@ -1,0 +1,107 @@
+<% if @lesson.content_type == "quiz" %>
+<% else %>
+  <div class="card mb-4">
+  <div class="card-header">
+    <h3 class="mb-0">
+      <% if @user_response %>
+        <i class="fas fa-check-circle text-success me-2"></i>Your Submission
+      <% else %>
+        <i class="fas fa-edit me-2"></i>Your Response
+      <% end %>
+    </h3>
+  </div>
+  <div class="card-body">
+    <% if @user_response %>
+      <div class="response-content mb-4">
+        <h5>Your Answer:</h5>
+        <div class="bg-light p-3 rounded">
+          <%= simple_format(@user_response.content) %>
+        </div>
+        
+        <% if @user_response.attachment.present? %>
+          <div class="mt-3">
+            <h5>Attached File:</h5>
+            <div class="p-3 bg-light rounded">
+              <%= render_attachment(@user_response.attachment) %>
+            </div>
+          </div>
+        <% end %>
+        
+        <% if @user_response.mark.present? %>
+          <div class="mt-4 pt-3 border-top">
+            <h5>Feedback:</h5>
+            <div class="alert alert-light">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <strong>Grade:</strong>
+                <span class="badge bg-<%= @user_response.mark.value.to_i >= 5 ? "success" : "warning" %>">
+                  <%= @user_response.mark.value %> / 100
+                </span>
+              </div>
+              <% if @user_response.mark.comment.present? %>
+                <div class="feedback-comment mt-2 p-2 bg-white rounded">
+                  <strong>Instructor's Note:</strong>
+                  <p class="mb-0"><%= @user_response.mark.comment %></p>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        <% else %>
+          <div class="alert alert-info mt-3">
+            <i class="fas fa-info-circle me-2"></i>Your submission has been received. The instructor will review it shortly.
+          </div>
+        <% end %>
+      </div>
+      
+    <% else %>
+      <% if @lesson.is_open? %>
+        <div class="response-form">
+          <%= form_with(url: course_lesson_responses_path(@lesson.topic.course, @lesson), 
+                      local: true,
+                      html: { class: "needs-validation", novalidate: true }) do |form| %>
+                      
+            <div class="mb-3">
+              <%= form.label :content, "Your Answer", class: "form-label fw-bold" %>
+              <%= form.text_area :content, 
+                              name: "response[content]",
+                              class: "form-control", 
+                              rows: 5,
+                              required: true,
+                              placeholder: "Type your response here..." %>
+              <div class="invalid-feedback">
+                Please provide your answer.
+              </div>
+            </div>
+            
+            <div class="mb-3">
+              <%= form.label :attachment, "Attach a file (optional)", class: "form-label fw-bold" %>
+              <%= form.file_field :attachment, 
+                              name: "response[attachment]",
+                              class: "form-control" %>
+              <div class="form-text">
+                You can upload a document, image, or other file (Max: 5MB)
+              </div>
+            </div>
+            
+            <div class="d-flex justify-content-end">
+              <%= form.submit "Submit Response", 
+                            class: "btn btn-primary",
+                            data: { disable_with: "Submitting..." } %>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="alert alert-warning">
+          <i class="fas fa-exclamation-triangle me-2"></i>
+          The submission period for this assignment has ended.
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+  
+  <% if @user_response && @user_response.updated_at != @user_response.created_at %>
+    <div class="card-footer text-muted small">
+      Last updated: <%= time_ago_in_words(@user_response.updated_at) %> ago
+    </div>
+  <% end %>
+</div>
+<% end %>

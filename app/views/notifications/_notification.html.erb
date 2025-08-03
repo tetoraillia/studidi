@@ -1,0 +1,19 @@
+<% type_label = notification_type_label(notification) %>
+<% badge_class = badge_class_for(notification) %>
+
+<div class="list-group-item d-flex justify-content-between align-items-start">
+  <div>
+    <span class="badge bg-<%= badge_class %> me-2"><%= type_label %></span>
+    <strong><%= notification.params[:message] %></strong><br>
+    <% if notification.params[:url].present? %>
+      <a href="<%= notification.params[:url] %>">Go to link</a>
+    <% end %>
+  </div>
+  <div class="text-end">
+    <% if notification.read_at.nil? %>
+      <%= button_to "Mark as read", notification_path(notification), method: :put, class: "btn btn-sm btn-outline-primary" %>
+    <% else %>
+      <span class="badge bg-secondary">Read</span>
+    <% end %>
+  </div>
+</div>

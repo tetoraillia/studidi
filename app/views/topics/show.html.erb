@@ -1,0 +1,84 @@
+<div class="container">
+  <div class="center">
+    <nav>
+      <ul>
+        <li><%= link_to "Responses", total_responses_path(current_user), class: "btn btn-primary" %></li>
+        <li><%= link_to "Courses", courses_path, class: "btn btn-primary" %></li>
+        <li><%= link_to "Bookmarks", bookmarks_path(current_user), class: "btn btn-primary" %></li>
+      </ul>
+    </nav>
+
+    <div class="topic-header mb-4">
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <h1><%= @topic.title %></h1>
+          <p class="text-muted mb-0">
+            Course: <%= link_to @course.title, course_path(@course), class: "text-decoration-none" %>
+            <span class="mx-2">•</span>
+            Instructor: <%= @course.instructor.first_name %>
+            <span class="mx-2">•</span>
+            Position: <span class="badge bg-secondary"><%= @topic.position %></span>
+          </p>
+        </div>
+        <div class="topic-actions">
+          <% if policy(@topic).update? %>
+            <%= link_to "Edit Topic", edit_course_topic_path(@course, @topic), class: "btn btn-outline-secondary btn-sm" %>
+          <% end %>
+          <% if policy(Lesson.new(topic: @topic)).create? %>
+            <%= link_to "New Lesson", select_lesson_type_course_topic_lessons_path(@course, @topic), class: "btn btn-primary btn-sm" %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <div class="lessons-container">
+      <h2>Lessons</h2>
+      
+      <% if @lessons.any? %>
+        <div class="lessons-list">
+          <% @lessons.each do |lesson| %>
+            <div class="lesson-card">
+              <div class="lesson-header">
+                <h3 class="lesson-title">
+                  <%= link_to lesson.title, course_topic_lesson_path(@course, @topic, lesson), class: "text-decoration-none" %>
+                </h3>
+                <div class="lesson-actions">
+                  <%= link_to "View", course_topic_lesson_path(@course, @topic, lesson), class: "btn btn-sm btn-outline-primary" %>
+                  <% if policy(lesson).update? %>
+                    <%= link_to "Edit", edit_course_topic_lesson_path(@course, @topic, lesson), class: "btn btn-sm btn-outline-secondary" %>
+                  <% end %>
+                  <% if policy(lesson).destroy? %>
+                    <%= button_to "Delete", 
+                                course_topic_lesson_path(@course, @topic, lesson), 
+                                method: :delete, 
+                                data: { confirm: "Are you sure you want to delete this lesson?" },
+                                class: "btn btn-sm btn-outline-danger" %>
+                  <% end %>
+                </div>
+              </div>
+              <div class="lesson-preview">
+                <%= render partial: "lessons/types/#{lesson.content_type}", locals: { lesson: lesson } %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+
+        <div class="mt-4">
+          <%= paginate @lessons %>
+        </div>
+      <% else %>
+        <div class="alert alert-info">
+          No lessons have been added to this topic yet.
+          <% if policy(Lesson.new(topic: @topic)).create? %>
+            <%= link_to "Create the first lesson", select_lesson_type_course_topic_lessons_path(@course, @topic), class: "alert-link" %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="mt-4">
+      <%= link_to "Back to Topics", course_topics_path(@course), class: "btn btn-outline-secondary" %>
+    </div>
+  </div>
+</div>
+

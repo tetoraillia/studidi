@@ -1,0 +1,68 @@
+<div class="quiz-container" data-lesson-id="<%= lesson.id %>">
+  <h3>Quiz Questions</h3>
+  
+  <% if lesson.questions.any? && lesson.is_open %>
+    <% if current_user.role == "teacher" %>
+      <div class="mb-3">
+        <% lesson.questions.each do |question| %>
+          <%= button_to "Delete Question #{lesson.questions.index(question) + 1}", course_topic_lesson_question_path(@course, @topic, lesson, question), method: :delete, class: "btn btn-danger btn-sm me-2 mb-2" %>
+        <% end %>
+      </div>
+    <% end %>
+    
+    <div class="questions-list">
+      <%= form_tag submit_quiz_answers_course_topic_lesson_path(@course, @topic, lesson), method: :post, id: "quiz-form" do %>
+        <% lesson.questions.each_with_index do |question, index| %>
+          <div class="question-card mb-4" data-question-id="<%= question.id %>">
+            <div class="card">
+              <div class="card-header">
+                <h5 class="mb-0">
+                  Question <%= index + 1 %>
+                </h5>
+              </div>
+              <div class="card-body">
+                <p class="question-title"><%= question.title %></p>
+                <div class="options-list">
+                  <% question.options.each do |option| %>
+                    <div class="form-check">
+                      <input class="form-check-input" 
+                             type="radio" 
+                             required
+                             name="answers[<%= question.id %>]" 
+                             id="option_<%= option.id %>" 
+                             value="<%= option.id %>"
+                             <% if current_user.responses.find_by(responseable: question)&.content == option.id.to_s %>checked<% end %>
+                             <% if current_user.role == "teacher" %>disabled<% end %>>
+                      <label class="form-check-label" for="option_<%= option.id %>">
+                        <%= option.title %>
+                        <% if current_user.role == "teacher" && option.is_correct %>
+                          <span class="badge bg-success ms-2">Correct</span>
+                        <% end %>
+                      </label>
+                    </div>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+        
+        <% if current_user.role == "student" %>
+          <div class="text-center mt-4">
+          <% if !@user_mark.present? %>
+            <%= submit_tag "Submit Quiz", class: "btn btn-primary" %>
+          <% else %>
+            <div class="alert alert-success">
+              <strong>✅ Quiz completed!</strong> You have submitted all answers for this quiz. Your score is <strong><%= @user_mark.value %></strong>
+            </div>
+          <% end %>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="alert alert-info">
+      No questions available for this quiz yet.
+    </div>
+  <% end %>
+</div>

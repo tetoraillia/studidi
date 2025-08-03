@@ -1,0 +1,79 @@
+<div class="container">
+  <div class="center">
+    <nav>
+      <ul>
+        <li><%= link_to "Responses", total_responses_path(current_user), class: "btn btn-primary" %></li>
+        <li><%= link_to "Courses", courses_path, class: "btn btn-primary" %></li>
+        <li><%= link_to "Bookmarks", bookmarks_path(current_user), class: "btn btn-primary" %></li>
+      </ul>
+    </nav>
+
+    <div class="select-lesson-type">
+      <div class="text-center mb-5">
+        <h1>Create a New Lesson</h1>
+        <p class="lead text-muted">Select the type of lesson you'd like to create for <strong><%= @topic.title %></strong></p>
+      </div>
+
+      <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+          <div class="card">
+            <div class="card-body p-4">
+              <%= form_with url: new_course_topic_lesson_path(@course, @topic), method: :get, local: true, class: "lesson-type-form" do |f| %>
+                <div class="mb-4">
+                  <%= f.label :content_type, "Lesson Type", class: "form-label fw-bold mb-3" %>
+                  <div class="list-group">
+                    <label class="list-group-item list-group-item-action p-4">
+                      <div class="d-flex align-items-center">
+                        <div class="form-check flex-grow-1">
+                          <%= f.radio_button :content_type, "text", class: "form-check-input me-3", checked: true %>
+                          <span class="form-check-label">
+                            <h5 class="mb-1">Text Lesson</h5>
+                            <p class="mb-0 text-muted">Create a lesson with formatted text content</p>
+                          </span>
+                        </div>
+                        <i class="fas fa-file-alt fa-2x text-primary"></i>
+                      </div>
+                    </label>
+
+                    <label class="list-group-item list-group-item-action p-4">
+                      <div class="d-flex align-items-center">
+                        <div class="form-check flex-grow-1">
+                          <%= f.radio_button :content_type, "video", class: "form-check-input me-3" %>
+                          <span class="form-check-label">
+                            <h5 class="mb-1">Video Lesson</h5>
+                            <p class="mb-0 text-muted">Embed a video from YouTube, Vimeo, or other platforms</p>
+                          </span>
+                        </div>
+                        <i class="fas fa-video fa-2x text-danger"></i>
+                      </div>
+                    </label>
+
+                    <label class="list-group-item list-group-item-action p-4">
+                      <div class="d-flex align-items-center">
+                        <div class="form-check flex-grow-1">
+                          <%= f.radio_button :content_type, "quiz", class: "form-check-input me-3" %>
+                          <span class="form-check-label">
+                            <h5 class="mb-1">Test/Quiz</h5>
+                            <p class="mb-0 text-muted">Create an assessment with multiple-choice questions</p>
+                          </span>
+                        </div>
+                        <i class="fas fa-question-circle fa-2x text-warning"></i>
+                      </div>
+                    </label>
+                  </div>
+                </div>
+
+                <div class="d-flex justify-content-between mt-4">
+                  <%= link_to "Back to Topic", course_topic_path(@course, @topic), class: "btn btn-outline-secondary" %>
+                  <%= f.button type: "submit", class: "btn btn-primary px-4" do %>
+                    Continue <i class="fas fa-arrow-right ms-2"></i>
+                  <% end %>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

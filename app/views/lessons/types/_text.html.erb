@@ -1,0 +1,43 @@
+<% lesson ||= local_assigns[:lesson] || local_assigns.dig(:locals, :lesson) %>
+
+<h2><%= lesson.title %></h2>
+
+<div class="lesson-content">
+  <div class="container py-4">
+    <div class="card shadow-sm">
+      <div class="card-body p-4">
+        <% if lesson&.content.present? %>
+          <div class="lesson-text-content">
+            <%= raw lesson.content %>
+          </div>
+        <% else %>
+          <div class="text-center text-muted py-4">
+            <p>No content available for this lesson.</p>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.lesson-text-content {
+  font-size: 1.1rem;
+  line-height: 1.7;
+}
+.lesson-text-content h1, 
+.lesson-text-content h2, 
+.lesson-text-content h3 {
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+}
+.lesson-text-content p {
+  margin-bottom: 1.2rem;
+}
+.lesson-text-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+  margin: 1rem 0;
+}
+</style>
